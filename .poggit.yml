@@ -3,6 +3,7 @@ branches:
 - master
 projects:
   ScoreHud:
+    icon: meta/ScoreHud.PNG
     libs:
       - src: JackMD/ScoreFactory/ScoreFactory
         version: ^1.0.0

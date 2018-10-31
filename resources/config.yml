@@ -1,0 +1,84 @@
+---
+#   _____                    _   _           _
+#  /  ___|                  | | | |         | |
+#  \ `--.  ___ ___  _ __ ___| |_| |_   _  __| |
+#   `--. \/ __/ _ \| '__/ _ \  _  | | | |/ _` |
+#  /\__/ / (_| (_) | | |  __/ | | | |_| | (_| |
+#  \____/ \___\___/|_|  \___\_| |_/\__,_|\__,_|
+#
+# ScoreHud, a Scoreboard plugin for PocketMine-MP
+# Copyright (c) 2018 JackMD  < https://github.com/JackMD >
+#
+# Discord: JackMD#3717
+# Twitter: JackMTaylor_
+#
+# This software is distributed under "GNU General Public License v3.0".
+# This license allows you to use it and/or modify it but you are not at
+# all allowed to sell this plugin at any cost. If found doing so the
+# necessary action required would be taken.
+#
+# MysteryCrate is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License v3.0 for more details.
+#
+# You should have received a copy of the GNU General Public License v3.0
+# along with this program. If not, see
+# <https://opensource.org/licenses/GPL-3.0>.
+#  -----------------------------------------------------------------------
+
+
+# The amount in seconds after which the Scoreboard would update.
+# Increase this value if your server seems to lag.
+# Default: 3 seconds.
+update-interval: 3
+
+# Changing titles of the scoreboard.
+# Can be of any number.
+server-names:
+- "§l§aServer §dName"
+- "§l§bServer §cName"
+- "§l§cServer §bName"
+- "§l§dServer §aName"
+
+# Currently Supported Tags:
+# {name}                - Name of the player.
+# {money}               - Money of the player. (Requires EconomyAPI).
+# {online}              - The number of online players.
+# {max_online}          - Max number of players allowed on the server.
+# {rank}                - Players current in-game rank/group. (Requires PurePerms).
+# {prison-rank}         - Get players Prison rank. (Requires RankUp)
+# {item_name}           - Name of the item in players hand.
+# {item_id}             - ID of the item in players hand.
+# {item_meta}           - Meta/Damage of the item in players hand.
+# {item_count}          - Amount of item in the players hand.
+# {x}/{y}/{z}           - X/Y/Z coordinate of the player.
+# {faction}             - Faction of the player. (Requires FactionsPro).
+# {load}                - Current load on the server (0 - 100%)
+# {tps}                 - TPS of the server.
+# {level_name}          - Name of the players current level/world.
+# {level_folder_name}   - Folder name of the players current level/world.
+# {ip}                  - IP of the player.
+# {ping}                - Ping of the player.
+
+# Add the lines that would be shown on the Scoreboard.
+# Follow the same pattern as below.
+# You can edit the lines already set below and adjust them according to your needs.
+# NOTE: You can only set a maximum of 15 lines and no more.
+score-lines:
+- " §dName: §5{name}"
+- " §bOnline: §a{online} §c/ §d{max_online}"
+- " §eMoney: §6$§2{money}"
+- " §6Rank: §a{rank}"
+- " §cPrison Rank: §6{prison-rank}"
+- " §a{item_name}: §2{item_id}§c/§2{item_meta}§c/§2{item_count}"
+- " §5Coordinates: §d{x}§2/§d{y}§2/§d{z}"
+- " §6Load: §a{load} §d| §cTPS: §b{tps}"
+- " §2Level Name: §7{level_name}"
+- " §2Level Folder: §7{level_folder_name}"
+- " §eIP: §6{ip}"
+- " §aFaction: §d{faction}"
+- " §cPing: §d{ping}"
+- " §3Vote:"
+- " §cwww.server.com"
+...

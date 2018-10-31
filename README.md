@@ -1,4 +1,4 @@
-![ScoreHud Banner](https://github.com/JackMD/ScoreHud/blob/master/meta/ScoreHud.png)
+![ScoreHud Banner](https://github.com/JackMD/ScoreHud/blob/master/meta/ScoreHud.PNG)
 # ScoreHud
 
 | HitCount | License | Poggit | Release |

@@ -35,6 +35,7 @@ namespace JackMD\ScoreHud;
 
 use _64FF00\PurePerms\PurePerms;
 use FactionsPro\FactionMain;
+use JackMD\KDR\KDR;
 use JackMD\ScoreFactory\ScoreFactory;
 use JackMD\ScoreHud\task\ScoreUpdateTask;
 use onebone\economyapi\EconomyAPI;
@@ -142,6 +143,42 @@ class Main extends PluginBase implements Listener{
 	
 	/**
 	 * @param Player $player
+	 * @return int|string
+	 */
+	public function getPlayerKills(Player $player){
+		if(KDR::getInstance() !== null){
+			return KDR::getInstance()->getProvider()->getPlayerKillPoints($player);
+		}else{
+			return "Plugin Not Found";
+		}
+	}
+	
+	/**
+	 * @param Player $player
+	 * @return int|string
+	 */
+	public function getPlayerDeaths(Player $player){
+		if(KDR::getInstance() !== null){
+			return KDR::getInstance()->getProvider()->getPlayerDeathPoints($player);
+		}else{
+			return "Plugin Not Found";
+		}
+	}
+	
+	/**
+	 * @param Player $player
+	 * @return string
+	 */
+	public function getPlayerKillToDeathRatio(Player $player): string{
+		if(KDR::getInstance() !== null){
+			return KDR::getInstance()->getProvider()->getKillToDeathRatio($player);
+		}else{
+			return "Plugin Not Found";
+		}
+	}
+	
+	/**
+	 * @param Player $player
 	 * @param string $string
 	 * @return string
 	 */
@@ -151,7 +188,7 @@ class Main extends PluginBase implements Listener{
 		$string = str_replace("{online}", count($this->getServer()->getOnlinePlayers()), $string);
 		$string = str_replace("{max_online}", $this->getServer()->getMaxPlayers(), $string);
 		$string = str_replace("{rank}", $this->getPlayerRank($player), $string);
-		$string = str_replace("{prison-rank}", $this->getPlayerPrisonRank($player), $string);
+		$string = str_replace("{prison_rank}", $this->getPlayerPrisonRank($player), $string);
 		$string = str_replace("{item_name}", $player->getInventory()->getItemInHand()->getName(), $string);
 		$string = str_replace("{item_id}", $player->getInventory()->getItemInHand()->getId(), $string);
 		$string = str_replace("{item_meta}", $player->getInventory()->getItemInHand()->getDamage(), $string);
@@ -166,6 +203,9 @@ class Main extends PluginBase implements Listener{
 		$string = str_replace("{level_folder_name}", $player->getLevel()->getFolderName(), $string);
 		$string = str_replace("{ip}", $player->getAddress(), $string);
 		$string = str_replace("{ping}", $player->getPing(), $string);
+		$string = str_replace("{kills}", $this->getPlayerKills($player), $string);
+		$string = str_replace("{deaths}", $this->getPlayerDeaths($player), $string);
+		$string = str_replace("{kdr}", $this->getPlayerKillToDeathRatio($player), $string);
 		return $string;
 	}
 }

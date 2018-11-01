@@ -47,7 +47,7 @@ server-names:
 # {online}              - The number of online players.
 # {max_online}          - Max number of players allowed on the server.
 # {rank}                - Players current in-game rank/group. (Requires PurePerms).
-# {prison-rank}         - Get players Prison rank. (Requires RankUp)
+# {prison_rank}         - Get players Prison rank. (Requires RankUp)
 # {item_name}           - Name of the item in players hand.
 # {item_id}             - ID of the item in players hand.
 # {item_meta}           - Meta/Damage of the item in players hand.
@@ -60,6 +60,9 @@ server-names:
 # {level_folder_name}   - Folder name of the players current level/world.
 # {ip}                  - IP of the player.
 # {ping}                - Ping of the player.
+# {kills}               - Get kill count of a player. (Requires KDR)
+# {deaths}              - Get death count of a player. (Requires KDR)
+# {kdr}                 - Get kill to death ratio of a player. (Requires KDR)
 
 # Add the lines that would be shown on the Scoreboard.
 # Follow the same pattern as below.

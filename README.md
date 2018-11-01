@@ -15,6 +15,7 @@
     - PurePerms
     - RankUp
     - FactionsPro
+    - KDR
  - If you want a feature to be added then be sure to make an issue regarding it.
 ### How to setup?
  - Head over to `config.yml` for details.

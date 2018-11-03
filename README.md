@@ -21,7 +21,7 @@
 ### How to setup?
  - Put the plugin in your plugins folder.
  - Start and then stop the server.
- - Edit the `confiig.yml` to suit your needs.
+ - Edit the `config.yml` to suit your needs.
  - Restart and enjoy...
  
 ### FAQs:

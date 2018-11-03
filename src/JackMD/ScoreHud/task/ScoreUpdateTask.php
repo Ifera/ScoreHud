@@ -57,7 +57,6 @@ class ScoreUpdateTask extends Task{
 	 * @param int $tick
 	 */
 	public function onRun(int $tick){
-		$this->titleIndex++;
 		$players = $this->plugin->getServer()->getOnlinePlayers();
 		$titles = $this->plugin->getConfig()->get("server-names");
 		if(!isset($titles[$this->titleIndex])){
@@ -66,5 +65,6 @@ class ScoreUpdateTask extends Task{
 		foreach($players as $player){
 			$this->plugin->addScore($player, $titles[$this->titleIndex]);
 		}
+		$this->titleIndex++;
 	}
 }

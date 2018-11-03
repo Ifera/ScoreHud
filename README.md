@@ -17,5 +17,23 @@
     - FactionsPro
     - KDR
  - If you want a feature to be added then be sure to make an issue regarding it.
+ 
 ### How to setup?
- - Head over to `config.yml` for details.
+ - Put the plugin in your plugins folder.
+ - Start and then stop the server.
+ - Edit the `confiig.yml` to suit your needs.
+ - Restart and enjoy...
+ 
+### FAQs:
+**Q: How many `score-lines` can I set?**<br />
+A: You can set 1 to 15 `score-lines`. <br /><br />
+**Q: What tags are available to be set?**<br />
+A: Mostly all the tags that you could imagine are available. More details can be found in `config.yml`. <br /><br />
+**Q: There is a tag missing or I want a new tag to be added?**<br />
+A: You can make a new issue with details what you want to be added. <br /><br />
+**Q: How many `server-names` can I set?**<br />
+A: You can set infinite many number of `server-names`. <br /><br />
+**Q: I am having problems and cannot set the plugin correctly. What do I do?**<br />
+A: Well you can always open a new issue on this repository or contact me via Discord: `JackMD#3717` or Twitter: `JackMTaylor_`. <br /><br />
+**Q: I like the plugin. What do I do?**<br />
+A: Well, that is extremely fortunate. Why not to star this repository and might as well a good review on [poggit](https://poggit.pmmp.io/p/ScoreHud).<br /><br />

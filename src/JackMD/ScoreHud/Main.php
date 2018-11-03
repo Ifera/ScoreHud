@@ -62,7 +62,7 @@ class Main extends PluginBase{
 	 */
 	public function checkConfig(): void{
 		$config = new Config($this->getDataFolder() . "config.yml", Config::YAML);
-		if((!$config->exists("config-version")) || (!$config->get("config-version") !== self::CONFIG_VERSION)){
+		if((!$config->exists("config-version")) || ($config->get("config-version") !== self::CONFIG_VERSION)){
 			rename($this->getDataFolder() . "config.yml", $this->getDataFolder() . "config_old.yml");
 			$this->saveResource("config.yml");
 			$this->getLogger()->critical("Your configuration file is outdated.");

@@ -39,18 +39,36 @@ use JackMD\KDR\KDR;
 use JackMD\ScoreFactory\ScoreFactory;
 use JackMD\ScoreHud\task\ScoreUpdateTask;
 use onebone\economyapi\EconomyAPI;
-use pocketmine\event\Listener;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
+use pocketmine\utils\Config;
 use rankup\RankUp;
 
-class Main extends PluginBase implements Listener{
+class Main extends PluginBase{
+	
+	/** @var string */
+	private const CONFIG_VERSION = "PewDiePie";
 	
 	public function onEnable(): void{
 		$this->saveDefaultConfig();
+		$this->checkConfig();
 		$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
 		$this->getScheduler()->scheduleRepeatingTask(new ScoreUpdateTask($this), (int) $this->getConfig()->get("update-interval") * 20);
 		$this->getLogger()->info("ScoreHud Plugin Enabled.");
+	}
+	
+	/**
+	 * Check if the config is up-to-date.
+	 */
+	public function checkConfig(): void{
+		$config = new Config($this->getDataFolder() . "config.yml", Config::YAML);
+		if((!$config->exists("config-version")) || (!$config->get("config-version") !== self::CONFIG_VERSION)){
+			rename($this->getDataFolder() . "config.yml", $this->getDataFolder() . "config_old.yml");
+			$this->saveResource("config.yml");
+			$this->getLogger()->critical("Your configuration file is outdated.");
+			$this->getLogger()->notice("Your old configuration has been saved as config_old.yml and a new configuration file has been generated.");
+			return;
+		}
 	}
 	
 	/**
@@ -80,8 +98,10 @@ class Main extends PluginBase implements Listener{
 	 * @return float|string
 	 */
 	private function getPlayerMoney(Player $player){
-		if(EconomyAPI::getInstance() !== null){
-			return EconomyAPI::getInstance()->myMoney($player);
+		/** @var EconomyAPI $economyAPI */
+		$economyAPI = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI");
+		if($economyAPI !== null){
+			return $economyAPI->myMoney($player);
 		}else{
 			return "Plugin not found";
 		}
@@ -146,8 +166,10 @@ class Main extends PluginBase implements Listener{
 	 * @return int|string
 	 */
 	public function getPlayerKills(Player $player){
-		if(KDR::getInstance() !== null){
-			return KDR::getInstance()->getProvider()->getPlayerKillPoints($player);
+		/** @var KDR $kdr */
+		$kdr = $this->getServer()->getPluginManager()->getPlugin("KDR");
+		if($kdr !== null){
+			return $kdr->getProvider()->getPlayerKillPoints($player);
 		}else{
 			return "Plugin Not Found";
 		}
@@ -158,8 +180,10 @@ class Main extends PluginBase implements Listener{
 	 * @return int|string
 	 */
 	public function getPlayerDeaths(Player $player){
-		if(KDR::getInstance() !== null){
-			return KDR::getInstance()->getProvider()->getPlayerDeathPoints($player);
+		/** @var KDR $kdr */
+		$kdr = $this->getServer()->getPluginManager()->getPlugin("KDR");
+		if($kdr !== null){
+			return $kdr->getProvider()->getPlayerDeathPoints($player);
 		}else{
 			return "Plugin Not Found";
 		}
@@ -170,8 +194,10 @@ class Main extends PluginBase implements Listener{
 	 * @return string
 	 */
 	public function getPlayerKillToDeathRatio(Player $player): string{
-		if(KDR::getInstance() !== null){
-			return KDR::getInstance()->getProvider()->getKillToDeathRatio($player);
+		/** @var KDR $kdr */
+		$kdr = $this->getServer()->getPluginManager()->getPlugin("KDR");
+		if($kdr !== null){
+			return $kdr->getProvider()->getKillToDeathRatio($player);
 		}else{
 			return "Plugin Not Found";
 		}

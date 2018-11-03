@@ -27,6 +27,9 @@
 # <https://opensource.org/licenses/GPL-3.0>.
 #  -----------------------------------------------------------------------
 
+# DO NOT EDIT THIS VALUE.
+# ONLY FOR INTERNAL USE.
+config-version: "PewDiePie"
 
 # The amount in seconds after which the Scoreboard would update.
 # Increase this value if your server seems to lag.
@@ -71,17 +74,4 @@ server-names:
 score-lines:
 - " §dName: §5{name}"
 - " §bOnline: §a{online} §c/ §d{max_online}"
-- " §eMoney: §6$§2{money}"
-- " §6Rank: §a{rank}"
-- " §cPrison Rank: §6{prison-rank}"
-- " §a{item_name}: §2{item_id}§c/§2{item_meta}§c/§2{item_count}"
-- " §5Coordinates: §d{x}§2/§d{y}§2/§d{z}"
-- " §6Load: §a{load} §d| §cTPS: §b{tps}"
-- " §2Level Name: §7{level_name}"
-- " §2Level Folder: §7{level_folder_name}"
-- " §eIP: §6{ip}"
-- " §aFaction: §d{faction}"
-- " §cPing: §d{ping}"
-- " §3Vote:"
-- " §cwww.server.com"
 ...

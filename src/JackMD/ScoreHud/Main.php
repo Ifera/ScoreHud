@@ -47,7 +47,7 @@ use rankup\RankUp;
 class Main extends PluginBase{
 	
 	/** @var string */
-	private const CONFIG_VERSION = "PewDiePie";
+	private const CONFIG_VERSION = "TaylorSwift";
 	
 	public function onEnable(): void{
 		$this->saveDefaultConfig();
@@ -120,6 +120,60 @@ class Main extends PluginBase{
 				return $group;
 			}else{
 				return "No Rank";
+			}
+		}else{
+			return "Plugin not found";
+		}
+	}
+	
+	/**
+	 * @param Player $player
+	 * @param null   $levelName
+	 * @return string
+	 */
+	public function getPrefix(Player $player, $levelName = null): string{
+		/** @var PurePerms $purePerms */
+		$purePerms = $this->getServer()->getPluginManager()->getPlugin("PurePerms");
+		if($purePerms !== null){
+			$prefix = $purePerms->getUserDataMgr()->getNode($player, "prefix");
+			if($levelName === null){
+				if(($prefix === null) || ($prefix === "")){
+					return "No Prefix";
+				}
+				return (string) $prefix;
+			}else{
+				$worldData = $purePerms->getUserDataMgr()->getWorldData($player, $levelName);
+				if(empty($worldData["prefix"]) || $worldData["prefix"] == null){
+					return "No Prefix";
+				}
+				return $worldData["prefix"];
+			}
+		}else{
+			return "Plugin not found";
+		}
+	}
+	
+	/**
+	 * @param Player $player
+	 * @param null   $levelName
+	 * @return string
+	 */
+	public function getSuffix(Player $player, $levelName = null): string{
+		/** @var PurePerms $purePerms */
+		$purePerms = $this->getServer()->getPluginManager()->getPlugin("PurePerms");
+		if($purePerms !== null){
+			$suffix = $purePerms->getUserDataMgr()->getNode($player, "suffix");
+			if($levelName === null){
+				if(($suffix === null) || ($suffix === "")){
+					return "No Suffix";
+				}
+				return (string) $suffix;
+			}else{
+				$worldData = $purePerms->getUserDataMgr()->getWorldData($player, $levelName);
+				if(empty($worldData["suffix"]) || $worldData["suffix"] == null){
+					return "No Suffix";
+				}
+				return $worldData["suffix"];
 			}
 		}else{
 			return "Plugin not found";
@@ -232,6 +286,8 @@ class Main extends PluginBase{
 		$string = str_replace("{kills}", $this->getPlayerKills($player), $string);
 		$string = str_replace("{deaths}", $this->getPlayerDeaths($player), $string);
 		$string = str_replace("{kdr}", $this->getPlayerKillToDeathRatio($player), $string);
+		$string = str_replace("{prefix}", $this->getPrefix($player), $string);
+		$string = str_replace("{suffix}", $this->getSuffix($player), $string);
 		return $string;
 	}
 }

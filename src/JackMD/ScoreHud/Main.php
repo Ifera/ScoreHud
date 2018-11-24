@@ -47,14 +47,25 @@ use rankup\RankUp;
 class Main extends PluginBase{
 	
 	/** @var string */
-	private const CONFIG_VERSION = "TaylorSwift";
+	private const CONFIG_VERSION = "Tesla";
 	
 	public function onEnable(): void{
+		$this->checkScoreFactory();
 		$this->saveDefaultConfig();
 		$this->checkConfig();
+		$this->setTimezone($this->getConfig()->get("timezone"));
 		$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
 		$this->getScheduler()->scheduleRepeatingTask(new ScoreUpdateTask($this), (int) $this->getConfig()->get("update-interval") * 20);
 		$this->getLogger()->info("ScoreHud Plugin Enabled.");
+	}
+	
+	/**
+	 * Checks if ScoreFactory virion is present or not.
+	 */
+	private function checkScoreFactory(): void{
+		if(!class_exists(ScoreFactory::class)){
+			throw new \RuntimeException("ScoreHud plugin will only work if you use the plugin phar from Poggit.");
+		}
 	}
 	
 	/**
@@ -69,6 +80,18 @@ class Main extends PluginBase{
 			$this->getLogger()->notice("Your old configuration has been saved as config_old.yml and a new configuration file has been generated.");
 			return;
 		}
+	}
+	
+	/**
+	 * @param $timezone
+	 * @return mixed
+	 */
+	private function setTimezone($timezone){
+		if($timezone !== false){
+			$this->getLogger()->notice("Server timezone successfully set to " . $timezone);
+			return @date_default_timezone_set($timezone);
+		}
+		return false;
 	}
 	
 	/**
@@ -288,6 +311,7 @@ class Main extends PluginBase{
 		$string = str_replace("{kdr}", $this->getPlayerKillToDeathRatio($player), $string);
 		$string = str_replace("{prefix}", $this->getPrefix($player), $string);
 		$string = str_replace("{suffix}", $this->getSuffix($player), $string);
+		$string = str_replace("{time}", date($this->getConfig()->get("time-format")), $string);
 		return $string;
 	}
 }

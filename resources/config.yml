@@ -29,7 +29,7 @@
 
 # DO NOT EDIT THIS VALUE.
 # ONLY FOR INTERNAL USE.
-config-version: "TaylorSwift"
+config-version: "Tesla"
 
 # The amount in seconds after which the Scoreboard would update.
 # Increase this value if your server seems to lag.
@@ -66,6 +66,7 @@ server-names:
 # {kills}               - Get kill count of a player. (Requires KDR)
 # {deaths}              - Get death count of a player. (Requires KDR)
 # {kdr}                 - Get kill to death ratio of a player. (Requires KDR)
+# {time}                - Show the current time. Please see 'time-format' and 'timezone' above to modify it.
 
 # Add the lines that would be shown on the Scoreboard.
 # Follow the same pattern as below.
@@ -74,4 +75,17 @@ server-names:
 score-lines:
 - " §dName: §5{name}"
 - " §bOnline: §a{online} §c/ §d{max_online}"
+
+# Set the timezone for {time} to your own preference.
+# false - Follow the server/machine time without changes.
+# For a list of timezones you can visit: https://secure.php.net/manual/timezones.php
+# Example: "America/New_York" - This will set NewYork's time.
+timezone: false
+
+# Set the time format that you want to display. Will only work if you add {time} in score-lines.
+# H - hours
+# i - minutes
+# s - seconds
+# You can fine more information regarding it here: http://php.net/manual/function.date.php
+time-format: "H:i:s"
 ...

@@ -201,6 +201,10 @@ class Main extends PluginBase{
 							return "N/A";
 						}
 					break;
+						
+					case "mexp":
+						return (int) $cx2->settings->get("baseExp");
+					break;
 					
 					case "gems":
 						if(is_numeric( $cx2->data->getVal($player, "gems") ))
@@ -210,7 +214,7 @@ class Main extends PluginBase{
 							return "N/A";
 						}
 					break;
-						
+					
 					default: return "Invalid Request";
 				}
 			} else {
@@ -391,7 +395,7 @@ class Main extends PluginBase{
 		$string = str_replace("{cxlvl}", $this->getFromCore($player, "lvl"), $string);
 		$string = str_replace("{cxgems}", $this->getFromCore($player, "gems"), $string);
 		$string = str_replace("{cxexp}", $this->getFromCore($player, "exp"), $string);
-		$string = str_replace("{cxmexp}", $this->getFromCore($player, "exp") * $this->getFromCore($player, "lvl"), $string);
+		$string = str_replace("{cxmexp}", $this->getFromCore($player, "mexp") * $this->getFromCore($player, "lvl"), $string);
 		return $string;
 	}
 }

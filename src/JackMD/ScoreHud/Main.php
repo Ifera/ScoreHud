@@ -149,6 +149,25 @@ class Main extends PluginBase{
 		}
 	}
 	
+	private function getFromCore(Player $player, string $value): string{
+		/** @var PurePerms $purePerms */
+		$cx2 = $this->getServer()->getPluginManager()->getPlugin("CoreX2");
+		if($cx2 !== null){
+			if($cx2->isRecorded($player)){
+				switch($value)
+				{
+					case "rank": return (string) $cx2->elo->getRank($player); break;
+					case "div": return (string) $cx2->elo->getDiv($player); break;
+					case "pts": return (string) $cx2->elo->getPoints($player); break;
+					default: return "Invalid Request";
+				}
+			}
+		}else{
+			return "Plugin not found";
+		}
+	}
+
+	
 	/**
 	 * @param Player $player
 	 * @param null   $levelName
@@ -312,6 +331,9 @@ class Main extends PluginBase{
 		$string = str_replace("{prefix}", $this->getPrefix($player), $string);
 		$string = str_replace("{suffix}", $this->getSuffix($player), $string);
 		$string = str_replace("{time}", date($this->getConfig()->get("time-format")), $string);
+		$string = str_replace("{cxrank}", $this->getFromCore($player, "rank"), $string);
+		$string = str_replace("{cxdiv}", $this->getFromCore($player, "div"), $string);
+		$string = str_replace("{cxpts}", $this->getFromCore($player, "pts"), $string);
 		return $string;
 	}
 }

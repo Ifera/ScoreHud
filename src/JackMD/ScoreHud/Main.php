@@ -149,7 +149,8 @@ class Main extends PluginBase{
 		}
 	}
 	
-	private function getFromCore(Player $player, string $value): string{
+	private function getFromCore(Player $player, string $value)
+	{
 		/** @var PurePerms $purePerms */
 		$cx2 = $this->getServer()->getPluginManager()->getPlugin("CoreX2");
 		if($cx2 !== null){
@@ -168,7 +169,7 @@ class Main extends PluginBase{
 					case "div":
 						if(is_numeric( $cx2->elo->getDiv($player) ))
 						{
-							return (string) $cx2->elo->getDiv($player);
+							return (int) $cx2->elo->getDiv($player);
 						} else {
 							return "N/A";
 						}
@@ -177,7 +178,7 @@ class Main extends PluginBase{
 					case "pts":
 						if(is_numeric( $cx2->elo->getPoints($player) ))
 						{
-							return (string) $cx2->elo->getPoints($player);
+							return (int) $cx2->elo->getPoints($player);
 						} else {
 							return "N/A";
 						}
@@ -186,7 +187,25 @@ class Main extends PluginBase{
 					case "lvl":
 						if(is_numeric( $cx2->data->getVal($player, "level") ))
 						{
-							return (string) $cx2->data->getVal($player, "level");
+							return (int) $cx2->data->getVal($player, "level");
+						} else {
+							return "N/A";
+						}
+					break;
+						
+					case "exp":
+						if(is_numeric( $cx2->data->getVal($player, "exp") ))
+						{
+							return (int) $cx2->data->getVal($player, "exp");
+						} else {
+							return "N/A";
+						}
+					break;
+					
+					case "gems":
+						if(is_numeric( $cx2->data->getVal($player, "gems") ))
+						{
+							return (int) $cx2->data->getVal($player, "gems");
 						} else {
 							return "N/A";
 						}
@@ -194,6 +213,8 @@ class Main extends PluginBase{
 						
 					default: return "Invalid Request";
 				}
+			} else {
+				return "N/A";
 			}
 		}else{
 			return "Plugin not found";
@@ -368,6 +389,9 @@ class Main extends PluginBase{
 		$string = str_replace("{cxdiv}", $this->getFromCore($player, "div"), $string);
 		$string = str_replace("{cxpts}", $this->getFromCore($player, "pts"), $string);
 		$string = str_replace("{cxlvl}", $this->getFromCore($player, "lvl"), $string);
+		$string = str_replace("{cxgems}", $this->getFromCore($player, "gems"), $string);
+		$string = str_replace("{cxexp}", $this->getFromCore($player, "exp"), $string);
+		$string = str_replace("{cxmexp}", $this->getFromCore($player, "exp") * $this->getFromCore($player, "lvl"), $string);
 		return $string;
 	}
 }

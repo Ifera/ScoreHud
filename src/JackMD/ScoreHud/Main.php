@@ -156,9 +156,42 @@ class Main extends PluginBase{
 			if($cx2->isRecorded($player)){
 				switch($value)
 				{
-					case "rank": return (string) $cx2->elo->getRank($player); break;
-					case "div": return (string) $cx2->elo->getDiv($player); break;
-					case "pts": return (string) $cx2->elo->getPoints($player); break;
+					case "rank":
+						if(is_string($cx2->elo->getRank($player)))
+						{
+							return (string) $cx2->elo->getRank($player);
+						} else {
+							return "N/A";
+						}
+					break;
+						
+					case "div":
+						if(is_numeric( $cx2->elo->getDiv($player) ))
+						{
+							return (string) $cx2->elo->getDiv($player);
+						} else {
+							return "N/A";
+						}
+					break;
+						
+					case "pts":
+						if(is_numeric( $cx2->elo->getPoints($player) ))
+						{
+							return (string) $cx2->elo->getPoints($player);
+						} else {
+							return "N/A";
+						}
+					break;
+						
+					case "lvl":
+						if(is_numeric( $cx2->data->getVal($player, "level") ))
+						{
+							return (string) $cx2->data->getVal($player, "level");
+						} else {
+							return "N/A";
+						}
+					break;
+						
 					default: return "Invalid Request";
 				}
 			}
@@ -334,6 +367,7 @@ class Main extends PluginBase{
 		$string = str_replace("{cxrank}", $this->getFromCore($player, "rank"), $string);
 		$string = str_replace("{cxdiv}", $this->getFromCore($player, "div"), $string);
 		$string = str_replace("{cxpts}", $this->getFromCore($player, "pts"), $string);
+		$string = str_replace("{cxlvl}", $this->getFromCore($player, "lvl"), $string);
 		return $string;
 	}
 }

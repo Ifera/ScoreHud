@@ -35,6 +35,7 @@ namespace JackMD\ScoreHud;
 
 use _64FF00\PurePerms\PurePerms;
 use FactionsPro\FactionMain;
+use JackMD\CPS\CPS;
 use JackMD\KDR\KDR;
 use JackMD\ScoreFactory\ScoreFactory;
 use JackMD\ScoreHud\task\ScoreUpdateTask;
@@ -47,7 +48,7 @@ use rankup\RankUp;
 class Main extends PluginBase{
 	
 	/** @var string */
-	private const CONFIG_VERSION = "Tesla";
+	private const CONFIG_VERSION = 3;
 	
 	public function onEnable(): void{
 		$this->checkScoreFactory();
@@ -123,7 +124,7 @@ class Main extends PluginBase{
 	private function getPlayerMoney(Player $player){
 		/** @var EconomyAPI $economyAPI */
 		$economyAPI = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI");
-		if($economyAPI !== null){
+		if($economyAPI instanceof EconomyAPI){
 			return $economyAPI->myMoney($player);
 		}else{
 			return "Plugin not found";
@@ -137,7 +138,7 @@ class Main extends PluginBase{
 	private function getPlayerRank(Player $player): string{
 		/** @var PurePerms $purePerms */
 		$purePerms = $this->getServer()->getPluginManager()->getPlugin("PurePerms");
-		if($purePerms !== null){
+		if($purePerms instanceof PurePerms){
 			$group = $purePerms->getUserDataMgr()->getData($player)['group'];
 			if($group !== null){
 				return $group;
@@ -157,7 +158,7 @@ class Main extends PluginBase{
 	public function getPrefix(Player $player, $levelName = null): string{
 		/** @var PurePerms $purePerms */
 		$purePerms = $this->getServer()->getPluginManager()->getPlugin("PurePerms");
-		if($purePerms !== null){
+		if($purePerms instanceof PurePerms){
 			$prefix = $purePerms->getUserDataMgr()->getNode($player, "prefix");
 			if($levelName === null){
 				if(($prefix === null) || ($prefix === "")){
@@ -184,7 +185,7 @@ class Main extends PluginBase{
 	public function getSuffix(Player $player, $levelName = null): string{
 		/** @var PurePerms $purePerms */
 		$purePerms = $this->getServer()->getPluginManager()->getPlugin("PurePerms");
-		if($purePerms !== null){
+		if($purePerms instanceof PurePerms){
 			$suffix = $purePerms->getUserDataMgr()->getNode($player, "suffix");
 			if($levelName === null){
 				if(($suffix === null) || ($suffix === "")){
@@ -210,7 +211,7 @@ class Main extends PluginBase{
 	private function getPlayerPrisonRank(Player $player){
 		/** @var RankUp $rankUp */
 		$rankUp = $this->getServer()->getPluginManager()->getPlugin("RankUp");
-		if($rankUp !== null){
+		if($rankUp instanceof RankUp){
 			$group = $rankUp->getRankUpDoesGroups()->getPlayerGroup($player);
 			if($group !== false){
 				return $group;
@@ -228,7 +229,7 @@ class Main extends PluginBase{
 	public function getPlayerFaction(Player $player): string{
 		/** @var FactionMain $factionsPro */
 		$factionsPro = $this->getServer()->getPluginManager()->getPlugin("FactionsPro");
-		if($factionsPro !== null){
+		if($factionsPro instanceof FactionMain){
 			$factionName = $factionsPro->getPlayerFaction($player->getName());
 			if($factionName == null){
 				return "No Faction";
@@ -245,7 +246,7 @@ class Main extends PluginBase{
 	public function getPlayerKills(Player $player){
 		/** @var KDR $kdr */
 		$kdr = $this->getServer()->getPluginManager()->getPlugin("KDR");
-		if($kdr !== null){
+		if($kdr instanceof KDR){
 			return $kdr->getProvider()->getPlayerKillPoints($player);
 		}else{
 			return "Plugin Not Found";
@@ -259,7 +260,7 @@ class Main extends PluginBase{
 	public function getPlayerDeaths(Player $player){
 		/** @var KDR $kdr */
 		$kdr = $this->getServer()->getPluginManager()->getPlugin("KDR");
-		if($kdr !== null){
+		if($kdr instanceof KDR){
 			return $kdr->getProvider()->getPlayerDeathPoints($player);
 		}else{
 			return "Plugin Not Found";
@@ -273,8 +274,18 @@ class Main extends PluginBase{
 	public function getPlayerKillToDeathRatio(Player $player): string{
 		/** @var KDR $kdr */
 		$kdr = $this->getServer()->getPluginManager()->getPlugin("KDR");
-		if($kdr !== null){
+		if($kdr instanceof KDR){
 			return $kdr->getProvider()->getKillToDeathRatio($player);
+		}else{
+			return "Plugin Not Found";
+		}
+	}
+	
+	public function getClicks(Player $player){
+		/** @var CPS $cps */
+		$cps = $this->getServer()->getPluginManager()->getPlugin("CPS");
+		if($cps instanceof CPS){
+			return $cps->getClicks($player);
 		}else{
 			return "Plugin Not Found";
 		}
@@ -312,6 +323,7 @@ class Main extends PluginBase{
 		$string = str_replace("{prefix}", $this->getPrefix($player), $string);
 		$string = str_replace("{suffix}", $this->getSuffix($player), $string);
 		$string = str_replace("{time}", date($this->getConfig()->get("time-format")), $string);
+		$string = str_replace("{cps}", $this->getClicks($player), $string);
 		return $string;
 	}
 }

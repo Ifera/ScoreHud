@@ -29,7 +29,7 @@
 
 # DO NOT EDIT THIS VALUE.
 # ONLY FOR INTERNAL USE.
-config-version: "Tesla"
+config-version: 3
 
 # The amount in seconds after which the Scoreboard would update.
 # Increase this value if your server seems to lag.
@@ -67,6 +67,7 @@ server-names:
 # {deaths}              - Get death count of a player. (Requires KDR)
 # {kdr}                 - Get kill to death ratio of a player. (Requires KDR)
 # {time}                - Show the current time. Please see 'time-format' and 'timezone' above to modify it.
+# {cps}                 - Get the clicks per second of a player. Requires CPS.
 
 # Add the lines that would be shown on the Scoreboard.
 # Follow the same pattern as below.

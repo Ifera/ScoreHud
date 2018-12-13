@@ -16,6 +16,7 @@
     - RankUp
     - FactionsPro
     - KDR
+    - CPS
  - If you want a feature to be added then be sure to make an issue regarding it.
  
 ### How to setup?

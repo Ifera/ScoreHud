@@ -7,25 +7,31 @@
 
 ### A highly customizable plugin to add Scoreboards on your Minecraft Bedrock Server.
 
-### Features
+### Features:
+
  - This plugin adds **scoreboard** to your server.
  - Everything is customizable.
- - Provides support for 
-    - EconomyAPI
-    - PurePerms
-    - RankUp
-    - FactionsPro
-    - KDR
-    - CPS
+ - Provides support for all the plugins mentioned in supported plugins.
  - If you want a feature to be added then be sure to make an issue regarding it.
  
+### Supported Plugins:
+
+ - [EconomyAPI](https://github.com/poggit-orphanage/EconomyS/tree/master/EconomyAPI)
+ - [PurePerms](https://github.com/poggit-orphanage/PurePerms)
+ - [RankUp](https://github.com/falkirks/RankUp)
+ - [FactionsPro](https://github.com/poggit-orphanage/FactionsPro)
+ - [KDR](https://github.com/JackMD/KDR)
+ - [CPS](https://github.com/JackMD/CPS)
+ 
 ### How to setup?
+
  - Put the plugin in your plugins folder.
  - Start and then stop the server.
  - Edit the `config.yml` to suit your needs.
  - Restart and enjoy...
  
 ### FAQs:
+
 **Q: How many `score-lines` can I set?**<br />
 A: You can set 1 to 15 `score-lines`. <br /><br />
 **Q: What tags are available to be set?**<br />

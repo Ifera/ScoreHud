@@ -100,6 +100,9 @@ class Main extends PluginBase{
 	 * @param string $title
 	 */
 	public function addScore(Player $player, string $title): void{
+		if(!$player->isOnline()){
+			return;
+		}
 		ScoreFactory::setScore($player, $title);
 		$this->updateScore($player);
 	}
@@ -109,7 +112,13 @@ class Main extends PluginBase{
 	 */
 	public function updateScore(Player $player): void{
 		$i = 0;
-		foreach($this->getConfig()->get("score-lines") as $line){
+		$lines = $this->getConfig()->get("score-lines");
+		if((is_null($lines)) || empty($lines) || !isset($lines)){
+			$this->getLogger()->error("Please set score-lines in config.yml properly.");
+			$this->getServer()->getPluginManager()->disablePlugin($this);
+			return;
+		}
+		foreach($lines as $line){
 			$i++;
 			if($i <= 15){
 				ScoreFactory::setScoreLine($player, $i, $this->process($player, $line));

@@ -59,6 +59,11 @@ class ScoreUpdateTask extends Task{
 	public function onRun(int $tick){
 		$players = $this->plugin->getServer()->getOnlinePlayers();
 		$titles = $this->plugin->getConfig()->get("server-names");
+		if((is_null($titles)) || empty($titles) || !isset($titles)){
+			$this->plugin->getLogger()->error("Please set server-names in config.yml properly.");
+			$this->plugin->getServer()->getPluginManager()->disablePlugin($this->plugin);
+			return;
+		}
 		if(!isset($titles[$this->titleIndex])){
 			$this->titleIndex = 0;
 		}

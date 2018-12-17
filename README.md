@@ -22,6 +22,7 @@
  - [FactionsPro](https://github.com/poggit-orphanage/FactionsPro)
  - [KDR](https://github.com/JackMD/KDR)
  - [CPS](https://github.com/JackMD/CPS)
+ - [SkyBlock](https://github.com/GiantQuartz/SkyBlock)
  
 ### How to setup?
 

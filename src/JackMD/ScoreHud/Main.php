@@ -33,37 +33,28 @@ declare(strict_types = 1);
 
 namespace JackMD\ScoreHud;
 
-use _64FF00\PurePerms\PurePerms;
-use FactionsPro\FactionMain;
-use JackMD\CPS\CPS;
-use JackMD\KDR\KDR;
 use JackMD\ScoreFactory\ScoreFactory;
+use JackMD\ScoreHud\data\DataManager;
 use JackMD\ScoreHud\task\ScoreUpdateTask;
 use JackMD\UpdateNotifier\UpdateNotifier;
-use onebone\economyapi\EconomyAPI;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
-use rankup\RankUp;
 
 class Main extends PluginBase{
 	
 	/** @var string */
-	private const CONFIG_VERSION = 3;
+	private const CONFIG_VERSION = 4;
+	
+	/** @var DataManager */
+	private $dataManager;
 	
 	public function onLoad(){
 		$this->checkVirions();
-		
-		UpdateNotifier::checkUpdate($this, $this->getDescription()->getName(), $this->getDescription()->getVersion());
-	}
-	
-	public function onEnable(): void{
 		$this->saveDefaultConfig();
 		$this->checkConfig();
-		$this->setTimezone($this->getConfig()->get("timezone"));
-		$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
-		$this->getScheduler()->scheduleRepeatingTask(new ScoreUpdateTask($this), (int) $this->getConfig()->get("update-interval") * 20);
-		$this->getLogger()->info("ScoreHud Plugin Enabled.");
+		
+		UpdateNotifier::checkUpdate($this, $this->getDescription()->getName(), $this->getDescription()->getVersion());
 	}
 	
 	/**
@@ -87,6 +78,15 @@ class Main extends PluginBase{
 			$this->getLogger()->notice("Your old configuration has been saved as config_old.yml and a new configuration file has been generated.");
 			return;
 		}
+	}
+	
+	public function onEnable(): void{
+		$this->dataManager = new DataManager($this);
+		
+		$this->setTimezone($this->getConfig()->get("timezone"));
+		$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
+		$this->getScheduler()->scheduleRepeatingTask(new ScoreUpdateTask($this), (int) $this->getConfig()->get("update-interval") * 20);
+		$this->getLogger()->info("ScoreHud Plugin Enabled.");
 	}
 	
 	/**
@@ -134,190 +134,16 @@ class Main extends PluginBase{
 	
 	/**
 	 * @param Player $player
-	 * @return float|string
-	 */
-	private function getPlayerMoney(Player $player){
-		/** @var EconomyAPI $economyAPI */
-		$economyAPI = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI");
-		if($economyAPI instanceof EconomyAPI){
-			return $economyAPI->myMoney($player);
-		}else{
-			return "Plugin not found";
-		}
-	}
-	
-	/**
-	 * @param Player $player
-	 * @return string
-	 */
-	private function getPlayerRank(Player $player): string{
-		/** @var PurePerms $purePerms */
-		$purePerms = $this->getServer()->getPluginManager()->getPlugin("PurePerms");
-		if($purePerms instanceof PurePerms){
-			$group = $purePerms->getUserDataMgr()->getData($player)['group'];
-			if($group !== null){
-				return $group;
-			}else{
-				return "No Rank";
-			}
-		}else{
-			return "Plugin not found";
-		}
-	}
-	
-	/**
-	 * @param Player $player
-	 * @param null   $levelName
-	 * @return string
-	 */
-	public function getPrefix(Player $player, $levelName = null): string{
-		/** @var PurePerms $purePerms */
-		$purePerms = $this->getServer()->getPluginManager()->getPlugin("PurePerms");
-		if($purePerms instanceof PurePerms){
-			$prefix = $purePerms->getUserDataMgr()->getNode($player, "prefix");
-			if($levelName === null){
-				if(($prefix === null) || ($prefix === "")){
-					return "No Prefix";
-				}
-				return (string) $prefix;
-			}else{
-				$worldData = $purePerms->getUserDataMgr()->getWorldData($player, $levelName);
-				if(empty($worldData["prefix"]) || $worldData["prefix"] == null){
-					return "No Prefix";
-				}
-				return $worldData["prefix"];
-			}
-		}else{
-			return "Plugin not found";
-		}
-	}
-	
-	/**
-	 * @param Player $player
-	 * @param null   $levelName
-	 * @return string
-	 */
-	public function getSuffix(Player $player, $levelName = null): string{
-		/** @var PurePerms $purePerms */
-		$purePerms = $this->getServer()->getPluginManager()->getPlugin("PurePerms");
-		if($purePerms instanceof PurePerms){
-			$suffix = $purePerms->getUserDataMgr()->getNode($player, "suffix");
-			if($levelName === null){
-				if(($suffix === null) || ($suffix === "")){
-					return "No Suffix";
-				}
-				return (string) $suffix;
-			}else{
-				$worldData = $purePerms->getUserDataMgr()->getWorldData($player, $levelName);
-				if(empty($worldData["suffix"]) || $worldData["suffix"] == null){
-					return "No Suffix";
-				}
-				return $worldData["suffix"];
-			}
-		}else{
-			return "Plugin not found";
-		}
-	}
-	
-	/**
-	 * @param Player $player
-	 * @return bool|int|string
-	 */
-	private function getPlayerPrisonRank(Player $player){
-		/** @var RankUp $rankUp */
-		$rankUp = $this->getServer()->getPluginManager()->getPlugin("RankUp");
-		if($rankUp instanceof RankUp){
-			$group = $rankUp->getRankUpDoesGroups()->getPlayerGroup($player);
-			if($group !== false){
-				return $group;
-			}else{
-				return "No Rank";
-			}
-		}
-		return "Plugin not found";
-	}
-	
-	/**
-	 * @param Player $player
-	 * @return string
-	 */
-	public function getPlayerFaction(Player $player): string{
-		/** @var FactionMain $factionsPro */
-		$factionsPro = $this->getServer()->getPluginManager()->getPlugin("FactionsPro");
-		if($factionsPro instanceof FactionMain){
-			$factionName = $factionsPro->getPlayerFaction($player->getName());
-			if($factionName == null){
-				return "No Faction";
-			}
-			return $factionName;
-		}
-		return "Plugin not found";
-	}
-	
-	/**
-	 * @param Player $player
-	 * @return int|string
-	 */
-	public function getPlayerKills(Player $player){
-		/** @var KDR $kdr */
-		$kdr = $this->getServer()->getPluginManager()->getPlugin("KDR");
-		if($kdr instanceof KDR){
-			return $kdr->getProvider()->getPlayerKillPoints($player);
-		}else{
-			return "Plugin Not Found";
-		}
-	}
-	
-	/**
-	 * @param Player $player
-	 * @return int|string
-	 */
-	public function getPlayerDeaths(Player $player){
-		/** @var KDR $kdr */
-		$kdr = $this->getServer()->getPluginManager()->getPlugin("KDR");
-		if($kdr instanceof KDR){
-			return $kdr->getProvider()->getPlayerDeathPoints($player);
-		}else{
-			return "Plugin Not Found";
-		}
-	}
-	
-	/**
-	 * @param Player $player
-	 * @return string
-	 */
-	public function getPlayerKillToDeathRatio(Player $player): string{
-		/** @var KDR $kdr */
-		$kdr = $this->getServer()->getPluginManager()->getPlugin("KDR");
-		if($kdr instanceof KDR){
-			return $kdr->getProvider()->getKillToDeathRatio($player);
-		}else{
-			return "Plugin Not Found";
-		}
-	}
-	
-	public function getClicks(Player $player){
-		/** @var CPS $cps */
-		$cps = $this->getServer()->getPluginManager()->getPlugin("CPS");
-		if($cps instanceof CPS){
-			return $cps->getClicks($player);
-		}else{
-			return "Plugin Not Found";
-		}
-	}
-	
-	/**
-	 * @param Player $player
 	 * @param string $string
 	 * @return string
 	 */
 	public function process(Player $player, string $string): string{
 		$string = str_replace("{name}", $player->getName(), $string);
-		$string = str_replace("{money}", $this->getPlayerMoney($player), $string);
+		$string = str_replace("{money}", $this->dataManager->getPlayerMoney($player), $string);
 		$string = str_replace("{online}", count($this->getServer()->getOnlinePlayers()), $string);
 		$string = str_replace("{max_online}", $this->getServer()->getMaxPlayers(), $string);
-		$string = str_replace("{rank}", $this->getPlayerRank($player), $string);
-		$string = str_replace("{prison_rank}", $this->getPlayerPrisonRank($player), $string);
+		$string = str_replace("{rank}", $this->dataManager->getPlayerRank($player), $string);
+		$string = str_replace("{prison_rank}", $this->dataManager->getPlayerPrisonRank($player), $string);
 		$string = str_replace("{item_name}", $player->getInventory()->getItemInHand()->getName(), $string);
 		$string = str_replace("{item_id}", $player->getInventory()->getItemInHand()->getId(), $string);
 		$string = str_replace("{item_meta}", $player->getInventory()->getItemInHand()->getDamage(), $string);
@@ -325,20 +151,24 @@ class Main extends PluginBase{
 		$string = str_replace("{x}", intval($player->getX()), $string);
 		$string = str_replace("{y}", intval($player->getY()), $string);
 		$string = str_replace("{z}", intval($player->getZ()), $string);
-		$string = str_replace("{faction}", $this->getPlayerFaction($player), $string);
+		$string = str_replace("{faction}", $this->dataManager->getPlayerFaction($player), $string);
 		$string = str_replace("{load}", $this->getServer()->getTickUsage(), $string);
 		$string = str_replace("{tps}", $this->getServer()->getTicksPerSecond(), $string);
 		$string = str_replace("{level_name}", $player->getLevel()->getName(), $string);
 		$string = str_replace("{level_folder_name}", $player->getLevel()->getFolderName(), $string);
 		$string = str_replace("{ip}", $player->getAddress(), $string);
 		$string = str_replace("{ping}", $player->getPing(), $string);
-		$string = str_replace("{kills}", $this->getPlayerKills($player), $string);
-		$string = str_replace("{deaths}", $this->getPlayerDeaths($player), $string);
-		$string = str_replace("{kdr}", $this->getPlayerKillToDeathRatio($player), $string);
-		$string = str_replace("{prefix}", $this->getPrefix($player), $string);
-		$string = str_replace("{suffix}", $this->getSuffix($player), $string);
+		$string = str_replace("{kills}", $this->dataManager->getPlayerKills($player), $string);
+		$string = str_replace("{deaths}", $this->dataManager->getPlayerDeaths($player), $string);
+		$string = str_replace("{kdr}", $this->dataManager->getPlayerKillToDeathRatio($player), $string);
+		$string = str_replace("{prefix}", $this->dataManager->getPrefix($player), $string);
+		$string = str_replace("{suffix}", $this->dataManager->getSuffix($player), $string);
 		$string = str_replace("{time}", date($this->getConfig()->get("time-format")), $string);
-		$string = str_replace("{cps}", $this->getClicks($player), $string);
+		$string = str_replace("{cps}", $this->dataManager->getClicks($player), $string);
+		$string = str_replace("{is_state}", $this->dataManager->getIsleState($player), $string);
+		$string = str_replace("{is_blocks}", $this->dataManager->getIsleBlocks($player), $string);
+		$string = str_replace("{is_members}", $this->dataManager->getIsleMembers($player), $string);
+		$string = str_replace("{is_size}", $this->dataManager->getIsleSize($player), $string);
 		return $string;
 	}
 }

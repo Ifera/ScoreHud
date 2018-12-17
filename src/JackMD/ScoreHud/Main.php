@@ -39,6 +39,7 @@ use JackMD\CPS\CPS;
 use JackMD\KDR\KDR;
 use JackMD\ScoreFactory\ScoreFactory;
 use JackMD\ScoreHud\task\ScoreUpdateTask;
+use JackMD\UpdateNotifier\UpdateNotifier;
 use onebone\economyapi\EconomyAPI;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
@@ -50,8 +51,13 @@ class Main extends PluginBase{
 	/** @var string */
 	private const CONFIG_VERSION = 3;
 	
+	public function onLoad(){
+		$this->checkVirions();
+		
+		UpdateNotifier::checkUpdate($this, $this->getDescription()->getName(), $this->getDescription()->getVersion());
+	}
+	
 	public function onEnable(): void{
-		$this->checkScoreFactory();
 		$this->saveDefaultConfig();
 		$this->checkConfig();
 		$this->setTimezone($this->getConfig()->get("timezone"));
@@ -61,10 +67,10 @@ class Main extends PluginBase{
 	}
 	
 	/**
-	 * Checks if ScoreFactory virion is present or not.
+	 * Checks if the required virions/libraries are present before enabling the plugin.
 	 */
-	private function checkScoreFactory(): void{
-		if(!class_exists(ScoreFactory::class)){
+	private function checkVirions(): void{
+		if(!class_exists(ScoreFactory::class) || !class_exists(UpdateNotifier::class)){
 			throw new \RuntimeException("ScoreHud plugin will only work if you use the plugin phar from Poggit.");
 		}
 	}

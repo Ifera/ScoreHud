@@ -169,6 +169,7 @@ class Main extends PluginBase{
 		$string = str_replace("{is_blocks}", $this->dataManager->getIsleBlocks($player), $string);
 		$string = str_replace("{is_members}", $this->dataManager->getIsleMembers($player), $string);
 		$string = str_replace("{is_size}", $this->dataManager->getIsleSize($player), $string);
+		$string = str_replace("{faction_power}", $this->dataManager->getFactionPower($player), $string);
 		return $string;
 	}
 }

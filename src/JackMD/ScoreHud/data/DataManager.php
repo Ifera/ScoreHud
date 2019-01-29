@@ -119,6 +119,22 @@ class DataManager{
 		}
 		return "Plugin not found";
 	}
+	/**
+	 * @param Player $player
+	 * @return string
+	 */
+	public function getFactionPower(Player $player){
+		/** @var FactionMain $factionsPro */
+		$factionsPro = $this->plugin->getServer()->getPluginManager()->getPlugin("FactionsPro");
+		if($factionsPro instanceof FactionMain){
+			$factionName = $factionsPro->getPlayerFaction($player->getName());
+			if($factionName == null){
+				return "No Faction";
+			}
+			return $factionsPro->getFactionPower($factionName);;
+		}
+		return "Plugin not found";
+	}
 	
 	/**
 	 * @param Player $player

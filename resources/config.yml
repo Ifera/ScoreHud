@@ -57,6 +57,7 @@ server-names:
 # {item_count}          - Amount of item in the players hand.
 # {x}/{y}/{z}           - X/Y/Z coordinate of the player.
 # {faction}             - Faction of the player. (Requires FactionsPro by poggit-orphanage).
+# {faction_power}             - Power of the faction. (Requires FactionsPro by poggit-orphanage).
 # {load}                - Current load on the server (0 - 100%)
 # {tps}                 - TPS of the server.
 # {level_name}          - Name of the players current level/world.

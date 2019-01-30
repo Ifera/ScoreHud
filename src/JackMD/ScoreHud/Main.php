@@ -75,8 +75,7 @@ class Main extends PluginBase{
 			rename($this->getDataFolder() . "config.yml", $this->getDataFolder() . "config_old.yml");
 			$this->saveResource("config.yml");
 			$this->getLogger()->critical("Your configuration file is outdated.");
-			$this->getLogger()->notice("Your old configuration has been saved as config_old.yml and a new configuration file has been generated.");
-			return;
+			$this->getLogger()->notice("Your old configuration has been saved as config_old.yml and a new configuration file has been generated. Please update accordingly.");
 		}
 	}
 	

@@ -112,7 +112,7 @@ class DataManager{
 		$factionsPro = $this->plugin->getServer()->getPluginManager()->getPlugin("FactionsPro");
 		if($factionsPro instanceof FactionMain){
 			$factionName = $factionsPro->getPlayerFaction($player->getName());
-			if($factionName == null){
+			if($factionName === null){
 				return "No Faction";
 			}
 			return $factionName;
@@ -132,7 +132,7 @@ class DataManager{
 			if($factionName === null){
 				return "No Faction";
 			}
-			return $factionsPro->getFactionPower($factionName);;
+			return $factionsPro->getFactionPower($factionName);
 		}
 		return "Plugin not found";
 	}
@@ -256,7 +256,7 @@ class DataManager{
 		$sb = $this->plugin->getServer()->getPluginManager()->getPlugin("SkyBlock");
 		if($sb instanceof SkyBlock){
 			$session = $sb->getSessionManager()->getSession($player);
-			if(!$session->hasIsle()){
+			if((is_null($session)) || (!$session->hasIsle())){
 				return "No Island";
 			}
 			$isle = $session->getIsle();
@@ -275,7 +275,7 @@ class DataManager{
 		$sb = $this->plugin->getServer()->getPluginManager()->getPlugin("SkyBlock");
 		if($sb instanceof SkyBlock){
 			$session = $sb->getSessionManager()->getSession($player);
-			if(!$session->hasIsle()){
+			if((is_null($session)) || (!$session->hasIsle())){
 				return "No Island";
 			}
 			$isle = $session->getIsle();
@@ -294,7 +294,7 @@ class DataManager{
 		$sb = $this->plugin->getServer()->getPluginManager()->getPlugin("SkyBlock");
 		if($sb instanceof SkyBlock){
 			$session = $sb->getSessionManager()->getSession($player);
-			if(!$session->hasIsle()){
+			if((is_null($session)) || (!$session->hasIsle())){
 				return "No Island";
 			}
 			$isle = $session->getIsle();
@@ -313,7 +313,7 @@ class DataManager{
 		$sb = $this->plugin->getServer()->getPluginManager()->getPlugin("SkyBlock");
 		if($sb instanceof SkyBlock){
 			$session = $sb->getSessionManager()->getSession($player);
-			if(!$session->hasIsle()){
+			if((is_null($session)) || (!$session->hasIsle())){
 				return "No Island";
 			}
 			$isle = $session->getIsle();

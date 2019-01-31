@@ -4,3 +4,8 @@ api: [3.0.0]
 version: 3.0.0
 author: JackMD
 description: Add fully customizable scoreboards to your server.
+
+permissions:
+  sh.command.sh:
+    default: true
+    description: Allow players to use /scorehud command.

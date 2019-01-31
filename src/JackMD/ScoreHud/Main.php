@@ -34,6 +34,7 @@ declare(strict_types = 1);
 namespace JackMD\ScoreHud;
 
 use JackMD\ScoreFactory\ScoreFactory;
+use JackMD\ScoreHud\commands\ScoreHudCommand;
 use JackMD\ScoreHud\data\DataManager;
 use JackMD\ScoreHud\task\ScoreUpdateTask;
 use JackMD\UpdateNotifier\UpdateNotifier;
@@ -42,7 +43,9 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 
 class Main extends PluginBase{
-	
+
+	/** @var string */
+	public const PREFIX = "§a[§6Score§eHud§a]§r ";
 	/** @var string */
 	private const CONFIG_VERSION = 5;
 	/** @var string */
@@ -50,6 +53,8 @@ class Main extends PluginBase{
 
 	/** @var DataManager */
 	private $dataManager;
+	/** @var array */
+	public $disabledScoreHudPlayers = [];
 	
 	public function onLoad(){
 		$this->checkVirions();
@@ -90,7 +95,8 @@ class Main extends PluginBase{
 	
 	public function onEnable(): void{
 		$this->dataManager = new DataManager($this);
-		
+
+		$this->getServer()->getCommandMap()->register("scorehud", new ScoreHudCommand($this));
 		$this->setTimezone($this->getConfig()->get("timezone"));
 		$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
 		$this->getScheduler()->scheduleRepeatingTask(new ScoreUpdateTask($this), (int) $this->getConfig()->get("update-interval") * 20);

@@ -41,6 +41,7 @@ use JackMD\ScoreHud\Main;
 use onebone\economyapi\EconomyAPI;
 use pocketmine\Player;
 use rankup\RankUp;
+use room17\SkyBlock\session\iSession;
 use room17\SkyBlock\SkyBlock;
 
 class DataManager{
@@ -318,6 +319,36 @@ class DataManager{
 			}
 			$isle = $session->getIsle();
 			return $isle->isLocked() ? "Locked" : "Unlocked";
+		}else{
+			return "Plugin Not Found";
+		}
+	}
+
+	/**
+	 * @param Player $player
+	 * @return string
+	 */
+	public function getIsleRank(Player $player){
+		/** @var SkyBlock $sb */
+		$sb = $this->plugin->getServer()->getPluginManager()->getPlugin("SkyBlock");
+		if($sb instanceof SkyBlock){
+			$session = $sb->getSessionManager()->getSession($player);
+			if((is_null($session)) || (!$session->hasIsle())){
+				return "No Island";
+			}
+			$rank = "No Rank";
+			switch($session->getRank()){
+				case iSession::RANK_DEFAULT:
+					$rank = "Member";
+					break;
+				case iSession::RANK_OFFICER:
+					$rank = "Officer";
+					break;
+				case iSession::RANK_LEADER:
+					$rank = "Leader";
+					break;
+			}
+			return $rank;
 		}else{
 			return "Plugin Not Found";
 		}

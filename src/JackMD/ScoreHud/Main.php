@@ -44,15 +44,17 @@ use pocketmine\utils\Config;
 class Main extends PluginBase{
 	
 	/** @var string */
-	private const CONFIG_VERSION = 4;
-	
+	private const CONFIG_VERSION = 5;
+	/** @var string */
+	private const DATA_CONFIG_VERSION = 1;
+
 	/** @var DataManager */
 	private $dataManager;
 	
 	public function onLoad(){
 		$this->checkVirions();
 		$this->saveDefaultConfig();
-		$this->checkConfig();
+		$this->checkConfigs();
 		
 		UpdateNotifier::checkUpdate($this, $this->getDescription()->getName(), $this->getDescription()->getVersion());
 	}
@@ -67,15 +69,22 @@ class Main extends PluginBase{
 	}
 	
 	/**
-	 * Check if the config is up-to-date.
+	 * Check if the configs is up-to-date.
 	 */
-	public function checkConfig(): void{
-		$config = new Config($this->getDataFolder() . "config.yml", Config::YAML);
-		if((!$config->exists("config-version")) || ($config->get("config-version") !== self::CONFIG_VERSION)){
+	public function checkConfigs(): void{
+		if((!$this->getConfig()->exists("config-version")) || ($this->getConfig()->get("config-version") !== self::CONFIG_VERSION)){
 			rename($this->getDataFolder() . "config.yml", $this->getDataFolder() . "config_old.yml");
 			$this->saveResource("config.yml");
 			$this->getLogger()->critical("Your configuration file is outdated.");
 			$this->getLogger()->notice("Your old configuration has been saved as config_old.yml and a new configuration file has been generated. Please update accordingly.");
+		}
+
+		$dataConfig = new Config($this->getDataFolder() . "data.yml", Config::YAML);
+		if((!$dataConfig->exists("data-version")) || ($dataConfig->get("data-version") !== self::DATA_CONFIG_VERSION)){
+			rename($this->getDataFolder() . "data.yml", $this->getDataFolder() . "data_old.yml");
+			$this->saveResource("data.yml");
+			$this->getLogger()->critical("Your data.yml file is outdated.");
+			$this->getLogger()->notice("Your old data.yml has been saved as data_old.yml and a new data.yml file has been generated. Please update accordingly.");
 		}
 	}
 	
@@ -117,9 +126,10 @@ class Main extends PluginBase{
 	 */
 	public function updateScore(Player $player): void{
 		$i = 0;
-		$lines = $this->getConfig()->get("score-lines");
+		$dataConfig = new Config($this->getDataFolder() . "data.yml", Config::YAML);
+		$lines = $dataConfig->get("score-lines");
 		if((is_null($lines)) || empty($lines) || !isset($lines)){
-			$this->getLogger()->error("Please set score-lines in config.yml properly.");
+			$this->getLogger()->error("Please set score-lines in data.yml properly.");
 			$this->getServer()->getPluginManager()->disablePlugin($this);
 			return;
 		}
@@ -151,6 +161,7 @@ class Main extends PluginBase{
 		$string = str_replace("{y}", intval($player->getY()), $string);
 		$string = str_replace("{z}", intval($player->getZ()), $string);
 		$string = str_replace("{faction}", $this->dataManager->getPlayerFaction($player), $string);
+		$string = str_replace("{faction_power}", $this->dataManager->getFactionPower($player), $string);
 		$string = str_replace("{load}", $this->getServer()->getTickUsage(), $string);
 		$string = str_replace("{tps}", $this->getServer()->getTicksPerSecond(), $string);
 		$string = str_replace("{level_name}", $player->getLevel()->getName(), $string);
@@ -163,12 +174,13 @@ class Main extends PluginBase{
 		$string = str_replace("{prefix}", $this->dataManager->getPrefix($player), $string);
 		$string = str_replace("{suffix}", $this->dataManager->getSuffix($player), $string);
 		$string = str_replace("{time}", date($this->getConfig()->get("time-format")), $string);
+		$string = str_replace("{date}", date($this->getConfig()->get("date-format")), $string);
 		$string = str_replace("{cps}", $this->dataManager->getClicks($player), $string);
 		$string = str_replace("{is_state}", $this->dataManager->getIsleState($player), $string);
 		$string = str_replace("{is_blocks}", $this->dataManager->getIsleBlocks($player), $string);
 		$string = str_replace("{is_members}", $this->dataManager->getIsleMembers($player), $string);
 		$string = str_replace("{is_size}", $this->dataManager->getIsleSize($player), $string);
-		$string = str_replace("{faction_power}", $this->dataManager->getFactionPower($player), $string);
+		$string = str_replace("{is_rank}", $this->dataManager->getIsleRank($player), $string);
 		return $string;
 	}
 }

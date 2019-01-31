@@ -35,6 +35,7 @@ namespace JackMD\ScoreHud\task;
 
 use JackMD\ScoreHud\Main;
 use pocketmine\scheduler\Task;
+use pocketmine\utils\Config;
 
 class ScoreUpdateTask extends Task{
 	
@@ -58,9 +59,10 @@ class ScoreUpdateTask extends Task{
 	 */
 	public function onRun(int $tick){
 		$players = $this->plugin->getServer()->getOnlinePlayers();
-		$titles = $this->plugin->getConfig()->get("server-names");
+		$dataConfig = new Config($this->plugin->getDataFolder() . "data.yml", Config::YAML);
+		$titles = $dataConfig->get("server-names");
 		if((is_null($titles)) || empty($titles) || !isset($titles)){
-			$this->plugin->getLogger()->error("Please set server-names in config.yml properly.");
+			$this->plugin->getLogger()->error("Please set server-names in data.yml properly.");
 			$this->plugin->getServer()->getPluginManager()->disablePlugin($this->plugin);
 			return;
 		}

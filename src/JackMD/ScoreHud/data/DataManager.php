@@ -115,7 +115,7 @@ class DataManager{
 		if($rankUp instanceof RankUp){
 			$nextRank = $rankUp->getRankStore()->getNextRank($player);
 			if($nextRank !== false){
-				return $nextRank;
+				return $nextRank->getPrice();
 			}else{
 				return "Max Rank";
 			}
@@ -355,19 +355,17 @@ class DataManager{
 			if((is_null($session)) || (!$session->hasIsle())){
 				return "No Island";
 			}
-			$rank = "No Rank";
 			switch($session->getRank()){
 				case SkyBlockSession::RANK_DEFAULT:
-					$rank = "Member";
-					break;
+					return "Member";
 				case SkyBlockSession::RANK_OFFICER:
-					$rank = "Officer";
-					break;
+					return "Officer";
 				case SkyBlockSession::RANK_LEADER:
-					$rank = "Leader";
-					break;
+					return "Leader";
+				case SkyBlockSession::RANK_FOUNDER:
+					return "Founder";
 			}
-			return $rank;
+			return "No Rank";
 		}else{
 			return "Plugin Not Found";
 		}

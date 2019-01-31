@@ -47,7 +47,7 @@ class ScoreHudCommand extends PluginCommand{
 	public function __construct(Main $plugin){
 		parent::__construct("scorehud", $plugin);
 		$this->setDescription("Give a crate key to a player.");
-		$this->setUsage("/scorehud <on|off|about>");
+		$this->setUsage("/scorehud <on|off|about|help>");
 		$this->setAliases(["sh"]);
 		$this->setPermission("sh.command.sh");
 
@@ -64,14 +64,13 @@ class ScoreHudCommand extends PluginCommand{
 			return false;
 		}
 		if(!isset($args[0])){
-			$sender->sendMessage(Main::PREFIX . "§cUsage: §a/scorehud <on|off|about>");
+			$sender->sendMessage(Main::PREFIX . "§cUsage: /scorehud <on|off|about|help>");
 
 			return false;
 		}
 		switch($args[0]){
 			case "about":
-				$sender->sendMessage(Main::PREFIX . "§6Score§eHud §av" . $this->plugin->getDescription()->getVersion());
-				$sender->sendMessage(Main::PREFIX . "§aPlugin by §dJackMD§a. Contact on §bTwitter: JackMTaylor_ §aor §bDiscord: JackMD#3717§a.");
+				$sender->sendMessage(Main::PREFIX . "§6Score§eHud §av" . $this->plugin->getDescription()->getVersion() . "§a.Plugin by §dJackMD§a. Contact on §bTwitter: JackMTaylor_ §aor §bDiscord: JackMD#3717§a.");
 				break;
 
 			case "on":
@@ -88,15 +87,15 @@ class ScoreHudCommand extends PluginCommand{
 					ScoreFactory::removeScore($sender);
 
 					$this->plugin->disabledScoreHudPlayers[strtolower($sender->getName())] = 1;
-					$sender->sendMessage(Main::PREFIX . "§aSuccessfully disabled ScoreHud.");
+					$sender->sendMessage(Main::PREFIX . "§cSuccessfully disabled ScoreHud.");
 				}else{
-					$sender->sendMessage(Main::PREFIX . "§cScoreHud is already disabled for you.");
+					$sender->sendMessage(Main::PREFIX . "§aScoreHud is already disabled for you.");
 				}
 				break;
 
 			case "help":
 			default:
-				$sender->sendMessage(Main::PREFIX . "§cUsage: §a/scorehud <on|off|about>");
+				$sender->sendMessage(Main::PREFIX . "§cUsage: /scorehud <on|off|about|help>");
 				break;
 		}
 

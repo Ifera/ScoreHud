@@ -45,7 +45,7 @@ use pocketmine\utils\Config;
 class Main extends PluginBase{
 
 	/** @var string */
-	public const PREFIX = "§a[§6Score§eHud§a]§r ";
+	public const PREFIX = "§8[§6S§eH§8]§r ";
 	/** @var string */
 	private const CONFIG_VERSION = 5;
 	/** @var string */
@@ -59,6 +59,7 @@ class Main extends PluginBase{
 	public function onLoad(){
 		$this->checkVirions();
 		$this->saveDefaultConfig();
+		$this->saveResource("data.yml");
 		$this->checkConfigs();
 		
 		UpdateNotifier::checkUpdate($this, $this->getDescription()->getName(), $this->getDescription()->getVersion());

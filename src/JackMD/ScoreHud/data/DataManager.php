@@ -40,8 +40,9 @@ use JackMD\KDR\KDR;
 use JackMD\ScoreHud\Main;
 use onebone\economyapi\EconomyAPI;
 use pocketmine\Player;
+use rankup\rank\Rank;
 use rankup\RankUp;
-use room17\SkyBlock\session\iSession;
+use room17\SkyBlock\session\iSession as SkyBlockSession;
 use room17\SkyBlock\SkyBlock;
 
 class DataManager{
@@ -90,7 +91,7 @@ class DataManager{
 	 * @param Player $player
 	 * @return bool|int|string
 	 */
-	public function getPlayerPrisonRank(Player $player){
+	public function getRankUpRank(Player $player){
 		/** @var RankUp $rankUp */
 		$rankUp = $this->plugin->getServer()->getPluginManager()->getPlugin("RankUp");
 		if($rankUp instanceof RankUp){
@@ -99,6 +100,24 @@ class DataManager{
 				return $group;
 			}else{
 				return "No Rank";
+			}
+		}
+		return "Plugin not found";
+	}
+
+	/**
+	 * @param Player $player
+	 * @return bool|Rank|string
+	 */
+	public function getRankUpRankPrice(Player $player){
+		/** @var RankUp $rankUp */
+		$rankUp = $this->plugin->getServer()->getPluginManager()->getPlugin("RankUp");
+		if($rankUp instanceof RankUp){
+			$nextRank = $rankUp->getRankStore()->getNextRank($player);
+			if($nextRank !== false){
+				return $nextRank;
+			}else{
+				return "Max Rank";
 			}
 		}
 		return "Plugin not found";
@@ -338,13 +357,13 @@ class DataManager{
 			}
 			$rank = "No Rank";
 			switch($session->getRank()){
-				case iSession::RANK_DEFAULT:
+				case SkyBlockSession::RANK_DEFAULT:
 					$rank = "Member";
 					break;
-				case iSession::RANK_OFFICER:
+				case SkyBlockSession::RANK_OFFICER:
 					$rank = "Officer";
 					break;
-				case iSession::RANK_LEADER:
+				case SkyBlockSession::RANK_LEADER:
 					$rank = "Leader";
 					break;
 			}

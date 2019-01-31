@@ -123,6 +123,9 @@ class Main extends PluginBase{
 		if(!$player->isOnline()){
 			return;
 		}
+		if(isset($this->disabledScoreHudPlayers[strtolower($player->getName())])){
+			return;
+		}
 		ScoreFactory::setScore($player, $title);
 		$this->updateScore($player);
 	}

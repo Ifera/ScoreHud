@@ -33,9 +33,11 @@ declare(strict_types = 1);
 
 namespace JackMD\ScoreHud\commands;
 
+use JackMD\ScoreFactory\ScoreFactory;
 use JackMD\ScoreHud\Main;
 use pocketmine\command\CommandSender;
 use pocketmine\command\PluginCommand;
+use pocketmine\Player;
 
 class ScoreHudCommand extends PluginCommand{
 
@@ -55,6 +57,11 @@ class ScoreHudCommand extends PluginCommand{
 	public function execute(CommandSender $sender, string $commandLabel, array $args){
 		if(!$this->testPermission($sender)){
 			return true;
+		}
+		if(!$sender instanceof Player){
+			$sender->sendMessage(Main::PREFIX . "§cYou can only use this command in-game.");
+
+			return false;
 		}
 		if(!isset($args[0])){
 			$sender->sendMessage(Main::PREFIX . "§cUsage: §a/scorehud <on|off|about>");
@@ -78,6 +85,8 @@ class ScoreHudCommand extends PluginCommand{
 
 			case "off":
 				if(!isset($this->plugin->disabledScoreHudPlayers[strtolower($sender->getName())])){
+					ScoreFactory::removeScore($sender);
+
 					$this->plugin->disabledScoreHudPlayers[strtolower($sender->getName())] = 1;
 					$sender->sendMessage(Main::PREFIX . "§aSuccessfully disabled ScoreHud.");
 				}else{

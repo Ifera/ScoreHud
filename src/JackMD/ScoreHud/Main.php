@@ -46,25 +46,28 @@ class Main extends PluginBase{
 
 	/** @var string */
 	public const PREFIX = "§8[§6S§eH§8]§r ";
-	/** @var string */
-	private const CONFIG_VERSION = 5;
-	/** @var string */
-	private const DATA_CONFIG_VERSION = 1;
 
-	/** @var DataManager */
-	private $dataManager;
+	/** @var string */
+	private const CONFIG_VERSION = 6;
+
+	/** @var string */
+	private const DATA_CONFIG_VERSION = 2;
 	/** @var array */
 	public $disabledScoreHudPlayers = [];
-	
+	/** @var DataManager */
+	private $dataManager;
+	/** @var null|array */
+	private $scoreboards = [];
+	/** @var null|array */
+	private $scorelines = [];
+
 	public function onLoad(){
 		$this->checkVirions();
-		$this->saveDefaultConfig();
-		$this->saveResource("data.yml");
-		$this->checkConfigs();
-		
+		$this->initScoreboards();
+
 		UpdateNotifier::checkUpdate($this, $this->getDescription()->getName(), $this->getDescription()->getVersion());
 	}
-	
+
 	/**
 	 * Checks if the required virions/libraries are present before enabling the plugin.
 	 */
@@ -73,7 +76,20 @@ class Main extends PluginBase{
 			throw new \RuntimeException("ScoreHud plugin will only work if you use the plugin phar from Poggit.");
 		}
 	}
-	
+
+	private function initScoreboards(): void{
+		$this->saveDefaultConfig();
+		$this->saveResource("data.yml");
+		$this->checkConfigs();
+
+		$dataConfig = new Config($this->getDataFolder() . "data.yml", Config::YAML);
+		foreach($dataConfig->getNested("scoreboards") as $world => $data){
+			$world = strtolower($world);
+			$this->scoreboards[$world] = $data;
+			$this->scorelines[$world] = $data["lines"];
+		}
+	}
+
 	/**
 	 * Check if the configs is up-to-date.
 	 */
@@ -93,7 +109,7 @@ class Main extends PluginBase{
 			$this->getLogger()->notice("Your old data.yml has been saved as data_old.yml and a new data.yml file has been generated. Please update accordingly.");
 		}
 	}
-	
+
 	public function onEnable(): void{
 		$this->dataManager = new DataManager($this);
 
@@ -103,7 +119,7 @@ class Main extends PluginBase{
 		$this->getScheduler()->scheduleRepeatingTask(new ScoreUpdateTask($this), (int) $this->getConfig()->get("update-interval") * 20);
 		$this->getLogger()->info("ScoreHud Plugin Enabled.");
 	}
-	
+
 	/**
 	 * @param $timezone
 	 * @return mixed
@@ -111,11 +127,13 @@ class Main extends PluginBase{
 	private function setTimezone($timezone){
 		if($timezone !== false){
 			$this->getLogger()->notice("Server timezone successfully set to " . $timezone);
+
 			return @date_default_timezone_set($timezone);
 		}
+
 		return false;
 	}
-	
+
 	/**
 	 * @param Player $player
 	 * @param string $title
@@ -130,27 +148,69 @@ class Main extends PluginBase{
 		ScoreFactory::setScore($player, $title);
 		$this->updateScore($player);
 	}
-	
+
 	/**
 	 * @param Player $player
 	 */
 	public function updateScore(Player $player): void{
-		$i = 0;
 		$dataConfig = new Config($this->getDataFolder() . "data.yml", Config::YAML);
-		$lines = $dataConfig->get("score-lines");
-		if((is_null($lines)) || empty($lines) || !isset($lines)){
-			$this->getLogger()->error("Please set score-lines in data.yml properly.");
-			$this->getServer()->getPluginManager()->disablePlugin($this);
-			return;
-		}
-		foreach($lines as $line){
-			$i++;
-			if($i <= 15){
-				ScoreFactory::setScoreLine($player, $i, $this->process($player, $line));
+
+		if($this->getConfig()->get("per-world-scoreboards")){
+			if(!$player->isOnline()){
+				return;
+			}
+			$levelName = strtolower($player->getLevel()->getFolderName());
+			if(!is_null($lines = $this->getScorelines($levelName))){
+				if(empty($lines)){
+					$this->getLogger()->error("Please set lines key for $levelName correctly for scoreboards in data.yml.");
+					$this->getServer()->getPluginManager()->disablePlugin($this);
+
+					return;
+				}
+				$i = 0;
+				foreach($lines as $line){
+					$i++;
+					if($i <= 15){
+						ScoreFactory::setScoreLine($player, $i, $this->process($player, $line));
+					}
+				}
+			}else{
+				ScoreFactory::removeScore($player);
+			}
+		}else{
+			$lines = $dataConfig->get("score-lines");
+			if(empty($lines)){
+				$this->getLogger()->error("Please set score-lines in data.yml properly.");
+				$this->getServer()->getPluginManager()->disablePlugin($this);
+
+				return;
+			}
+			$i = 0;
+			foreach($lines as $line){
+				$i++;
+				if($i <= 15){
+					ScoreFactory::setScoreLine($player, $i, $this->process($player, $line));
+				}
 			}
 		}
 	}
-	
+
+	public function getScorelines(string $world): ?array{
+		return !isset($this->scorelines[$world]) ? null : $this->scorelines[$world];
+	}
+
+	public function getScoreboards(): ?array{
+		return $this->scoreboards;
+	}
+
+	public function getScoreboardData(string $world): ?array{
+		return !isset($this->scoreboards[$world]) ? null : $this->scoreboards[$world];
+	}
+
+	public function getScoreWorlds(): ?array{
+		return is_null($this->scoreboards) ? null : array_keys($this->scoreboards);
+	}
+
 	/**
 	 * @param Player $player
 	 * @param string $string
@@ -192,6 +252,7 @@ class Main extends PluginBase{
 		$string = str_replace("{is_members}", $this->dataManager->getIsleMembers($player), $string);
 		$string = str_replace("{is_size}", $this->dataManager->getIsleSize($player), $string);
 		$string = str_replace("{is_rank}", $this->dataManager->getIsleRank($player), $string);
+
 		return $string;
 	}
 }

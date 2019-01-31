@@ -1,7 +1,7 @@
 ---
 # DO NOT EDIT THIS VALUE.
 # ONLY FOR INTERNAL USE.
-data-version: 1
+data-version: 2
 
 # Changing titles of the scoreboard.
 # Can be of any number.
@@ -45,13 +45,32 @@ server-names:
 # {is_rank}                 - Gets the SkyBlock rank of the player. (Requires SkyBlock by GiantQuartz).
 
 # Note: You can find links to the required/supported plugins via the README.md.
-
-# Add the lines that would be shown on the Scoreboard.
-# Follow the same pattern as below.
-# You can edit the lines already set below and adjust them according to your needs.
-#
 # IMPORTANT NOTE: You can only set a maximum of 15 lines and no more.
+
+# You can edit the lines already set below and adjust them according to your needs.
+
+# If you want same scoreboard to be displayed in every world then set per-world-scoreboard to false in config.yml.
+# After that edit the following score-lines to edit the scoreboard.
 score-lines:
 - " §dName: §5{name}"
 - " §bOnline: §a{online} §c/ §d{max_online}"
+
+# If you want to display different scoreboards for every world then set per-world-scoreboard to true in config.yml.
+# After that edit the following to suit your needs.
+scoreboards:
+# EXAMPLE CONFIGURATION:
+# -------------------
+# "world name":     | The name of the world. Enclose it in inverted commas.
+#   lines:          | This key is important. And the plugin won't function without it.
+#   - " Line #1"    | Line number one. You can use any of the above tags.
+#   - " Line #2"    | You can add a maximum of 15 lines.
+#--------------------
+  "world":
+    lines:
+    - " §dName: §5{name}"
+    - " §bOnline: §a{online} §c/ §d{max_online}"
+  "world 2":
+    lines:
+    - " §dTPS: §5{tps}"
+    - " §bLoad: §a{load}"
 ...

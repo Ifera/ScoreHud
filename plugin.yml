@@ -1,5 +1,6 @@
 name: ScoreHud
 main: JackMD\ScoreHud\Main
 api: [3.0.0]
-version: 2.0.0
+version: 3.0.0
 author: JackMD
+description: Add fully customizable scoreboards to your server.

@@ -152,7 +152,8 @@ class Main extends PluginBase{
 		$string = str_replace("{online}", count($this->getServer()->getOnlinePlayers()), $string);
 		$string = str_replace("{max_online}", $this->getServer()->getMaxPlayers(), $string);
 		$string = str_replace("{rank}", $this->dataManager->getPlayerRank($player), $string);
-		$string = str_replace("{prison_rank}", $this->dataManager->getPlayerPrisonRank($player), $string);
+		$string = str_replace("{prison_rank}", $this->dataManager->getRankUpRank($player), $string);
+		$string = str_replace("{prison_next_rank_price}", $this->dataManager->getRankUpRankPrice($player), $string);
 		$string = str_replace("{item_name}", $player->getInventory()->getItemInHand()->getName(), $string);
 		$string = str_replace("{item_id}", $player->getInventory()->getItemInHand()->getId(), $string);
 		$string = str_replace("{item_meta}", $player->getInventory()->getItemInHand()->getDamage(), $string);

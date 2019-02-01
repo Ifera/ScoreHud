@@ -18,6 +18,7 @@
 
  - [EconomyAPI](https://github.com/poggit-orphanage/EconomyS/tree/master/EconomyAPI)
  - [PurePerms](https://github.com/poggit-orphanage/PurePerms)
+ - [PureChat](https://github.com/poggit-orphanage/PureChat)
  - [RankUp](https://github.com/falkirks/RankUp)
  - [FactionsPro](https://github.com/poggit-orphanage/FactionsPro)
  - [KDR](https://github.com/JackMD/KDR)

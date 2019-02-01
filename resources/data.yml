@@ -17,6 +17,8 @@ server-names:
 # {online}                  - The number of online players.
 # {max_online}              - Max number of players allowed on the server.
 # {rank}                    - Players current in-game rank/group. (Requires PurePerms by poggit-orphanage).
+# {prefix}                  - Shows the prefix of the player. (Requires PureChat by poggit-orphanage).
+# {suffix}                  - Shows the suffix of the player. (Requires PureChat by poggit-orphanage).
 # {prison_rank}             - Get players Prison rank. (Requires RankUp by Falkirks).
 # {prison_next_rank_price}  - Get players next Prison rank price. (Requires RankUp by Falkirks).
 # {item_name}               - Name of the item in players hand.

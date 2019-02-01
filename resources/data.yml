@@ -1,7 +1,7 @@
 ---
 # DO NOT EDIT THIS VALUE.
 # ONLY FOR INTERNAL USE.
-data-version: 2
+data-version: 3
 
 # Changing titles of the scoreboard.
 # Can be of any number.
@@ -52,6 +52,10 @@ server-names:
 # You can edit the lines already set below and adjust them according to your needs.
 
 # If you want same scoreboard to be displayed in every world then set per-world-scoreboard to false in config.yml.
+#
+# If you have per-world-scoreboard enabled and want to display a default scoreboard for a world you didn't mention
+# in scoreboards key below then set use-default-score-lines to true in config.yml.
+#
 # After that edit the following score-lines to edit the scoreboard.
 score-lines:
 - " §dName: §5{name}"

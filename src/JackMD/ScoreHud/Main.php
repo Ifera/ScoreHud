@@ -46,12 +46,11 @@ class Main extends PluginBase{
 
 	/** @var string */
 	public const PREFIX = "§8[§6S§eH§8]§r ";
-
 	/** @var string */
-	private const CONFIG_VERSION = 6;
-
+	private const CONFIG_VERSION = 7;
 	/** @var string */
-	private const DATA_CONFIG_VERSION = 2;
+	private const DATA_CONFIG_VERSION = 3;
+
 	/** @var array */
 	public $disabledScoreHudPlayers = [];
 	/** @var DataManager */
@@ -112,7 +111,6 @@ class Main extends PluginBase{
 
 	public function onEnable(): void{
 		$this->dataManager = new DataManager($this);
-
 		$this->getServer()->getCommandMap()->register("scorehud", new ScoreHudCommand($this));
 		$this->setTimezone($this->getConfig()->get("timezone"));
 		$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
@@ -153,8 +151,6 @@ class Main extends PluginBase{
 	 * @param Player $player
 	 */
 	public function updateScore(Player $player): void{
-		$dataConfig = new Config($this->getDataFolder() . "data.yml", Config::YAML);
-
 		if($this->getConfig()->get("per-world-scoreboards")){
 			if(!$player->isOnline()){
 				return;
@@ -174,41 +170,37 @@ class Main extends PluginBase{
 						ScoreFactory::setScoreLine($player, $i, $this->process($player, $line));
 					}
 				}
+			}elseif($this->getConfig()->get("use-default-score-lines")){
+				$this->displayDefaultScoreboard($player);
 			}else{
 				ScoreFactory::removeScore($player);
 			}
 		}else{
-			$lines = $dataConfig->get("score-lines");
-			if(empty($lines)){
-				$this->getLogger()->error("Please set score-lines in data.yml properly.");
-				$this->getServer()->getPluginManager()->disablePlugin($this);
+			$this->displayDefaultScoreboard($player);
+		}
+	}
 
-				return;
-			}
-			$i = 0;
-			foreach($lines as $line){
-				$i++;
-				if($i <= 15){
-					ScoreFactory::setScoreLine($player, $i, $this->process($player, $line));
-				}
+	public function displayDefaultScoreboard(Player $player): void{
+		$dataConfig = new Config($this->getDataFolder() . "data.yml", Config::YAML);
+
+		$lines = $dataConfig->get("score-lines");
+		if(empty($lines)){
+			$this->getLogger()->error("Please set score-lines in data.yml properly.");
+			$this->getServer()->getPluginManager()->disablePlugin($this);
+
+			return;
+		}
+		$i = 0;
+		foreach($lines as $line){
+			$i++;
+			if($i <= 15){
+				ScoreFactory::setScoreLine($player, $i, $this->process($player, $line));
 			}
 		}
 	}
 
 	public function getScorelines(string $world): ?array{
 		return !isset($this->scorelines[$world]) ? null : $this->scorelines[$world];
-	}
-
-	public function getScoreboards(): ?array{
-		return $this->scoreboards;
-	}
-
-	public function getScoreboardData(string $world): ?array{
-		return !isset($this->scoreboards[$world]) ? null : $this->scoreboards[$world];
-	}
-
-	public function getScoreWorlds(): ?array{
-		return is_null($this->scoreboards) ? null : array_keys($this->scoreboards);
 	}
 
 	/**
@@ -254,5 +246,17 @@ class Main extends PluginBase{
 		$string = str_replace("{is_rank}", $this->dataManager->getIsleRank($player), $string);
 
 		return $string;
+	}
+
+	public function getScoreboards(): ?array{
+		return $this->scoreboards;
+	}
+
+	public function getScoreboardData(string $world): ?array{
+		return !isset($this->scoreboards[$world]) ? null : $this->scoreboards[$world];
+	}
+
+	public function getScoreWorlds(): ?array{
+		return is_null($this->scoreboards) ? null : array_keys($this->scoreboards);
 	}
 }

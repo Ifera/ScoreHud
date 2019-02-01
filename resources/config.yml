@@ -29,11 +29,15 @@
 
 # DO NOT EDIT THIS VALUE.
 # ONLY FOR INTERNAL USE.
-config-version: 6
+config-version: 7
 
 # Set this to true if you want to enable per world scoreboards.
 # Then edit scoreboards key in data.yml to suit your needs.
 per-world-scoreboards: false
+
+# If you have per-world-scoreboards enabled and you want to display a default scoreboard for a world
+# whose scoreboard you didn't set in data.yml under scoreboards key then set this to true.
+use-default-score-lines: false
 
 # The amount in seconds after which the Scoreboard would update.
 # Increase this value if your server seems to lag.

@@ -46,7 +46,7 @@ class ScoreHudCommand extends PluginCommand{
 
 	public function __construct(Main $plugin){
 		parent::__construct("scorehud", $plugin);
-		$this->setDescription("Give a crate key to a player.");
+		$this->setDescription("Shows ScoreHud Commands");
 		$this->setUsage("/scorehud <on|off|about|help>");
 		$this->setAliases(["sh"]);
 		$this->setPermission("sh.command.sh");

@@ -42,7 +42,7 @@ use onebone\economyapi\EconomyAPI;
 use pocketmine\Player;
 use rankup\rank\Rank;
 use rankup\RankUp;
-use room17\SkyBlock\session\iSession as SkyBlockSession;
+use room17\SkyBlock\session\BaseSession as SkyBlockSession;
 use room17\SkyBlock\SkyBlock;
 
 class DataManager{

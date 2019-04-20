@@ -41,15 +41,16 @@ use JackMD\UpdateNotifier\UpdateNotifier;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
+use RuntimeException;
 
-class Main extends PluginBase{
+class ScoreHud extends PluginBase{
 
 	/** @var string */
 	public const PREFIX = "§8[§6S§eH§8]§r ";
 	/** @var string */
-	private const CONFIG_VERSION = 7;
+	private const CONFIG_VERSION = 8;
 	/** @var string */
-	private const DATA_CONFIG_VERSION = 3;
+	private const DATA_CONFIG_VERSION = 4;
 
 	/** @var array */
 	public $disabledScoreHudPlayers = [];
@@ -72,7 +73,7 @@ class Main extends PluginBase{
 	 */
 	private function checkVirions(): void{
 		if(!class_exists(ScoreFactory::class) || !class_exists(UpdateNotifier::class)){
-			throw new \RuntimeException("ScoreHud plugin will only work if you use the plugin phar from Poggit.");
+			throw new RuntimeException("ScoreHud plugin will only work if you use the plugin phar from Poggit.");
 		}
 	}
 
@@ -111,11 +112,11 @@ class Main extends PluginBase{
 
 	public function onEnable(): void{
 		$this->dataManager = new DataManager($this);
+
 		$this->getServer()->getCommandMap()->register("scorehud", new ScoreHudCommand($this));
 		$this->setTimezone($this->getConfig()->get("timezone"));
 		$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
 		$this->getScheduler()->scheduleRepeatingTask(new ScoreUpdateTask($this), (int) $this->getConfig()->get("update-interval") * 20);
-		$this->getLogger()->info("ScoreHud Plugin Enabled.");
 	}
 
 	/**
@@ -126,7 +127,7 @@ class Main extends PluginBase{
 		if($timezone !== false){
 			$this->getLogger()->notice("Server timezone successfully set to " . $timezone);
 
-			return @date_default_timezone_set($timezone);
+			return date_default_timezone_set($timezone);
 		}
 
 		return false;

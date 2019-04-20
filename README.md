@@ -8,4 +8,4 @@
 
 |Addon|Description|Supported Tags|Plugin|
 |:--:|:--:|:--:|:--:|
-|EconomyApiAddon|Adds support for showing players money.|`{money}`: Shows your money.|[EconomyAPI](https://github.com/poggit-orphanage/EconomyS/tree/master/EconomyAPI)|
+|EconomyApiAddon|Adds support for showing players money.|`{money}`|[EconomyAPI](https://github.com/poggit-orphanage/EconomyS/tree/master/EconomyAPI)|

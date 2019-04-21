@@ -31,18 +31,16 @@ namespace JackMD\ScoreHud\Addons
 		/**
 		 * @param Player $player
 		 * @param string $string
-		 * @return string
+		 * @return array
 		 */
-		public function getProcessedString(Player $player, string $string): string{
-			$data = [
-				"{money}" => str_replace("{money}", $this->getPlayerMoney($player), $string)
-			];
+		public function getProcessedTags(Player $player, string $string): array{
+			$tags = [];
 
 			if(strpos($string, "{money}") !== false){
-				return $data["{money}"];
+				$tags["{money}"] = str_replace("{money}", $this->getPlayerMoney($player), $string);
 			}
 
-			return $string;
+			return $tags;
 		}
 	}
 }

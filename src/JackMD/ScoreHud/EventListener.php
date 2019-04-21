@@ -39,7 +39,7 @@ use pocketmine\event\player\PlayerQuitEvent;
 
 class EventListener implements Listener{
 	
-	/** @var Main */
+	/** @var ScoreHud */
 	private $plugin;
 	
 	/**
@@ -47,7 +47,7 @@ class EventListener implements Listener{
 	 *
 	 * @param Main $plugin
 	 */
-	public function __construct(Main $plugin){
+	public function __construct(ScoreHud $plugin){
 		$this->plugin = $plugin;
 	}
 	

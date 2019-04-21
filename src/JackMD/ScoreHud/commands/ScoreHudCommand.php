@@ -34,17 +34,22 @@ declare(strict_types = 1);
 namespace JackMD\ScoreHud\commands;
 
 use JackMD\ScoreFactory\ScoreFactory;
-use JackMD\ScoreHud\Main;
+use JackMD\ScoreHud\ScoreHud;
 use pocketmine\command\CommandSender;
 use pocketmine\command\PluginCommand;
 use pocketmine\Player;
 
 class ScoreHudCommand extends PluginCommand{
 
-	/** @var Main */
+	/** @var ScoreHud */
 	private $plugin;
 
-	public function __construct(Main $plugin){
+	/**
+	 * ScoreHudCommand constructor.
+	 *
+	 * @param ScoreHud $plugin
+	 */
+	public function __construct(ScoreHud $plugin){
 		parent::__construct("scorehud", $plugin);
 		$this->setDescription("Shows ScoreHud Commands");
 		$this->setUsage("/scorehud <on|off|about|help>");
@@ -54,31 +59,37 @@ class ScoreHudCommand extends PluginCommand{
 		$this->plugin = $plugin;
 	}
 
+	/**
+	 * @param CommandSender $sender
+	 * @param string        $commandLabel
+	 * @param array         $args
+	 * @return bool|mixed
+	 */
 	public function execute(CommandSender $sender, string $commandLabel, array $args){
 		if(!$this->testPermission($sender)){
 			return true;
 		}
 		if(!$sender instanceof Player){
-			$sender->sendMessage(Main::PREFIX . "§cYou can only use this command in-game.");
+			$sender->sendMessage(ScoreHud::PREFIX . "§cYou can only use this command in-game.");
 
 			return false;
 		}
 		if(!isset($args[0])){
-			$sender->sendMessage(Main::PREFIX . "§cUsage: /scorehud <on|off|about|help>");
+			$sender->sendMessage(ScoreHud::PREFIX . "§cUsage: /scorehud <on|off|about|help>");
 
 			return false;
 		}
 		switch($args[0]){
 			case "about":
-				$sender->sendMessage(Main::PREFIX . "§6Score§eHud §av" . $this->plugin->getDescription()->getVersion() . "§a.Plugin by §dJackMD§a. Contact on §bTwitter: JackMTaylor_ §aor §bDiscord: JackMD#3717§a.");
+				$sender->sendMessage(ScoreHud::PREFIX . "§6Score§eHud §av" . $this->plugin->getDescription()->getVersion() . "§a.Plugin by §dJackMD§a. Contact on §bTwitter: JackMTaylor_ §aor §bDiscord: JackMD#3717§a.");
 				break;
 
 			case "on":
 				if(isset($this->plugin->disabledScoreHudPlayers[strtolower($sender->getName())])){
 					unset($this->plugin->disabledScoreHudPlayers[strtolower($sender->getName())]);
-					$sender->sendMessage(Main::PREFIX . "§aSuccessfully enabled ScoreHud.");
+					$sender->sendMessage(ScoreHud::PREFIX . "§aSuccessfully enabled ScoreHud.");
 				}else{
-					$sender->sendMessage(Main::PREFIX . "§cScoreHud is already enabled for you.");
+					$sender->sendMessage(ScoreHud::PREFIX . "§cScoreHud is already enabled for you.");
 				}
 				break;
 
@@ -87,15 +98,15 @@ class ScoreHudCommand extends PluginCommand{
 					ScoreFactory::removeScore($sender);
 
 					$this->plugin->disabledScoreHudPlayers[strtolower($sender->getName())] = 1;
-					$sender->sendMessage(Main::PREFIX . "§cSuccessfully disabled ScoreHud.");
+					$sender->sendMessage(ScoreHud::PREFIX . "§cSuccessfully disabled ScoreHud.");
 				}else{
-					$sender->sendMessage(Main::PREFIX . "§aScoreHud is already disabled for you.");
+					$sender->sendMessage(ScoreHud::PREFIX . "§aScoreHud is already disabled for you.");
 				}
 				break;
 
 			case "help":
 			default:
-				$sender->sendMessage(Main::PREFIX . "§cUsage: /scorehud <on|off|about|help>");
+				$sender->sendMessage(ScoreHud::PREFIX . "§cUsage: /scorehud <on|off|about|help>");
 				break;
 		}
 

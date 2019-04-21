@@ -20,3 +20,4 @@
 |CPSAddon|`{cps}`|[CPS](https://github.com/JackMD/CPS)|
 |KDRAddon|`{kdr}`, `{kills}`, `{deaths}`|[KDR](https://github.com/JackMD/KDR)|
 |BasicAddon|`{name}`, `{online}`, `{max_online}`, `{item_name}`, `{item_id}`, `{item_meta}`, `{item_count}`, `{x}`, `{y}`, `{z}`, `{load}`, `{tps}`, `{level_name}`, `{level_folder_name}`, `{ip}`, `{ping}`, `{time}`, `{date}`|`none`|
+|CombatLoggerAddon|`{combat_duration}`|[CombatLogger](https://poggit.pmmp.io/ci/JackNoordhuis/PocketMine-Plugins/CombatLogger)|

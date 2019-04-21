@@ -1,0 +1,54 @@
+---
+# DO NOT EDIT THIS VALUE.
+# ONLY FOR INTERNAL USE.
+scorehud-version: 1
+
+# Changing titles of the scoreboard.
+# Can be of any number.
+server-names:
+- "§l§aServer §dName"
+- "§l§bServer §cName"
+- "§l§cServer §bName"
+- "§l§dServer §aName"
+
+# Note: You can find links to the required/supported plugins via the README.md.
+# IMPORTANT NOTE: You can only set a maximum of 15 lines and no more.
+#
+# You can edit the lines already set below and adjust them according to your needs.
+#
+# If you want same scoreboard to be displayed in every world then set per-world-scoreboard to false in config.yml.
+#
+# If you have per-world-scoreboard enabled and want to display a default scoreboard for a world you didn't mention
+# in scoreboards key below then set use-default-score-lines to true in config.yml.
+#
+# After that edit the following score-lines to edit the scoreboard.
+#
+# You need to add addons for adding support for tags.
+# If you want support for a plugin please ask the plugin author of that plugin to add support for ScoreHud by making an addon.
+#
+# For a list of addons go here https://github.com/JackMD/ScoreHud/blob/master/README.md#addons.
+score-lines:
+- " §aLine #1"
+- " §bLine #2"
+- " §cLine #3"
+- " §dLine #4"
+
+# If you want to display different scoreboards for every world then set per-world-scoreboard to true in config.yml.
+# After that edit the following to suit your needs.
+scoreboards:
+# EXAMPLE CONFIGURATION:
+# -------------------
+# "world name":     | The name of the world. Enclose it in inverted commas.
+#   lines:          | This key is important. And the plugin won't function without it.
+#   - " Line #1"    | Line number one. You can use any of the above tags.
+#   - " Line #2"    | You can add a maximum of 15 lines.
+#--------------------
+  "world":
+    lines:
+    - " §dName: §5{name}"
+    - " §bOnline: §a{online} §c/ §d{max_online}"
+  "world 2":
+    lines:
+    - " §dTPS: §5{tps}"
+    - " §bLoad: §a{load}"
+...

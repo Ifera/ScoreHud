@@ -29,7 +29,7 @@
 
 # DO NOT EDIT THIS VALUE.
 # ONLY FOR INTERNAL USE.
-config-version: 7
+config-version: 8
 
 # Set this to true if you want to enable per world scoreboards.
 # Then edit scoreboards key in data.yml to suit your needs.

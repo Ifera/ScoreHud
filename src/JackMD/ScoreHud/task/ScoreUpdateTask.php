@@ -33,45 +33,50 @@ declare(strict_types = 1);
 
 namespace JackMD\ScoreHud\task;
 
-use JackMD\ScoreHud\Main;
+use JackMD\ScoreHud\ScoreHud;
 use pocketmine\scheduler\Task;
-use pocketmine\utils\Config;
 
 class ScoreUpdateTask extends Task{
-	
-	/** @var Main */
+
+	/** @var ScoreHud */
 	private $plugin;
 	/** @var int */
 	private $titleIndex = 0;
-	
+
 	/**
 	 * ScoreUpdateTask constructor.
 	 *
-	 * @param Main $plugin
+	 * @param ScoreHud $plugin
 	 */
-	public function __construct(Main $plugin){
+	public function __construct(ScoreHud $plugin){
 		$this->plugin = $plugin;
 		$this->titleIndex = 0;
 	}
-	
+
 	/**
 	 * @param int $tick
 	 */
 	public function onRun(int $tick){
 		$players = $this->plugin->getServer()->getOnlinePlayers();
-		$dataConfig = new Config($this->plugin->getDataFolder() . "data.yml", Config::YAML);
+
+		$dataConfig = $this->plugin->getScoreHudConfig();
 		$titles = $dataConfig->get("server-names");
+
 		if((is_null($titles)) || empty($titles) || !isset($titles)){
-			$this->plugin->getLogger()->error("Please set server-names in data.yml properly.");
+			$this->plugin->getLogger()->error("Please set server-names in scorehud.yml properly.");
 			$this->plugin->getServer()->getPluginManager()->disablePlugin($this->plugin);
+
 			return;
 		}
+
 		if(!isset($titles[$this->titleIndex])){
 			$this->titleIndex = 0;
 		}
+
 		foreach($players as $player){
 			$this->plugin->addScore($player, $titles[$this->titleIndex]);
 		}
+
 		$this->titleIndex++;
 	}
 }

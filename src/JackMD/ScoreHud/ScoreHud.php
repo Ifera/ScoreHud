@@ -91,11 +91,9 @@ class ScoreHud extends PluginBase{
 	private function checkConfigs(): void{
 		$this->saveDefaultConfig();
 
+		$this->saveResource("addons" . DIRECTORY_SEPARATOR . "README.txt");
 		$this->saveResource("scorehud.yml");
 		$this->scoreHudConfig = new Config($this->getDataFolder() . "scorehud.yml", Config::YAML);
-
-		$this->saveResource("addons" . DIRECTORY_SEPARATOR . "BasicAddon.php");
-		$this->saveResource("addons" . DIRECTORY_SEPARATOR . "README.txt");
 
 		ConfigUpdater::checkUpdate($this, $this->getConfig(), "config-version", self::CONFIG_VERSION);
 		ConfigUpdater::checkUpdate($this, $this->scoreHudConfig, "scorehud-version", self::SCOREHUD_VERSION);

@@ -10,7 +10,12 @@
 
 # Addons 
 
-|Addon|Description|Supported Tags|Plugin|
-|:--:|:--:|:--:|:--:|
-|EconomyApiAddon|Adds support for showing players money.|`{money}`|[EconomyAPI](https://github.com/poggit-orphanage/EconomyS/tree/master/EconomyAPI)|
-|RankUpAddon|Adds support for showing rankup tags.|`{prison_rank}: Your currnet rank`, `{prison_next_rank_price}: Price required for next rank`|[RankUp](https://github.com/falkirks/RankUp)|
+|Addon|Supported Tags|Plugin|
+|:--:|:--:|:--:|
+|EconomyApiAddon|`{money}`|[EconomyAPI](https://github.com/poggit-orphanage/EconomyS/tree/master/EconomyAPI)|
+|RankUpAddon|`{prison_rank}`, `{prison_next_rank_price}`|[RankUp](https://github.com/falkirks/RankUp)|
+|SkyBlock|`{is_state}`, `{is_blocks}`, `{is_members}`, `{is_size}`, `{is_rank}`|[SkyBlock](https://github.com/GiantQuartz/SkyBlock)|
+|PurePerms|`{rank}`, `{prefix}`, `{suffix}`|[PurePerms](https://github.com/poggit-orphanage/PurePerms)|
+|FactionsPro|`{faction}`, `{faction_power}`|[FactionsPro](https://github.com/poggit-orphanage/FactionsPro)|
+|CPSAddon|`{cps}`|[CPS](https://github.com/JackMD/CPS)|
+|KDRAddon|`{kdr}`, `{kills}`, `{deaths}`|[KDR](https://github.com/JackMD/KDR)|

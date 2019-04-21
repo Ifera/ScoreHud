@@ -13,3 +13,4 @@
 |Addon|Description|Supported Tags|Plugin|
 |:--:|:--:|:--:|:--:|
 |EconomyApiAddon|Adds support for showing players money.|`{money}`|[EconomyAPI](https://github.com/poggit-orphanage/EconomyS/tree/master/EconomyAPI)|
+|RankUpAddon|Adds support for showing rankup tags.|`{prison_rank}: Your currnet rank`, `{prison_next_rank_price}: Price required for next rank`|[RankUp](https://github.com/falkirks/RankUp)|

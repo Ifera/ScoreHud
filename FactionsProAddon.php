@@ -56,21 +56,13 @@ namespace JackMD\ScoreHud\Addons
 
 		/**
 		 * @param Player $player
-		 * @param string $string
 		 * @return array
 		 */
-		public function getProcessedTags(Player $player, string $string): array{
-			$tags = [];
-
-			if(strpos($string, "{faction}") !== false){
-				$tags["{faction}"] = str_replace("{faction}", $this->getPlayerFaction($player), $string);
-			}
-
-			if(strpos($string, "{faction_power}") !== false){
-				$tags["{faction_power}"] = str_replace("{faction_power}", $this->getFactionPower($player), $string);
-			}
-
-			return $tags;
+		public function getProcessedTags(Player $player): array{
+			return [
+				"{faction}" => $this->getPlayerFaction($player),
+				"{faction_power}" => $this->getFactionPower($player)
+			];
 		}
 	}
 }

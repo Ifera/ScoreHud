@@ -18,33 +18,16 @@ namespace JackMD\ScoreHud\Addons
 
 		/**
 		 * @param Player $player
-		 * @param string $string
 		 * @return array
 		 */
-		public function getProcessedTags(Player $player, string $string): array{
-			$tags = [];
-
-			if(strpos($string, "{is_state}") !== false){
-				$tags["{is_state}"] = str_replace("{is_state}", $this->getIsleState($player), $string);
-			}
-
-			if(strpos($string, "{is_blocks}") !== false){
-				$tags["{is_blocks}"] = str_replace("{is_blocks}", $this->getIsleBlocks($player), $string);
-			}
-
-			if(strpos($string, "{is_members}") !== false){
-				$tags["{is_members}"] = str_replace("{is_members}", $this->getIsleMembers($player), $string);
-			}
-
-			if(strpos($string, "{is_size}") !== false){
-				$tags["{is_size}"] = str_replace("{is_size}", $this->getIsleSize($player), $string);
-			}
-
-			if(strpos($string, "{is_rank}") !== false){
-				$tags["{is_rank}"] = str_replace("{is_rank}", $this->getIsleRank($player), $string);
-			}
-
-			return $tags;
+		public function getProcessedTags(Player $player): array{
+			return [
+				"{is_state}" => $this->getIsleState($player),
+				"{is_blocks}" => $this->getIsleBlocks($player),
+				"{is_members}" => $this->getIsleMembers($player),
+				"{is_size}" => $this->getIsleSize($player),
+				"{is_rank}" => $this->getIsleRank($player)
+			];
 		}
 
 		/**

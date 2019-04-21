@@ -61,25 +61,14 @@ namespace JackMD\ScoreHud\Addons
 
 		/**
 		 * @param Player $player
-		 * @param string $string
 		 * @return array
 		 */
-		public function getProcessedTags(Player $player, string $string): array{
-			$tags = [];
-
-			if(strpos($string, "{kdr}") !== false){
-				$tags["{kdr}"] = str_replace("{kdr}", $this->getPlayerKillToDeathRatio($player), $string);
-			}
-
-			if(strpos($string, "{deaths}") !== false){
-				$tags["{deaths}"] = str_replace("{deaths}", $this->getPlayerDeaths($player), $string);
-			}
-
-			if(strpos($string, "{kills}") !== false){
-				$tags["{kills}"] = str_replace("{kills}", $this->getPlayerKills($player), $string);
-			}
-
-			return $tags;
+		public function getProcessedTags(Player $player): array{
+			return [
+				"{kdr}" => $this->getPlayerKillToDeathRatio($player),
+				"{deaths}" => $this->getPlayerDeaths($player),
+				"{kills}" => $this->getPlayerKills($player)
+			];
 		}
 	}
 }

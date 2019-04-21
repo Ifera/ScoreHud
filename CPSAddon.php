@@ -30,17 +30,12 @@ namespace JackMD\ScoreHud\Addons
 
 		/**
 		 * @param Player $player
-		 * @param string $string
 		 * @return array
 		 */
-		public function getProcessedTags(Player $player, string $string): array{
-			$tags = [];
-
-			if(strpos($string, "{cps}") !== false){
-				$tags["{cps}"] = str_replace("{cps}", $this->getClicks($player), $string);
-			}
-
-			return $tags;
+		public function getProcessedTags(Player $player): array{
+			return [
+				"{cps}" => $this->getClicks($player)
+			];
 		}
 	}
 }

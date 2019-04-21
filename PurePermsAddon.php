@@ -17,25 +17,14 @@ namespace JackMD\ScoreHud\Addons
 
 		/**
 		 * @param Player $player
-		 * @param string $string
 		 * @return array
 		 */
-		public function getProcessedTags(Player $player, string $string): array{
-			$tags = [];
-
-			if(strpos($string, "{rank}") !== false){
-				$tags["{rank}"] = str_replace("{rank}", $this->getPlayerRank($player), $string);
-			}
-
-			if(strpos($string, "{prefix}") !== false){
-				$tags["{prefix}"] = str_replace("{prefix}", $this->getPrefix($player), $string);
-			}
-
-			if(strpos($string, "{suffix}") !== false){
-				$tags["{suffix}"] = str_replace("{suffix}", $this->getSuffix($player), $string);
-			}
-
-			return $tags;
+		public function getProcessedTags(Player $player): array{
+			return [
+				"{rank}" => $this->getPlayerRank($player),
+				"{prefix}" => $this->getPrefix($player),
+				"{suffix}" => $this->getSuffix($player)
+			];
 		}
 
 		/**

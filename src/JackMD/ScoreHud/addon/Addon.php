@@ -82,8 +82,7 @@ interface Addon{
 	 * For example addons refer here: https://github.com/JackMD/ScoreHud/tree/addons
 	 *
 	 * @param Player $player
-	 * @param string $string
 	 * @return array
 	 */
-	public function getProcessedTags(Player $player, string $string): array;
+	public function getProcessedTags(Player $player): array;
 }

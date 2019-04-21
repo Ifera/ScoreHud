@@ -67,8 +67,6 @@ class ScoreHud extends PluginBase{
 	private $scoreboards = [];
 	/** @var null|array */
 	private $scorelines = [];
-	/** @var array */
-	private $tags = [];
 
 	/**
 	 * @return ScoreHud|null
@@ -203,7 +201,6 @@ class ScoreHud extends PluginBase{
 						ScoreFactory::setScoreLine($player, $i, $this->process($player, $line));
 					}
 				}
-
 			}elseif($this->getConfig()->get("use-default-score-lines")){
 				$this->displayDefaultScoreboard($player);
 			}else{
@@ -246,18 +243,20 @@ class ScoreHud extends PluginBase{
 	 * @return string
 	 */
 	public function process(Player $player, string $string): string{
+		$tags = [];
+
 		foreach($this->addonManager->getAddons() as $addon){
-			foreach($addon->getProcessedTags($player, $string) as $identifier => $processedTag){
-				$this->tags[$identifier] = $processedTag;
+			foreach($addon->getProcessedTags($player) as $identifier => $processedTag){
+				$tags[$identifier] = $processedTag;
 			}
 		}
 
-		foreach($this->tags as $identifier => $tag){
-			if(strpos($string, $identifier) !== false){
-				return $tag;
-			}
-		}
+		$formattedString = str_replace(
+			array_keys($tags),
+			array_values($tags),
+			$string
+		);
 
-		return $string;
+		return $formattedString;
 	}
 }

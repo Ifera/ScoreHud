@@ -52,7 +52,7 @@ interface Addon{
 	 *
 	 * @param Player $player
 	 * @param string $string
-	 * @return string
+	 * @return array
 	 */
-	public function getProcessedString(Player $player, string $string): string;
+	public function getProcessedTags(Player $player, string $string): array;
 }

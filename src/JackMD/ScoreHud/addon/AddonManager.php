@@ -24,7 +24,9 @@ class AddonManager{
 		$this->scoreHud = $scoreHud;
 		$this->addonDirectory = $addonDirectory;
 
-		mkdir($addonDirectory);
+		if(!is_dir($addonDirectory)){
+			mkdir($addonDirectory);
+		}
 
 		$addons = $this->loadAddons($addonDirectory);
 

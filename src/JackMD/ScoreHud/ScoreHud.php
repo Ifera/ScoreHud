@@ -67,6 +67,8 @@ class ScoreHud extends PluginBase{
 	private $scoreboards = [];
 	/** @var null|array */
 	private $scorelines = [];
+	/** @var array */
+	private $tags = [];
 
 	/**
 	 * @return ScoreHud|null
@@ -241,12 +243,18 @@ class ScoreHud extends PluginBase{
 	 * @return string
 	 */
 	public function process(Player $player, string $string): string{
-		$processedString = $string;
-
 		foreach($this->addonManager->getAddons() as $addon){
-			$processedString = $addon->getProcessedString($player, $string);
+			foreach($addon->getProcessedTags($player, $string) as $identifier => $processedTag){
+				$this->tags[$identifier] = $processedTag;
+			}
 		}
 
-		return $processedString;
+		foreach($this->tags as $identifier => $tag){
+			if(strpos($string, $identifier) !== false){
+				return $tag;
+			}
+		}
+
+		return $string;
 	}
 }

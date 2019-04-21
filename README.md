@@ -4,6 +4,10 @@
 >**I won't be making any more. So if you would like a plugin to be supported then ask the author of that plugin to make a ScoreHud addon.**<br />
 <br />
 
+# How to setup?
+
+- Please refer to [here](https://github.com/JackMD/ScoreHud/tree/master#addons) and [here](https://github.com/JackMD/ScoreHud/tree/master#how-to-use-addons).
+
 # Addons 
 
 |Addon|Description|Supported Tags|Plugin|

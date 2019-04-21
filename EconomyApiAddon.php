@@ -13,9 +13,6 @@ namespace JackMD\ScoreHud\Addons
 
 	class EconomyApiAddon extends AddonBase{
 
-		public function initiate(): void{
-		}
-
 		/**
 		 * @param Player $player
 		 * @return float|string
@@ -31,8 +28,21 @@ namespace JackMD\ScoreHud\Addons
 			}
 		}
 
-		public function getProcessedData(Player $player, string $string): string{
-			return str_replace("{money}", $this->getPlayerMoney($player), $string);
+		/**
+		 * @param Player $player
+		 * @param string $string
+		 * @return string
+		 */
+		public function getProcessedString(Player $player, string $string): string{
+			$data = [
+				"{money}" => str_replace("{money}", $this->getPlayerMoney($player), $string)
+			];
+
+			if(strpos($string, "{money}") !== false){
+				return $data["{money}"];
+			}
+
+			return $string;
 		}
 	}
 }

@@ -33,104 +33,124 @@ declare(strict_types = 1);
 
 namespace JackMD\ScoreHud;
 
+use JackMD\ConfigUpdater\ConfigUpdater;
 use JackMD\ScoreFactory\ScoreFactory;
+use JackMD\ScoreHud\addon\AddonManager;
 use JackMD\ScoreHud\commands\ScoreHudCommand;
-use JackMD\ScoreHud\data\DataManager;
 use JackMD\ScoreHud\task\ScoreUpdateTask;
+use JackMD\ScoreHud\utils\Utils;
 use JackMD\UpdateNotifier\UpdateNotifier;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
-use RuntimeException;
 
 class ScoreHud extends PluginBase{
 
 	/** @var string */
 	public const PREFIX = "§8[§6S§eH§8]§r ";
-	/** @var string */
+	/** @var int */
 	private const CONFIG_VERSION = 8;
-	/** @var string */
-	private const DATA_CONFIG_VERSION = 4;
+	/** @var int */
+	private const SCOREHUD_VERSION = 1;
+
+	/** @var ScoreHud|null */
+	private static $instance = null;
+
+	/** @var Config */
+	private $scoreHudConfig;
+	/** @var AddonManager */
+	private $addonManager;
 
 	/** @var array */
 	public $disabledScoreHudPlayers = [];
-	/** @var DataManager */
-	private $dataManager;
 	/** @var null|array */
 	private $scoreboards = [];
 	/** @var null|array */
 	private $scorelines = [];
 
+	/**
+	 * @return ScoreHud|null
+	 */
+	public static function getInstance(): ?ScoreHud{
+		return self::$instance;
+	}
+
 	public function onLoad(){
-		$this->checkVirions();
-		$this->initScoreboards();
+		self::$instance = $this;
 
 		UpdateNotifier::checkUpdate($this, $this->getDescription()->getName(), $this->getDescription()->getVersion());
-	}
+		Utils::checkVirions();
 
-	/**
-	 * Checks if the required virions/libraries are present before enabling the plugin.
-	 */
-	private function checkVirions(): void{
-		if(!class_exists(ScoreFactory::class) || !class_exists(UpdateNotifier::class)){
-			throw new RuntimeException("ScoreHud plugin will only work if you use the plugin phar from Poggit.");
-		}
-	}
-
-	private function initScoreboards(): void{
-		$this->saveDefaultConfig();
-		$this->saveResource("data.yml");
 		$this->checkConfigs();
-
-		$dataConfig = new Config($this->getDataFolder() . "data.yml", Config::YAML);
-		foreach($dataConfig->getNested("scoreboards") as $world => $data){
-			$world = strtolower($world);
-			$this->scoreboards[$world] = $data;
-			$this->scorelines[$world] = $data["lines"];
-		}
+		$this->initScoreboards();
 	}
 
 	/**
 	 * Check if the configs is up-to-date.
 	 */
-	public function checkConfigs(): void{
-		if((!$this->getConfig()->exists("config-version")) || ($this->getConfig()->get("config-version") !== self::CONFIG_VERSION)){
-			rename($this->getDataFolder() . "config.yml", $this->getDataFolder() . "config_old.yml");
-			$this->saveResource("config.yml");
-			$this->getLogger()->critical("Your configuration file is outdated.");
-			$this->getLogger()->notice("Your old configuration has been saved as config_old.yml and a new configuration file has been generated. Please update accordingly.");
-		}
+	private function checkConfigs(): void{
+		$this->saveDefaultConfig();
 
-		$dataConfig = new Config($this->getDataFolder() . "data.yml", Config::YAML);
-		if((!$dataConfig->exists("data-version")) || ($dataConfig->get("data-version") !== self::DATA_CONFIG_VERSION)){
-			rename($this->getDataFolder() . "data.yml", $this->getDataFolder() . "data_old.yml");
-			$this->saveResource("data.yml");
-			$this->getLogger()->critical("Your data.yml file is outdated.");
-			$this->getLogger()->notice("Your old data.yml has been saved as data_old.yml and a new data.yml file has been generated. Please update accordingly.");
+		$this->saveResource("scorehud.yml");
+		$this->scoreHudConfig = new Config($this->getDataFolder() . "scorehud.yml", Config::YAML);
+
+		ConfigUpdater::checkUpdate($this, $this->getConfig(), "config-version", self::CONFIG_VERSION);
+		ConfigUpdater::checkUpdate($this, $this->scoreHudConfig, "scorehud-version", self::SCOREHUD_VERSION);
+	}
+
+	private function initScoreboards(): void{
+		foreach($this->scoreHudConfig->getNested("scoreboards") as $world => $data){
+			$world = strtolower($world);
+
+			$this->scoreboards[$world] = $data;
+			$this->scorelines[$world] = $data["lines"];
 		}
 	}
 
-	public function onEnable(): void{
-		$this->dataManager = new DataManager($this);
+	public function onEnable(){
+		$this->addonManager = new AddonManager($this, realpath($this->getDataFolder() . "addons") . DIRECTORY_SEPARATOR);
 
 		$this->getServer()->getCommandMap()->register("scorehud", new ScoreHudCommand($this));
-		$this->setTimezone($this->getConfig()->get("timezone"));
 		$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
+
 		$this->getScheduler()->scheduleRepeatingTask(new ScoreUpdateTask($this), (int) $this->getConfig()->get("update-interval") * 20);
 	}
 
 	/**
-	 * @param $timezone
-	 * @return mixed
+	 * @return Config
 	 */
-	private function setTimezone($timezone){
-		if($timezone !== false){
-			$this->getLogger()->notice("Server timezone successfully set to " . $timezone);
+	public function getScoreHudConfig(): Config{
+		return $this->scoreHudConfig;
+	}
 
-			return date_default_timezone_set($timezone);
-		}
+	/**
+	 * @param string $world
+	 * @return array|null
+	 */
+	public function getScorelines(string $world): ?array{
+		return !isset($this->scorelines[$world]) ? null : $this->scorelines[$world];
+	}
 
-		return false;
+	/**
+	 * @return array|null
+	 */
+	public function getScoreboards(): ?array{
+		return $this->scoreboards;
+	}
+
+	/**
+	 * @param string $world
+	 * @return array|null
+	 */
+	public function getScoreboardData(string $world): ?array{
+		return !isset($this->scoreboards[$world]) ? null : $this->scoreboards[$world];
+	}
+
+	/**
+	 * @return array|null
+	 */
+	public function getScoreWorlds(): ?array{
+		return is_null($this->scoreboards) ? null : array_keys($this->scoreboards);
 	}
 
 	/**
@@ -141,9 +161,11 @@ class ScoreHud extends PluginBase{
 		if(!$player->isOnline()){
 			return;
 		}
+
 		if(isset($this->disabledScoreHudPlayers[strtolower($player->getName())])){
 			return;
 		}
+
 		ScoreFactory::setScore($player, $title);
 		$this->updateScore($player);
 	}
@@ -156,21 +178,27 @@ class ScoreHud extends PluginBase{
 			if(!$player->isOnline()){
 				return;
 			}
+
 			$levelName = strtolower($player->getLevel()->getFolderName());
+
 			if(!is_null($lines = $this->getScorelines($levelName))){
 				if(empty($lines)){
-					$this->getLogger()->error("Please set lines key for $levelName correctly for scoreboards in data.yml.");
+					$this->getLogger()->error("Please set lines key for $levelName correctly for scoreboards in scorehud.yml.");
 					$this->getServer()->getPluginManager()->disablePlugin($this);
 
 					return;
 				}
+
 				$i = 0;
+
 				foreach($lines as $line){
 					$i++;
+
 					if($i <= 15){
 						ScoreFactory::setScoreLine($player, $i, $this->process($player, $line));
 					}
 				}
+
 			}elseif($this->getConfig()->get("use-default-score-lines")){
 				$this->displayDefaultScoreboard($player);
 			}else{
@@ -181,27 +209,30 @@ class ScoreHud extends PluginBase{
 		}
 	}
 
+	/**
+	 * @param Player $player
+	 */
 	public function displayDefaultScoreboard(Player $player): void{
-		$dataConfig = new Config($this->getDataFolder() . "data.yml", Config::YAML);
+		$dataConfig = $this->scoreHudConfig;
 
 		$lines = $dataConfig->get("score-lines");
+
 		if(empty($lines)){
-			$this->getLogger()->error("Please set score-lines in data.yml properly.");
+			$this->getLogger()->error("Please set score-lines in scorehud.yml properly.");
 			$this->getServer()->getPluginManager()->disablePlugin($this);
 
 			return;
 		}
+
 		$i = 0;
+
 		foreach($lines as $line){
 			$i++;
+
 			if($i <= 15){
 				ScoreFactory::setScoreLine($player, $i, $this->process($player, $line));
 			}
 		}
-	}
-
-	public function getScorelines(string $world): ?array{
-		return !isset($this->scorelines[$world]) ? null : $this->scorelines[$world];
 	}
 
 	/**
@@ -210,54 +241,12 @@ class ScoreHud extends PluginBase{
 	 * @return string
 	 */
 	public function process(Player $player, string $string): string{
-		$string = str_replace("{name}", $player->getName(), $string);
-		$string = str_replace("{money}", $this->dataManager->getPlayerMoney($player), $string);
-		$string = str_replace("{online}", count($this->getServer()->getOnlinePlayers()), $string);
-		$string = str_replace("{max_online}", $this->getServer()->getMaxPlayers(), $string);
-		$string = str_replace("{rank}", $this->dataManager->getPlayerRank($player), $string);
-		$string = str_replace("{prison_rank}", $this->dataManager->getRankUpRank($player), $string);
-		$string = str_replace("{prison_next_rank_price}", $this->dataManager->getRankUpRankPrice($player), $string);
-		$string = str_replace("{item_name}", $player->getInventory()->getItemInHand()->getName(), $string);
-		$string = str_replace("{item_id}", $player->getInventory()->getItemInHand()->getId(), $string);
-		$string = str_replace("{item_meta}", $player->getInventory()->getItemInHand()->getDamage(), $string);
-		$string = str_replace("{item_count}", $player->getInventory()->getItemInHand()->getCount(), $string);
-		$string = str_replace("{x}", intval($player->getX()), $string);
-		$string = str_replace("{y}", intval($player->getY()), $string);
-		$string = str_replace("{z}", intval($player->getZ()), $string);
-		$string = str_replace("{faction}", $this->dataManager->getPlayerFaction($player), $string);
-		$string = str_replace("{faction_power}", $this->dataManager->getFactionPower($player), $string);
-		$string = str_replace("{load}", $this->getServer()->getTickUsage(), $string);
-		$string = str_replace("{tps}", $this->getServer()->getTicksPerSecond(), $string);
-		$string = str_replace("{level_name}", $player->getLevel()->getName(), $string);
-		$string = str_replace("{level_folder_name}", $player->getLevel()->getFolderName(), $string);
-		$string = str_replace("{ip}", $player->getAddress(), $string);
-		$string = str_replace("{ping}", $player->getPing(), $string);
-		$string = str_replace("{kills}", $this->dataManager->getPlayerKills($player), $string);
-		$string = str_replace("{deaths}", $this->dataManager->getPlayerDeaths($player), $string);
-		$string = str_replace("{kdr}", $this->dataManager->getPlayerKillToDeathRatio($player), $string);
-		$string = str_replace("{prefix}", $this->dataManager->getPrefix($player), $string);
-		$string = str_replace("{suffix}", $this->dataManager->getSuffix($player), $string);
-		$string = str_replace("{time}", date($this->getConfig()->get("time-format")), $string);
-		$string = str_replace("{date}", date($this->getConfig()->get("date-format")), $string);
-		$string = str_replace("{cps}", $this->dataManager->getClicks($player), $string);
-		$string = str_replace("{is_state}", $this->dataManager->getIsleState($player), $string);
-		$string = str_replace("{is_blocks}", $this->dataManager->getIsleBlocks($player), $string);
-		$string = str_replace("{is_members}", $this->dataManager->getIsleMembers($player), $string);
-		$string = str_replace("{is_size}", $this->dataManager->getIsleSize($player), $string);
-		$string = str_replace("{is_rank}", $this->dataManager->getIsleRank($player), $string);
+		$processedString = $string;
 
-		return $string;
-	}
+		foreach($this->addonManager->getAddons() as $addon){
+			$processedString = $addon->getProcessedString($player, $string);
+		}
 
-	public function getScoreboards(): ?array{
-		return $this->scoreboards;
-	}
-
-	public function getScoreboardData(string $world): ?array{
-		return !isset($this->scoreboards[$world]) ? null : $this->scoreboards[$world];
-	}
-
-	public function getScoreWorlds(): ?array{
-		return is_null($this->scoreboards) ? null : array_keys($this->scoreboards);
+		return $processedString;
 	}
 }

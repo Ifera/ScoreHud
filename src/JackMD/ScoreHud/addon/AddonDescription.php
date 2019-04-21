@@ -44,6 +44,8 @@ class AddonDescription{
 	private $name;
 	/** @var string */
 	private $main;
+	/** @var array */
+	private $depend = [];
 
 	/**
 	 * @param string|array $yamlString
@@ -66,7 +68,22 @@ class AddonDescription{
 
 		$this->name = str_replace(" ", "_", $this->name);
 		$this->main = $addon["main"];
+
+		if(isset($addon["depend"])){
+			$depend = explode(",", $addon["depend"]);
+
+			$this->depend = $depend;
+		}else{
+			$this->depend = [];
+		}
  	}
+
+	/**
+	 * @return array
+	 */
+	public function getMap(): array{
+		return $this->map;
+	}
 
 	/**
 	 * @return string
@@ -82,11 +99,10 @@ class AddonDescription{
 		return $this->main;
 	}
 
-
 	/**
 	 * @return array
 	 */
-	public function getMap(): array{
-		return $this->map;
+	public function getDepend(): array{
+		return $this->depend;
 	}
 }

@@ -34,6 +34,8 @@ declare(strict_types = 1);
 namespace JackMD\ScoreHud\addon;
 
 use JackMD\ScoreHud\ScoreHud;
+use pocketmine\plugin\Plugin;
+use pocketmine\scheduler\ClosureTask;
 
 class AddonManager{
 
@@ -58,61 +60,13 @@ class AddonManager{
 			mkdir($addonDirectory);
 		}
 
-		$addons = $this->loadAddons($addonDirectory);
+		/* This task enables addons to only start loading after complete server load */
+		$task = new ClosureTask(function(int $currentTick): void{
+			$this->loadAddons($this->addonDirectory);
+		});
 
-		foreach($addons as $addon){
-			$addon->initiate();
-		}
-	}
+		$scoreHud->getScheduler()->scheduleDelayedTask($task, 0);
 
-	/**
-	 * @param string $name
-	 * @return Addon|null
-	 */
-	public function getAddon(string $name): ?Addon{
-		if(isset($this->addons[$name])){
-			return $this->addons[$name];
-		}
-
-		return null;
-	}
-
-	/**
-	 * @return Addon[]
-	 */
-	public function getAddons(): array{
-		return $this->addons;
-	}
-
-	/**
-	 * @param string $directory
-	 * @return Addon[]
-	 */
-	private function loadAddons(string $directory): array{
-		if(!is_dir($directory)){
-			return [];
-		}
-
-		$addons = [];
-
-		foreach(glob($directory . "*.php") as $file){
-			$description = $this->getAddonDescription($file);
-
-			if(is_null($description)){
-				continue;
-			}
-
-			$name = $description->getName();
-
-			if(strpos($name, " ") !== false){
-				throw new AddonException("Could not load $name addon since spaces found.");
-			}
-
-			$addon = $this->loadAddon($file);
-			$addons[$name] = $addon;
-		}
-
-		return $addons;
 	}
 
 	/**
@@ -149,6 +103,129 @@ class AddonManager{
 	}
 
 	/**
+	 * @param string $name
+	 * @return Addon|null
+	 */
+	public function getAddon(string $name): ?Addon{
+		if(isset($this->addons[$name])){
+			return $this->addons[$name];
+		}
+
+		return null;
+	}
+
+	/**
+	 * @return Addon[]
+	 */
+	public function getAddons(): array{
+		return $this->addons;
+	}
+
+	/**
+	 * @param string $directory
+	 * @return array
+	 */
+	private function loadAddons(string $directory): array{
+		if(!is_dir($directory)){
+			return [];
+		}
+
+		$addons = [];
+		$loadedAddons = [];
+		$dependencies = [];
+
+		foreach(glob($directory . "*.php") as $file){
+			$description = $this->getAddonDescription($file);
+
+			if(is_null($description)){
+				continue;
+			}
+
+			$name = $description->getName();
+
+			if(strpos($name, " ") !== false){
+				throw new AddonException("§cCould not load $name addon since spaces found.");
+			}
+
+			if((isset($addons[$name]) )|| ($this->getAddon($name) instanceof Addon)){
+				$this->scoreHud->getLogger()->error("§cCould not load addon §4{$name}§c. Addon with the same name already exists.");
+
+				continue;
+			}
+
+			$addons[$name] = $file;
+			$dependencies[$name] = $description->getDepend();
+		}
+
+		$pluginManager = $this->scoreHud->getServer()->getPluginManager();
+		$loadedPlugins = $pluginManager->getPlugins();
+
+		while(count($addons) > 0){
+			$missingDependency = true;
+
+			foreach($addons as $name => $file){
+				if(isset($dependencies[$name])){
+					foreach($dependencies[$name] as $key => $dependency){
+						if(isset($loadedPlugins[$dependency]) || ($pluginManager->getPlugin($dependency) instanceof Plugin)){
+
+							unset($dependencies[$name][$key]);
+						}else{
+							$this->scoreHud->getLogger()->error("§cCould not load addon §4{$name}§c. Unknown dependency: §4$dependency");
+
+							unset($addons[$name]);
+							continue 2;
+						}
+					}
+
+					if(count($dependencies[$name]) === 0){
+						unset($dependencies[$name]);
+					}
+				}
+
+				if(!isset($dependencies[$name])){
+					unset($addons[$name]);
+
+					$missingDependency = false;
+					$addon = $this->loadAddon($file);
+
+					if($addon instanceof Addon){
+						$loadedAddons[$name] = $addon;
+					}else{
+						$this->scoreHud->getLogger()->error("§cCould not load addon §4{$name}§c.");
+					}
+				}
+			}
+
+			if($missingDependency){
+				foreach($addons as $name => $file){
+					if(!isset($dependencies[$name])){
+						unset($addons[$name]);
+
+						$missingDependency = false;
+						$addon = $this->loadAddon($file);
+
+						if($addon instanceof Addon){
+							$loadedAddons[$name] = $addon;
+						}else{
+							$this->scoreHud->getLogger()->error("§cCould not load addon §4{$name}§c.");
+						}
+					}
+				}
+
+				if($missingDependency){
+					foreach($addons as $name => $file){
+						$this->scoreHud->getLogger()->error("§cCould not load addon §4{$name}§c. Circular dependency detected.");
+					}
+
+					$addons = [];
+				}
+			}
+		}
+
+		return $loadedAddons;
+	}
+
+	/**
 	 * @param string $path
 	 * @return Addon|null
 	 */
@@ -177,9 +254,11 @@ class AddonManager{
 
 				/** @var Addon $addon */
 				$addon = new $mainClass($this->scoreHud, $description);
+				$addon->onEnable();
+
 				$this->addons[$name] = $addon;
 
-				$this->scoreHud->getServer()->getLogger()->info("§2[§eScoreHud§2] §aAddon §6$name §asuccessfully enabled.");
+				$this->scoreHud->getLogger()->notice("§aAddon §6$name §asuccessfully enabled.");
 
 				return $addon;
 			}

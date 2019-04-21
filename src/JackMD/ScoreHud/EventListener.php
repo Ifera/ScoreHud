@@ -45,7 +45,7 @@ class EventListener implements Listener{
 	/**
 	 * EventListener constructor.
 	 *
-	 * @param Main $plugin
+	 * @param ScoreHud $plugin
 	 */
 	public function __construct(ScoreHud $plugin){
 		$this->plugin = $plugin;

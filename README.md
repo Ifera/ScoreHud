@@ -19,3 +19,4 @@
 |FactionsPro|`{faction}`, `{faction_power}`|[FactionsPro](https://github.com/poggit-orphanage/FactionsPro)|
 |CPSAddon|`{cps}`|[CPS](https://github.com/JackMD/CPS)|
 |KDRAddon|`{kdr}`, `{kills}`, `{deaths}`|[KDR](https://github.com/JackMD/KDR)|
+|BasicAddon|`{name}`, `{online}`, `{max_online}`, `{item_name}`, `{item_id}`, `{item_meta}`, `{item_count}`, `{x}`, `{y}`, `{z}`, `{load}`, `{tps}`, `{level_name}`, `{level_folder_name}`, `{ip}`, `{ping}`, `{time}`, `{date}`|`none`|

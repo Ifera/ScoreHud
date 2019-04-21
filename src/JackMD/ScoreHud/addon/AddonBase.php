@@ -35,6 +35,7 @@ declare(strict_types = 1);
 namespace JackMD\ScoreHud\addon;
 
 use JackMD\ScoreHud\ScoreHud;
+use pocketmine\Server;
 
 /**
  * Use of this class is encouraged instead of Addon.php.
@@ -64,7 +65,7 @@ abstract class AddonBase implements Addon{
 		$this->description = $description;
 	}
 
-	public function initiate(): void{
+	public function onEnable(): void{
 	}
 
 	/**
@@ -79,5 +80,12 @@ abstract class AddonBase implements Addon{
 	 */
 	final public function getDescription(): AddonDescription{
 		return $this->description;
+	}
+
+	/**
+	 * @return Server
+	 */
+	public function getServer(): Server{
+		return $this->scoreHud->getServer();
 	}
 }

@@ -38,7 +38,7 @@ use JackMD\ScoreHud\ScoreHud;
 use pocketmine\Player;
 
 /**
- * Instead of implementing this class AddonBase class should be implemented for Addon making.
+ * Instead of implementing this class, AddonBase class should be extended for Addon making.
  * @see AddonBase
  *
  * Interface Addon
@@ -59,7 +59,7 @@ interface Addon{
 	 * This is called whenever an Addon is successfully enabled. Depends on your use case.
 	 * Almost same as Plugin::onEnable().
 	 */
-	public function initiate(): void;
+	public function onEnable(): void;
 
 	/**
 	 * Returns the ScoreHud plugin for whatever reason an addon would like to use it.

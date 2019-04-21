@@ -1,17 +1,17 @@
 ![ScoreHud Banner](https://github.com/JackMD/ScoreHud/blob/master/meta/ScoreHud.PNG)
 # ScoreHud
 
+>## Disclaimer: <br />
+> Starting from ScoreHud version 5.0.0 onwards addons will be used. <br />
+> The old methods have been removed. You are therefore requested to update. <br />
+> Process on how to use addons is written below. <br />
+> **Please also read last two questions in FAQs.**
+
 | HitCount | License | Poggit | Release |
 |:--:|:--:|:--:|:--:|
 |[![HitCount](http://hits.dwyl.io/JackMD/ScoreHud.svg)](http://hits.dwyl.io/JackMD/ScoreHud)|[![GitHub license](https://img.shields.io/github/license/JackMD/ScoreHud.svg)](https://github.com/JackMD/ScoreHud/blob/master/LICENSE)|[![Poggit-CI](https://poggit.pmmp.io/ci.shield/JackMD/ScoreHud/ScoreHud)](https://poggit.pmmp.io/ci/JackMD/ScoreHud/ScoreHud)|[![](https://poggit.pmmp.io/shield.state/ScoreHud)](https://poggit.pmmp.io/p/ScoreHud)|
 
 ### A highly customizable plugin to add Scoreboards on your Minecraft Bedrock Server.
-
->### Disclaimer: <br />
-> Starting from ScoreHud version 5.0.0 onwards addons will be used. <br />
-> The old methods have been removed. You are therefore requested to update. <br />
-> Process on how to use addons is written below. <br />
-> **Please also read last two questions in FAQs.**
 
 ### Features:
 

@@ -7,6 +7,12 @@
 
 ### A highly customizable plugin to add Scoreboards on your Minecraft Bedrock Server.
 
+>### Disclaimer: <br />
+> Starting from ScoreHud version 5.0.0 onwards addons will be used. <br />
+> The old methods have been removed. You are therefore requested to update. <br />
+> Process on how to use addons is written below. <br />
+> **Please also read last two questions in FAQs.**
+
 ### Features:
 
  - This plugin adds **scoreboard** to your server.

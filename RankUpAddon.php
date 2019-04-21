@@ -4,8 +4,8 @@ declare(strict_types = 1);
 /**
  * @name RankUpAddon
  * @main JackMD\ScoreHud\Addons\RankUpAddon
+ * @depend RankUp
  */
-
 namespace JackMD\ScoreHud\Addons
 {
 
@@ -15,6 +15,13 @@ namespace JackMD\ScoreHud\Addons
 	use rankup\RankUp;
 
 	class RankUpAddon extends AddonBase{
+
+		/** @var RankUp */
+		private $rankUp;
+
+		public function onEnable(): void{
+			$this->rankUp = $this->getServer()->getPluginManager()->getPlugin("RankUp");
+		}
 
 		/**
 		 * @param Player $player
@@ -32,20 +39,13 @@ namespace JackMD\ScoreHud\Addons
 		 * @return bool|int|string
 		 */
 		public function getRankUpRank(Player $player){
-			/** @var RankUp $rankUp */
-			$rankUp = $this->getScoreHud()->getServer()->getPluginManager()->getPlugin("RankUp");
+			$group = $this->rankUp->getRankUpDoesGroups()->getPlayerGroup($player);
 
-			if($rankUp instanceof RankUp){
-				$group = $rankUp->getRankUpDoesGroups()->getPlayerGroup($player);
-
-				if($group !== false){
-					return $group;
-				}else{
-					return "No Rank";
-				}
+			if($group !== false){
+				return $group;
+			}else{
+				return "No Rank";
 			}
-
-			return "Plugin not found";
 		}
 
 		/**
@@ -53,20 +53,13 @@ namespace JackMD\ScoreHud\Addons
 		 * @return bool|Rank|string
 		 */
 		public function getRankUpRankPrice(Player $player){
-			/** @var RankUp $rankUp */
-			$rankUp = $this->getScoreHud()->getServer()->getPluginManager()->getPlugin("RankUp");
+			$nextRank = $this->rankUp->getRankStore()->getNextRank($player);
 
-			if($rankUp instanceof RankUp){
-				$nextRank = $rankUp->getRankStore()->getNextRank($player);
-
-				if($nextRank !== false){
-					return $nextRank->getPrice();
-				}else{
-					return "Max Rank";
-				}
+			if($nextRank !== false){
+				return $nextRank->getPrice();
+			}else{
+				return "Max Rank";
 			}
-
-			return "Plugin not found";
 		}
 	}
 }

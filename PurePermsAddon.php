@@ -3,9 +3,9 @@ declare(strict_types = 1);
 
 /**
  * @name PurePermsAddon
- * @main JackMD\ScoreHud\Addons\PurePermsAddon
+ * @main   JackMD\ScoreHud\Addons\PurePermsAddon
+ * @depend PurePerms
  */
-
 namespace JackMD\ScoreHud\Addons
 {
 
@@ -15,13 +15,20 @@ namespace JackMD\ScoreHud\Addons
 
 	class PurePermsAddon extends AddonBase{
 
+		/** @var PurePerms */
+		private $purePerms;
+
+		public function onEnable(): void{
+			$this->purePerms = $this->getServer()->getPluginManager()->getPlugin("PurePerms");
+		}
+
 		/**
 		 * @param Player $player
 		 * @return array
 		 */
 		public function getProcessedTags(Player $player): array{
 			return [
-				"{rank}" => $this->getPlayerRank($player),
+				"{rank}"   => $this->getPlayerRank($player),
 				"{prefix}" => $this->getPrefix($player),
 				"{suffix}" => $this->getSuffix($player)
 			];
@@ -32,18 +39,12 @@ namespace JackMD\ScoreHud\Addons
 		 * @return string
 		 */
 		public function getPlayerRank(Player $player): string{
-			/** @var PurePerms $purePerms */
-			$purePerms = $this->getScoreHud()->getServer()->getPluginManager()->getPlugin("PurePerms");
+			$group = $this->purePerms->getUserDataMgr()->getData($player)['group'];
 
-			if($purePerms instanceof PurePerms){
-				$group = $purePerms->getUserDataMgr()->getData($player)['group'];
-				if($group !== null){
-					return $group;
-				}else{
-					return "No Rank";
-				}
+			if($group !== null){
+				return $group;
 			}else{
-				return "Plugin not found";
+				return "No Rank";
 			}
 		}
 
@@ -53,28 +54,23 @@ namespace JackMD\ScoreHud\Addons
 		 * @return string
 		 */
 		public function getPrefix(Player $player, $levelName = null): string{
-			/** @var PurePerms $purePerms */
-			$purePerms = $this->getScoreHud()->getServer()->getPluginManager()->getPlugin("PurePerms");
+			$purePerms = $this->purePerms;
+			$prefix = $purePerms->getUserDataMgr()->getNode($player, "prefix");
 
-			if($purePerms instanceof PurePerms){
-				$prefix = $purePerms->getUserDataMgr()->getNode($player, "prefix");
-				if($levelName === null){
-					if(($prefix === null) || ($prefix === "")){
-						return "No Prefix";
-					}
-
-					return (string) $prefix;
-				}else{
-					$worldData = $purePerms->getUserDataMgr()->getWorldData($player, $levelName);
-
-					if(empty($worldData["prefix"]) || $worldData["prefix"] == null){
-						return "No Prefix";
-					}
-
-					return $worldData["prefix"];
+			if($levelName === null){
+				if(($prefix === null) || ($prefix === "")){
+					return "No Prefix";
 				}
+
+				return (string) $prefix;
 			}else{
-				return "Plugin not found";
+				$worldData = $purePerms->getUserDataMgr()->getWorldData($player, $levelName);
+
+				if(empty($worldData["prefix"]) || $worldData["prefix"] == null){
+					return "No Prefix";
+				}
+
+				return $worldData["prefix"];
 			}
 		}
 
@@ -84,29 +80,23 @@ namespace JackMD\ScoreHud\Addons
 		 * @return string
 		 */
 		public function getSuffix(Player $player, $levelName = null): string{
-			/** @var PurePerms $purePerms */
-			$purePerms = $this->getScoreHud()->getServer()->getPluginManager()->getPlugin("PurePerms");
+			$purePerms = $this->purePerms;
+			$suffix = $purePerms->getUserDataMgr()->getNode($player, "suffix");
 
-			if($purePerms instanceof PurePerms){
-				$suffix = $purePerms->getUserDataMgr()->getNode($player, "suffix");
-
-				if($levelName === null){
-					if(($suffix === null) || ($suffix === "")){
-						return "No Suffix";
-					}
-
-					return (string) $suffix;
-				}else{
-					$worldData = $purePerms->getUserDataMgr()->getWorldData($player, $levelName);
-
-					if(empty($worldData["suffix"]) || $worldData["suffix"] == null){
-						return "No Suffix";
-					}
-
-					return $worldData["suffix"];
+			if($levelName === null){
+				if(($suffix === null) || ($suffix === "")){
+					return "No Suffix";
 				}
+
+				return (string) $suffix;
 			}else{
-				return "Plugin not found";
+				$worldData = $purePerms->getUserDataMgr()->getWorldData($player, $levelName);
+
+				if(empty($worldData["suffix"]) || $worldData["suffix"] == null){
+					return "No Suffix";
+				}
+
+				return $worldData["suffix"];
 			}
 		}
 	}

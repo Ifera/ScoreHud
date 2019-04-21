@@ -4,6 +4,7 @@ declare(strict_types = 1);
 /**
  * @name EconomyApiAddon
  * @main JackMD\ScoreHud\Addons\EconomyApiAddon
+ * @depend EconomyAPI
  */
 namespace JackMD\ScoreHud\Addons
 {
@@ -13,19 +14,11 @@ namespace JackMD\ScoreHud\Addons
 
 	class EconomyApiAddon extends AddonBase{
 
-		/**
-		 * @param Player $player
-		 * @return float|string
-		 */
-		private function getPlayerMoney(Player $player){
-			/** @var EconomyAPI $economyAPI */
-			$economyAPI = $this->getScoreHud()->getServer()->getPluginManager()->getPlugin("EconomyAPI");
+		/** @var EconomyAPI */
+		private $economyAPI;
 
-			if($economyAPI instanceof EconomyAPI){
-				return $economyAPI->myMoney($player);
-			}else{
-				return "Plugin not found";
-			}
+		public function onEnable(): void{
+			$this->economyAPI = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI");
 		}
 
 		/**
@@ -34,7 +27,7 @@ namespace JackMD\ScoreHud\Addons
 		 */
 		public function getProcessedTags(Player $player): array{
 			return [
-				"{money}" => $this->getPlayerMoney($player),
+				"{money}" => $this->economyAPI->myMoney($player)
 			];
 		}
 	}

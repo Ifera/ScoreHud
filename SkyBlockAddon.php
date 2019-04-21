@@ -3,9 +3,9 @@ declare(strict_types = 1);
 
 /**
  * @name SkyBlockAddon
- * @main JackMD\ScoreHud\Addons\SkyBlockAddon
+ * @main   JackMD\ScoreHud\Addons\SkyBlockAddon
+ * @depend SkyBlock
  */
-
 namespace JackMD\ScoreHud\Addons
 {
 
@@ -16,17 +16,24 @@ namespace JackMD\ScoreHud\Addons
 
 	class SkyBlockAddon extends AddonBase{
 
+		/** @var SkyBlock */
+		private $skyBlock;
+
+		public function onEnable(): void{
+			$this->cps = $this->getServer()->getPluginManager()->getPlugin("SkyBlock");
+		}
+
 		/**
 		 * @param Player $player
 		 * @return array
 		 */
 		public function getProcessedTags(Player $player): array{
 			return [
-				"{is_state}" => $this->getIsleState($player),
-				"{is_blocks}" => $this->getIsleBlocks($player),
+				"{is_state}"   => $this->getIsleState($player),
+				"{is_blocks}"  => $this->getIsleBlocks($player),
 				"{is_members}" => $this->getIsleMembers($player),
-				"{is_size}" => $this->getIsleSize($player),
-				"{is_rank}" => $this->getIsleRank($player)
+				"{is_size}"    => $this->getIsleSize($player),
+				"{is_rank}"    => $this->getIsleRank($player)
 			];
 		}
 
@@ -35,22 +42,15 @@ namespace JackMD\ScoreHud\Addons
 		 * @return string
 		 */
 		public function getIsleState(Player $player){
-			/** @var SkyBlock $sb */
-			$sb = $this->getScoreHud()->getServer()->getPluginManager()->getPlugin("SkyBlock");
+			$session = $this->skyBlock->getSessionManager()->getSession($player);
 
-			if($sb instanceof SkyBlock){
-				$session = $sb->getSessionManager()->getSession($player);
-
-				if((is_null($session)) || (!$session->hasIsle())){
-					return "No Island";
-				}
-
-				$isle = $session->getIsle();
-
-				return $isle->isLocked() ? "Locked" : "Unlocked";
-			}else{
-				return "Plugin Not Found";
+			if((is_null($session)) || (!$session->hasIsle())){
+				return "No Island";
 			}
+
+			$isle = $session->getIsle();
+
+			return $isle->isLocked() ? "Locked" : "Unlocked";
 		}
 
 		/**
@@ -58,22 +58,15 @@ namespace JackMD\ScoreHud\Addons
 		 * @return int|string
 		 */
 		public function getIsleBlocks(Player $player){
-			/** @var SkyBlock $sb */
-			$sb = $this->getScoreHud()->getServer()->getPluginManager()->getPlugin("SkyBlock");
+			$session = $this->skyBlock->getSessionManager()->getSession($player);
 
-			if($sb instanceof SkyBlock){
-				$session = $sb->getSessionManager()->getSession($player);
-
-				if((is_null($session)) || (!$session->hasIsle())){
-					return "No Island";
-				}
-
-				$isle = $session->getIsle();
-
-				return $isle->getBlocksBuilt();
-			}else{
-				return "Plugin Not Found";
+			if((is_null($session)) || (!$session->hasIsle())){
+				return "No Island";
 			}
+
+			$isle = $session->getIsle();
+
+			return $isle->getBlocksBuilt();
 		}
 
 		/**
@@ -81,22 +74,15 @@ namespace JackMD\ScoreHud\Addons
 		 * @return int|string
 		 */
 		public function getIsleMembers(Player $player){
-			/** @var SkyBlock $sb */
-			$sb = $this->getScoreHud()->getServer()->getPluginManager()->getPlugin("SkyBlock");
+			$session = $this->skyBlock->getSessionManager()->getSession($player);
 
-			if($sb instanceof SkyBlock){
-				$session = $sb->getSessionManager()->getSession($player);
-
-				if((is_null($session)) || (!$session->hasIsle())){
-					return "No Island";
-				}
-
-				$isle = $session->getIsle();
-
-				return count($isle->getMembers());
-			}else{
-				return "Plugin Not Found";
+			if((is_null($session)) || (!$session->hasIsle())){
+				return "No Island";
 			}
+
+			$isle = $session->getIsle();
+
+			return count($isle->getMembers());
 		}
 
 		/**
@@ -104,22 +90,15 @@ namespace JackMD\ScoreHud\Addons
 		 * @return string
 		 */
 		public function getIsleSize(Player $player){
-			/** @var SkyBlock $sb */
-			$sb = $this->getScoreHud()->getServer()->getPluginManager()->getPlugin("SkyBlock");
+			$session = $this->skyBlock->getSessionManager()->getSession($player);
 
-			if($sb instanceof SkyBlock){
-				$session = $sb->getSessionManager()->getSession($player);
-
-				if((is_null($session)) || (!$session->hasIsle())){
-					return "No Island";
-				}
-
-				$isle = $session->getIsle();
-
-				return $isle->getCategory();
-			}else{
-				return "Plugin Not Found";
+			if((is_null($session)) || (!$session->hasIsle())){
+				return "No Island";
 			}
+
+			$isle = $session->getIsle();
+
+			return $isle->getCategory();
 		}
 
 		/**
@@ -127,31 +106,24 @@ namespace JackMD\ScoreHud\Addons
 		 * @return string
 		 */
 		public function getIsleRank(Player $player){
-			/** @var SkyBlock $sb */
-			$sb = $this->getScoreHud()->getServer()->getPluginManager()->getPlugin("SkyBlock");
+			$session = $this->skyBlock->getSessionManager()->getSession($player);
 
-			if($sb instanceof SkyBlock){
-				$session = $sb->getSessionManager()->getSession($player);
-
-				if((is_null($session)) || (!$session->hasIsle())){
-					return "No Island";
-				}
-
-				switch($session->getRank()){
-					case SkyBlockSession::RANK_DEFAULT:
-						return "Member";
-					case SkyBlockSession::RANK_OFFICER:
-						return "Officer";
-					case SkyBlockSession::RANK_LEADER:
-						return "Leader";
-					case SkyBlockSession::RANK_FOUNDER:
-						return "Founder";
-				}
-
-				return "No Rank";
-			}else{
-				return "Plugin Not Found";
+			if((is_null($session)) || (!$session->hasIsle())){
+				return "No Island";
 			}
+
+			switch($session->getRank()){
+				case SkyBlockSession::RANK_DEFAULT:
+					return "Member";
+				case SkyBlockSession::RANK_OFFICER:
+					return "Officer";
+				case SkyBlockSession::RANK_LEADER:
+					return "Leader";
+				case SkyBlockSession::RANK_FOUNDER:
+					return "Founder";
+			}
+
+			return "No Rank";
 		}
 	}
 }

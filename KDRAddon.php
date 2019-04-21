@@ -4,6 +4,7 @@ declare(strict_types = 1);
 /**
  * @name KDRAddon
  * @main JackMD\ScoreHud\Addons\KDRAddon
+ * @depend KDR
  */
 namespace JackMD\ScoreHud\Addons
 {
@@ -14,49 +15,11 @@ namespace JackMD\ScoreHud\Addons
 
 	class KDRAddon extends AddonBase{
 
-		/**
-		 * @param Player $player
-		 * @return int|string
-		 */
-		public function getPlayerKills(Player $player){
-			/** @var KDR $kdr */
-			$kdr = $this->getScoreHud()->getServer()->getPluginManager()->getPlugin("KDR");
+		/** @var KDR */
+		private $kdr;
 
-			if($kdr instanceof KDR){
-				return $kdr->getProvider()->getPlayerKillPoints($player);
-			}else{
-				return "Plugin Not Found";
-			}
-		}
-
-		/**
-		 * @param Player $player
-		 * @return int|string
-		 */
-		public function getPlayerDeaths(Player $player){
-			/** @var KDR $kdr */
-			$kdr = $this->getScoreHud()->getServer()->getPluginManager()->getPlugin("KDR");
-
-			if($kdr instanceof KDR){
-				return $kdr->getProvider()->getPlayerDeathPoints($player);
-			}else{
-				return "Plugin Not Found";
-			}
-		}
-
-		/**
-		 * @param Player $player
-		 * @return string
-		 */
-		public function getPlayerKillToDeathRatio(Player $player): string{
-			/** @var KDR $kdr */
-			$kdr = $this->getScoreHud()->getServer()->getPluginManager()->getPlugin("KDR");
-
-			if($kdr instanceof KDR){
-				return $kdr->getProvider()->getKillToDeathRatio($player);
-			}else{
-				return "Plugin Not Found";
-			}
+		public function onEnable(): void{
+			$this->kdr = $this->getServer()->getPluginManager()->getPlugin("KDR");
 		}
 
 		/**
@@ -65,9 +28,9 @@ namespace JackMD\ScoreHud\Addons
 		 */
 		public function getProcessedTags(Player $player): array{
 			return [
-				"{kdr}" => $this->getPlayerKillToDeathRatio($player),
-				"{deaths}" => $this->getPlayerDeaths($player),
-				"{kills}" => $this->getPlayerKills($player)
+				"{kdr}" => $this->kdr->getProvider()->getKillToDeathRatio($player),
+				"{deaths}" => $this->kdr->getProvider()->getPlayerDeathPoints($player),
+				"{kills}" => $this->kdr->getProvider()->getPlayerKillPoints($player)
 			];
 		}
 	}

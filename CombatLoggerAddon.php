@@ -4,6 +4,7 @@ declare(strict_types = 1);
 /**
  * @name CombatLoggerAddon
  * @main JackMD\ScoreHud\Addons\CombatLoggerAddon
+ * @depend CombatLogger
  */
 namespace JackMD\ScoreHud\Addons
 {
@@ -13,19 +14,11 @@ namespace JackMD\ScoreHud\Addons
 
 	class CombatLoggerAddon extends AddonBase{
 
-		/**
-		 * @param Player $player
-		 * @return int|string
-		 */
-		public function getTagDuration(Player $player){
-			/** @var CombatLogger $cl */
-			$cl = $this->getScoreHud()->getServer()->getPluginManager()->getPlugin("CombatLogger");
-			
-			if($cl instanceof CombatLogger){
-				return $cl->getTagDuration($player);
-			}else{
-				return "Plugin Not Found";
-			}
+		/** @var CombatLogger */
+		private $combatLogger;
+
+		public function onEnable(): void{
+			$this->combatLogger = $this->getServer()->getPluginManager()->getPlugin("CombatLogger");
 		}
 
 		/**
@@ -34,7 +27,7 @@ namespace JackMD\ScoreHud\Addons
 		 */
 		public function getProcessedTags(Player $player): array{
 			return [
-				"{combat_duration}" => $this->getTagDuration($player)
+				"{combat_duration}" => $this->combatLogger->getTagDuration($player)
 			];
 		}
 	}

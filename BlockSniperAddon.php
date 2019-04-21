@@ -22,11 +22,15 @@ namespace BlockHorizons\ScoreHud\Addons {
 		 */
 		public function getProcessedTags(Player $player): array{
 			$brush = SessionManager::getPlayerSession($player)->getBrush();
+			$size = (string) $brush->size;
+			if($brush->getShape()->usesThreeLengths()){
+				$size = (string) $brush->width . "x" . (string) $brush->length . "x" . (string) $brush->height;
+			}
 			return [
 				"{brush_shape}" => $brush->getShape()->getName(),
 				"{brush_type}" => $brush->getType()->getName(),
 				"{brush_mode}" => $brush->mode === Brush::MODE_BRUSH ? "Brush" : "Selection",
-				"{brush_size}" => $brush->size,
+				"{brush_size}" => $size,
 			];
 		}
 	}

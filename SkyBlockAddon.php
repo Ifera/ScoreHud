@@ -20,7 +20,7 @@ namespace JackMD\ScoreHud\Addons
 		private $skyBlock;
 
 		public function onEnable(): void{
-			$this->cps = $this->getServer()->getPluginManager()->getPlugin("SkyBlock");
+			$this->skyBlock = $this->getServer()->getPluginManager()->getPlugin("SkyBlock");
 		}
 
 		/**

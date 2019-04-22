@@ -1,11 +1,12 @@
 ![ScoreHud Banner](https://github.com/JackMD/ScoreHud/blob/master/meta/ScoreHud.PNG)
-# ScoreHud
 
 >## Disclaimer: <br />
 > Starting from ScoreHud version 5.0.0 onwards addons will be used. <br />
 > The old methods have been removed. You are therefore requested to update. <br />
 > Process on how to use addons is written below. <br />
 > **Please also read last two questions in FAQs.**
+
+# ScoreHud
 
 | HitCount | License | Poggit | Release |
 |:--:|:--:|:--:|:--:|
@@ -30,11 +31,11 @@
 ### Addons:
 
  - This plugin supports addons for adding tags to edit on the scoreboard.
- - For a list of available addons go [here](https://github.com/JackMD/ScoreHud/tree/addons).
+ - For a list of available addons go [here](https://github.com/JackMD/ScoreHud-Addons).
  
 ### How to use Addons?
 
- - Download the addons you like to use from [here](https://github.com/JackMD/ScoreHud/tree/addons).
+ - Download the addons you like to use from [here](https://github.com/JackMD/ScoreHud-Addonss).
  - Stop the server if on.
  - Hint: The addons end with a `.php` extension.
  - Put the addons you downloaded in `plugin_data\ScoreHud\addons` folder.

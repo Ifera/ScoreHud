@@ -257,4 +257,11 @@ class ScoreHud extends PluginBase{
 
 		return $formattedString;
 	}
+
+	/**
+	 * @return AddonManager
+	 */
+	public function getAddonManager(): AddonManager{
+		return $this->addonManager;
+	}
 }

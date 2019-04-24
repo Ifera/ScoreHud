@@ -31,7 +31,6 @@ declare(strict_types = 1);
  * ------------------------------------------------------------------------
  */
 
-
 namespace JackMD\ScoreHud\addon;
 
 use JackMD\ScoreHud\ScoreHud;
@@ -79,7 +78,7 @@ interface Addon{
 	 * After doing the edits in your script.
 	 * Return the final result to be used by ScoreHud using this.
 	 *
-	 * For example addons refer here: https://github.com/JackMD/ScoreHud/tree/addons
+	 * For example addons refer here: https://github.com/JackMD/ScoreHud-Addons
 	 *
 	 * @param Player $player
 	 * @return array

@@ -31,7 +31,6 @@ declare(strict_types = 1);
  * ------------------------------------------------------------------------
  */
 
-
 namespace JackMD\ScoreHud\addon;
 
 use JackMD\ScoreHud\ScoreHud;
@@ -41,7 +40,8 @@ use pocketmine\Server;
  * Use of this class is encouraged instead of Addon.php.
  *
  * Please refer to Addon.php for details on what the methods below do.
- * @see Addon.php
+ *
+ * @see     Addon.php
  *
  * Class AddonBase
  *

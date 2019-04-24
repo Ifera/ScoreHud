@@ -55,6 +55,8 @@ class ScoreHud extends PluginBase{
 
 	/** @var ScoreHud|null */
 	private static $instance = null;
+	/** @var string */
+	public static $addonPath = "";
 
 	/** @var Config */
 	private $scoreHudConfig;
@@ -77,6 +79,7 @@ class ScoreHud extends PluginBase{
 
 	public function onLoad(){
 		self::$instance = $this;
+		self::$addonPath = realpath($this->getDataFolder() . "addons") . DIRECTORY_SEPARATOR;
 
 		UpdateNotifier::checkUpdate($this, $this->getDescription()->getName(), $this->getDescription()->getVersion());
 		Utils::checkVirions();
@@ -109,7 +112,7 @@ class ScoreHud extends PluginBase{
 	}
 
 	public function onEnable(){
-		$this->addonManager = new AddonManager($this, realpath($this->getDataFolder() . "addons") . DIRECTORY_SEPARATOR);
+		$this->addonManager = new AddonManager($this);
 
 		$this->getServer()->getCommandMap()->register("scorehud", new ScoreHudCommand($this));
 		$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);

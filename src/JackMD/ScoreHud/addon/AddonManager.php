@@ -43,26 +43,22 @@ class AddonManager{
 	protected $addons = [];
 	/** @var ScoreHud */
 	private $scoreHud;
-	/** @var string */
-	private $addonDirectory;
 
 	/**
 	 * AddonManager constructor.
 	 *
 	 * @param ScoreHud $scoreHud
-	 * @param string   $addonDirectory
 	 */
-	public function __construct(ScoreHud $scoreHud, string $addonDirectory){
+	public function __construct(ScoreHud $scoreHud){
 		$this->scoreHud = $scoreHud;
-		$this->addonDirectory = $addonDirectory;
 
-		if(!is_dir($addonDirectory)){
-			mkdir($addonDirectory);
+		if(!is_dir(ScoreHud::$addonPath)){
+			mkdir(ScoreHud::$addonPath);
 		}
 
 		/* This task enables addons to only start loading after complete server load */
 		$task = new ClosureTask(function(int $currentTick): void{
-			$this->loadAddons($this->addonDirectory);
+			$this->loadAddons();
 		});
 
 		$scoreHud->getScheduler()->scheduleDelayedTask($task, 0);
@@ -122,10 +118,11 @@ class AddonManager{
 	}
 
 	/**
-	 * @param string $directory
 	 * @return array
 	 */
-	private function loadAddons(string $directory): array{
+	private function loadAddons(): array{
+		$directory = ScoreHud::$addonPath;
+
 		if(!is_dir($directory)){
 			return [];
 		}

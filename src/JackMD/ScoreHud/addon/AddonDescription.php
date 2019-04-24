@@ -46,6 +46,8 @@ class AddonDescription{
 	/** @var string */
 	private $main;
 	/** @var array */
+	private $api = [];
+	/** @var array */
 	private $depend = [];
 
 	/**
@@ -70,6 +72,14 @@ class AddonDescription{
 		$this->name = str_replace(" ", "_", $this->name);
 		$this->version = $addon["version"] ?? "0.0.0";
 		$this->main = $addon["main"];
+
+		if(isset($addon["api"])){
+			$api = explode(",", $addon["api"]);
+
+			$this->api = $api;
+		}else{
+			$this->api = [];
+		}
 
 		if(isset($addon["depend"])){
 			$depend = explode(",", $addon["depend"]);
@@ -106,6 +116,13 @@ class AddonDescription{
 	 */
 	public function getMain(): string{
 		return $this->main;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getCompatibleApis(): array{
+		return $this->api;
 	}
 
 	/**

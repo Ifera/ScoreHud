@@ -123,6 +123,9 @@ class AddonManager{
 	private function loadAddons(): array{
 		$directory = ScoreHud::$addonPath;
 
+		$scoreHud = $this->scoreHud;
+		$server = $scoreHud->getServer();
+
 		if(!is_dir($directory)){
 			return [];
 		}
@@ -145,16 +148,24 @@ class AddonManager{
 			}
 
 			if((isset($addons[$name]) )|| ($this->getAddon($name) instanceof Addon)){
-				$this->scoreHud->getLogger()->error("§cCould not load addon §4{$name}§c. Addon with the same name already exists.");
+				$scoreHud->getLogger()->error("§cCould not load addon §4{$name}§c. Addon with the same name already exists.");
 
 				continue;
+			}
+
+			if(!empty($description->getCompatibleApis())){
+				if(!$server->getPluginManager()->isCompatibleApi(...$description->getCompatibleApis())){
+					$scoreHud->getLogger()->error("§cCould not load addon §4{$name}§c. Incompatible API version. Addon requires one of §4" . implode(", ", $description->getCompatibleApis()));
+
+					continue;
+				}
 			}
 
 			$addons[$name] = $file;
 			$dependencies[$name] = $description->getDepend();
 		}
 
-		$pluginManager = $this->scoreHud->getServer()->getPluginManager();
+		$pluginManager = $server->getPluginManager();
 		$loadedPlugins = $pluginManager->getPlugins();
 
 		while(count($addons) > 0){
@@ -167,7 +178,7 @@ class AddonManager{
 
 							unset($dependencies[$name][$key]);
 						}else{
-							$this->scoreHud->getLogger()->error("§cCould not load addon §4{$name}§c. Unknown dependency: §4$dependency");
+							$scoreHud->getLogger()->error("§cCould not load addon §4{$name}§c. Unknown dependency: §4$dependency");
 
 							unset($addons[$name]);
 							continue 2;
@@ -188,7 +199,7 @@ class AddonManager{
 					if($addon instanceof Addon){
 						$loadedAddons[$name] = $addon;
 					}else{
-						$this->scoreHud->getLogger()->error("§cCould not load addon §4{$name}§c.");
+						$scoreHud->getLogger()->error("§cCould not load addon §4{$name}§c.");
 					}
 				}
 			}
@@ -204,14 +215,14 @@ class AddonManager{
 						if($addon instanceof Addon){
 							$loadedAddons[$name] = $addon;
 						}else{
-							$this->scoreHud->getLogger()->error("§cCould not load addon §4{$name}§c.");
+							$scoreHud->getLogger()->error("§cCould not load addon §4{$name}§c.");
 						}
 					}
 				}
 
 				if($missingDependency){
 					foreach($addons as $name => $file){
-						$this->scoreHud->getLogger()->error("§cCould not load addon §4{$name}§c. Circular dependency detected.");
+						$scoreHud->getLogger()->error("§cCould not load addon §4{$name}§c. Circular dependency detected.");
 					}
 
 					$addons = [];
@@ -255,7 +266,7 @@ class AddonManager{
 
 				$this->addons[$name] = $addon;
 
-				$this->scoreHud->getLogger()->notice("§aAddon §6$name §asuccessfully enabled.");
+				$this->scoreHud->getLogger()->notice("Addon §a$name §bsuccessfully enabled.");
 				$this->scoreHud->getAddonUpdater()->check($addon);
 
 				return $addon;

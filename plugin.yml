@@ -1,9 +1,14 @@
 name: ScoreHud
 main: JackMD\ScoreHud\ScoreHud
 api: [3.0.0]
-version: 5.0.0
+version: 5.1.0
 author: JackMD
 description: Add fully customizable scoreboards to your server.
+
+virions:
+- ScoreFactory
+- UpdateNotifier
+- ConfigUpdater
 
 permissions:
   sh.command.sh:

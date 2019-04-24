@@ -31,57 +31,42 @@ declare(strict_types = 1);
  * ------------------------------------------------------------------------
  */
 
-namespace JackMD\ScoreHud\addon;
+namespace JackMD\ScoreHud\updater;
 
+use JackMD\ScoreHud\addon\Addon;
 use JackMD\ScoreHud\ScoreHud;
-use pocketmine\Player;
+use JackMD\ScoreHud\updater\task\AddonUpdateNotifyTask;
 
-/**
- * Instead of implementing this class, AddonBase class should be extended for Addon making.
- * @see AddonBase
- *
- * Interface Addon
- *
- * @package JackMD\ScoreHud\addon
- */
-interface Addon{
+class AddonUpdater{
+
+	/** @var ScoreHud */
+	private $plugin;
 
 	/**
-	 * Addon constructor.
+	 * AddonUpdater constructor.
 	 *
-	 * @param ScoreHud         $scoreHud
-	 * @param AddonDescription $description
+	 * @param ScoreHud $plugin
 	 */
-	public function __construct(ScoreHud $scoreHud, AddonDescription $description);
+	public function __construct(ScoreHud $plugin){
+		$this->plugin = $plugin;
+	}
 
 	/**
-	 * This is called whenever an Addon is successfully enabled. Depends on your use case.
-	 * Almost same as Plugin::onEnable().
+	 * @param Addon $addon
 	 */
-	public function onEnable(): void;
+	public function check(Addon $addon): void{
+		$plugin = $this->plugin;
+		$description = $addon->getDescription();
 
-	/**
-	 * Returns the ScoreHud plugin for whatever reason an addon would like to use it.
-	 *
-	 * @return ScoreHud
-	 */
-	public function getScoreHud(): ScoreHud;
+		$addonName = $description->getName();
+		$addonVersion = $description->getVersion();
 
-	/**
-	 * Returns the description containing name, main etc of the addon.
-	 *
-	 * @return AddonDescription
-	 */
-	public function getDescription(): AddonDescription;
+		if($addonVersion === "0.0.0"){
+			$plugin->getLogger()->warning("Addon $addonName is outdated. A new version has been released. Download the latest version from https://github.com/JackMD/ScoreHud-Addons");
 
-	/**
-	 * After doing the edits in your script.
-	 * Return the final result to be used by ScoreHud using this.
-	 *
-	 * For example addons refer here: https://github.com/JackMD/ScoreHud-Addons
-	 *
-	 * @param Player $player
-	 * @return array
-	 */
-	public function getProcessedTags(Player $player): array;
+			return;
+		}
+
+		$plugin->getServer()->getAsyncPool()->submitTask(new AddonUpdateNotifyTask($addonName, $addonVersion));
+	}
 }

@@ -32,7 +32,6 @@ declare(strict_types = 1);
  * ------------------------------------------------------------------------
  */
 
-
 namespace JackMD\ScoreHud\addon;
 
 class AddonDescription{
@@ -42,6 +41,8 @@ class AddonDescription{
 
 	/** @var string */
 	private $name;
+	/** @var string */
+	private $version;
 	/** @var string */
 	private $main;
 	/** @var array */
@@ -67,6 +68,7 @@ class AddonDescription{
 		}
 
 		$this->name = str_replace(" ", "_", $this->name);
+		$this->version = $addon["version"] ?? "0.0.0";
 		$this->main = $addon["main"];
 
 		if(isset($addon["depend"])){
@@ -76,7 +78,7 @@ class AddonDescription{
 		}else{
 			$this->depend = [];
 		}
- 	}
+	}
 
 	/**
 	 * @return array
@@ -90,6 +92,13 @@ class AddonDescription{
 	 */
 	public function getName(): string{
 		return $this->name;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getVersion(): string{
+		return $this->version;
 	}
 
 	/**

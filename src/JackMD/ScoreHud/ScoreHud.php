@@ -38,6 +38,7 @@ use JackMD\ScoreFactory\ScoreFactory;
 use JackMD\ScoreHud\addon\AddonManager;
 use JackMD\ScoreHud\commands\ScoreHudCommand;
 use JackMD\ScoreHud\task\ScoreUpdateTask;
+use JackMD\ScoreHud\Updater\AddonUpdater;
 use JackMD\ScoreHud\utils\Utils;
 use JackMD\UpdateNotifier\UpdateNotifier;
 use pocketmine\Player;
@@ -48,21 +49,26 @@ class ScoreHud extends PluginBase{
 
 	/** @var string */
 	public const PREFIX = "§8[§6S§eH§8]§r ";
+
 	/** @var int */
 	private const CONFIG_VERSION = 8;
 	/** @var int */
 	private const SCOREHUD_VERSION = 1;
 
+	/** @var string */
+	public static $addonPath = "";
 	/** @var ScoreHud|null */
 	private static $instance = null;
 
-	/** @var Config */
-	private $scoreHudConfig;
+	/** @var AddonUpdater */
+	private $addonUpdater;
 	/** @var AddonManager */
 	private $addonManager;
 
 	/** @var array */
 	public $disabledScoreHudPlayers = [];
+	/** @var Config */
+	private $scoreHudConfig;
 	/** @var null|array */
 	private $scoreboards = [];
 	/** @var null|array */
@@ -77,6 +83,7 @@ class ScoreHud extends PluginBase{
 
 	public function onLoad(){
 		self::$instance = $this;
+		self::$addonPath = realpath($this->getDataFolder() . "addons") . DIRECTORY_SEPARATOR;
 
 		UpdateNotifier::checkUpdate($this, $this->getDescription()->getName(), $this->getDescription()->getVersion());
 		Utils::checkVirions();
@@ -109,7 +116,8 @@ class ScoreHud extends PluginBase{
 	}
 
 	public function onEnable(){
-		$this->addonManager = new AddonManager($this, realpath($this->getDataFolder() . "addons") . DIRECTORY_SEPARATOR);
+		$this->addonUpdater = new AddonUpdater($this);
+		$this->addonManager = new AddonManager($this);
 
 		$this->getServer()->getCommandMap()->register("scorehud", new ScoreHudCommand($this));
 		$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
@@ -122,14 +130,6 @@ class ScoreHud extends PluginBase{
 	 */
 	public function getScoreHudConfig(): Config{
 		return $this->scoreHudConfig;
-	}
-
-	/**
-	 * @param string $world
-	 * @return array|null
-	 */
-	public function getScorelines(string $world): ?array{
-		return !isset($this->scorelines[$world]) ? null : $this->scorelines[$world];
 	}
 
 	/**
@@ -210,6 +210,37 @@ class ScoreHud extends PluginBase{
 	}
 
 	/**
+	 * @param string $world
+	 * @return array|null
+	 */
+	public function getScorelines(string $world): ?array{
+		return !isset($this->scorelines[$world]) ? null : $this->scorelines[$world];
+	}
+
+	/**
+	 * @param Player $player
+	 * @param string $string
+	 * @return string
+	 */
+	public function process(Player $player, string $string): string{
+		$tags = [];
+
+		foreach($this->addonManager->getAddons() as $addon){
+			foreach($addon->getProcessedTags($player) as $identifier => $processedTag){
+				$tags[$identifier] = $processedTag;
+			}
+		}
+
+		$formattedString = str_replace(
+			array_keys($tags),
+			array_values($tags),
+			$string
+		);
+
+		return $formattedString;
+	}
+
+	/**
 	 * @param Player $player
 	 */
 	public function displayDefaultScoreboard(Player $player): void{
@@ -236,25 +267,16 @@ class ScoreHud extends PluginBase{
 	}
 
 	/**
-	 * @param Player $player
-	 * @param string $string
-	 * @return string
+	 * @return AddonUpdater
 	 */
-	public function process(Player $player, string $string): string{
-		$tags = [];
+	public function getAddonUpdater(): AddonUpdater{
+		return $this->addonUpdater;
+	}
 
-		foreach($this->addonManager->getAddons() as $addon){
-			foreach($addon->getProcessedTags($player) as $identifier => $processedTag){
-				$tags[$identifier] = $processedTag;
-			}
-		}
-
-		$formattedString = str_replace(
-			array_keys($tags),
-			array_values($tags),
-			$string
-		);
-
-		return $formattedString;
+	/**
+	 * @return AddonManager
+	 */
+	public function getAddonManager(): AddonManager{
+		return $this->addonManager;
 	}
 }

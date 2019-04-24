@@ -62,7 +62,7 @@ class AddonUpdater{
 		$addonVersion = $description->getVersion();
 
 		if($addonVersion === "0.0.0"){
-			$plugin->getLogger()->warning("Addon $addonName is outdated. A new version has been released. Download the latest version from https://github.com/JackMD/ScoreHud-Addons");
+			$plugin->getLogger()->warning("(Addon Update Notice) Addon $addonName is outdated. A new version has been released. Download the latest version from https://github.com/JackMD/ScoreHud-Addons");
 
 			return;
 		}

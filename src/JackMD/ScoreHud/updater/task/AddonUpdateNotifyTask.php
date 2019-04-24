@@ -115,7 +115,7 @@ class AddonUpdateNotifyTask extends AsyncTask{
 		$data = $this->getResult();
 
 		if(empty($data) || !isset($data["version"])){
-			$plugin->getLogger()->info("No new updates for addon $addonName were found. You are using the latest version.");
+			$plugin->getLogger()->info("(Addon Update Info) No new updates for addon $addonName were found. You are using the latest version.");
 
 			return;
 		}
@@ -123,11 +123,11 @@ class AddonUpdateNotifyTask extends AsyncTask{
 		$highestVersion = $data["version"];
 
 		if($highestVersion === $addonVersion){
-			$plugin->getLogger()->info("No new updates for addon $addonName were found. You are using the latest version.");
+			$plugin->getLogger()->info("(Addon Update Info) No new updates for addon $addonName were found. You are using the latest version.");
 
 			return;
 		}
 
-		$plugin->getLogger()->notice("Addon Update Alert! Version $highestVersion has been released for $addonName. Download the new release at https://github.com/JackMD/ScoreHud-Addons");
+		$plugin->getLogger()->notice("(Addon Update Notice) Version $highestVersion has been released for $addonName. Download the new release at https://github.com/JackMD/ScoreHud-Addons");
 	}
 }

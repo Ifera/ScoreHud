@@ -38,7 +38,7 @@ use JackMD\ScoreFactory\ScoreFactory;
 use JackMD\ScoreHud\addon\AddonManager;
 use JackMD\ScoreHud\commands\ScoreHudCommand;
 use JackMD\ScoreHud\task\ScoreUpdateTask;
-use JackMD\ScoreHud\Updater\AddonUpdater;
+use JackMD\ScoreHud\updater\AddonUpdater;
 use JackMD\ScoreHud\utils\Utils;
 use JackMD\UpdateNotifier\UpdateNotifier;
 use pocketmine\Player;

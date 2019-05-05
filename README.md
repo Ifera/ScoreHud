@@ -35,7 +35,7 @@
  
 ### How to use Addons?
 
- - Download the addons you like to use from [here](https://github.com/JackMD/ScoreHud-Addonss).
+ - Download the addons you like to use from [here](https://github.com/JackMD/ScoreHud-Addons).
  - Stop the server if on.
  - Hint: The addons end with a `.php` extension.
  - Put the addons you downloaded in `plugin_data\ScoreHud\addons` folder.

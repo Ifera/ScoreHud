@@ -60,13 +60,13 @@ class ScoreHud extends PluginBase{
 	/** @var ScoreHud|null */
 	private static $instance = null;
 
+	/** @var array */
+	public $disabledScoreHudPlayers = [];
+
 	/** @var AddonUpdater */
 	private $addonUpdater;
 	/** @var AddonManager */
 	private $addonManager;
-
-	/** @var array */
-	public $disabledScoreHudPlayers = [];
 	/** @var Config */
 	private $scoreHudConfig;
 	/** @var null|array */
@@ -84,12 +84,22 @@ class ScoreHud extends PluginBase{
 	public function onLoad(){
 		self::$instance = $this;
 		self::$addonPath = realpath($this->getDataFolder() . "addons") . DIRECTORY_SEPARATOR;
+	}
 
-		UpdateNotifier::checkUpdate($this, $this->getDescription()->getName(), $this->getDescription()->getVersion());
+	public function onEnable(){
 		Utils::checkVirions();
+		UpdateNotifier::checkUpdate($this, $this->getDescription()->getName(), $this->getDescription()->getVersion());
 
 		$this->checkConfigs();
 		$this->initScoreboards();
+
+		$this->addonUpdater = new AddonUpdater($this);
+		$this->addonManager = new AddonManager($this);
+
+		$this->getServer()->getCommandMap()->register("scorehud", new ScoreHudCommand($this));
+		$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
+
+		$this->getScheduler()->scheduleRepeatingTask(new ScoreUpdateTask($this), (int) $this->getConfig()->get("update-interval") * 20);
 	}
 
 	/**
@@ -113,16 +123,6 @@ class ScoreHud extends PluginBase{
 			$this->scoreboards[$world] = $data;
 			$this->scorelines[$world] = $data["lines"];
 		}
-	}
-
-	public function onEnable(){
-		$this->addonUpdater = new AddonUpdater($this);
-		$this->addonManager = new AddonManager($this);
-
-		$this->getServer()->getCommandMap()->register("scorehud", new ScoreHudCommand($this));
-		$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
-
-		$this->getScheduler()->scheduleRepeatingTask(new ScoreUpdateTask($this), (int) $this->getConfig()->get("update-interval") * 20);
 	}
 
 	/**

@@ -61,6 +61,10 @@ A: Well, the whole process of making addon support system was simply to let othe
 **Q: The author of the plugin whose addon I want is no longer alive. What do I do?**<br />
 A: In this case make an issue [here](https://github.com/JackMD/ScoreHud/issues) starting with `[Addon Request]` and mention in detail which plugins support you want to be added. I will then look into it.<br /><br />
 
+### Video:
+
+[![YouTube](http://img.youtube.com/vi/QtsvkgJfjdg/0.jpg)](http://www.youtube.com/watch?v=QtsvkgJfjdg)
+
 ### For Developers:
 
  - Refer to [wiki](https://github.com/JackMD/ScoreHud/wiki).

@@ -266,7 +266,7 @@ class AddonManager{
 
 				$this->addons[$name] = $addon;
 
-				$this->scoreHud->getLogger()->notice("Addon §a$name §bsuccessfully enabled.");
+				$this->scoreHud->getLogger()->debug("§bAddon §a$name §bsuccessfully enabled.");
 				$this->scoreHud->getAddonUpdater()->check($addon);
 
 				return $addon;

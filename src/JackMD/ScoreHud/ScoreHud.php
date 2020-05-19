@@ -88,7 +88,7 @@ class ScoreHud extends PluginBase{
 
 	public function onEnable(){
 		Utils::checkVirions();
-		UpdateNotifier::checkUpdate($this, $this->getDescription()->getName(), $this->getDescription()->getVersion());
+		UpdateNotifier::checkUpdate($this->getDescription()->getName(), $this->getDescription()->getVersion());
 
 		$this->checkConfigs();
 		$this->initScoreboards();

@@ -8,7 +8,7 @@ projects:
       - src: JackMD/ScoreFactory/ScoreFactory
         version: ^1.0.0
       - src: JackMD/UpdateNotifier/UpdateNotifier
-        version: ^1.0.0
+        version: ^2.0.0
       - src: JackMD/ConfigUpdater/ConfigUpdater
         version: ^1.0.0
 ...

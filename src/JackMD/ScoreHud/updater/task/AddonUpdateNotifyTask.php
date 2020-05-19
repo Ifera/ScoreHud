@@ -115,16 +115,12 @@ class AddonUpdateNotifyTask extends AsyncTask{
 		$data = $this->getResult();
 
 		if(empty($data) || !isset($data["version"])){
-			$plugin->getLogger()->info("(Addon Update Info) No new updates for addon $addonName were found. You are using the latest version.");
-
 			return;
 		}
 
 		$highestVersion = $data["version"];
 
 		if($highestVersion === $addonVersion){
-			$plugin->getLogger()->info("(Addon Update Info) No new updates for addon $addonName were found. You are using the latest version.");
-
 			return;
 		}
 

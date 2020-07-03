@@ -39,14 +39,14 @@ scoreboards:
 # EXAMPLE CONFIGURATION:
 # -------------------
 # "world name":     | The name of the world. Enclose it in inverted commas.
-#   lines:          | This key is important. And the plugin won't function without it.
+#   lines:2         | This key is important. And the plugin won't function without it.
 #   - " Line #1"    | Line number one. You can use any of the above tags.
 #   - " Line #2"    | You can add a maximum of 15 lines.
 #--------------------
   "world":
     lines:
-    - " §dName: §5{name}"
-    - " §bOnline: §a{online} §c/ §d{max_online}"
+    -1" §dName: §5{name}"
+    -2" §bOnline: §a{online} §c/ §d{max_online}"
   "world 2":
     lines:
     - " §dTPS: §5{tps}"

@@ -6,10 +6,10 @@ scorehud-version: 1
 # Changing titles of the scoreboard.
 # Can be of any number.
 server-names:
-- "§l§aServer §dName"
-- "§l§bServer §cName"
-- "§l§cServer §bName"
-- "§l§dServer §aName"
+- "§l•§bTumoral§f•"
+- "§l•§bTumoral§f•"
+- "§l•§bTumoral§f•"
+- "§l•§bTumoral§f•"
 
 # Note: You can find links to the required/supported plugins via the README.md.
 # IMPORTANT NOTE: You can only set a maximum of 15 lines and no more.
@@ -28,10 +28,10 @@ server-names:
 #
 # For a list of addons go here https://github.com/JackMD/ScoreHud/blob/master/README.md#addons.
 score-lines:
-- " §aLine #1"
-- " §bLine #2"
-- " §cLine #3"
-- " §dLine #4"
+- " §bWelcome"
+- " §bTo"
+- " §bMy"
+- " §bServer"
 
 # If you want to display different scoreboards for every world then set per-world-scoreboard to true in config.yml.
 # After that edit the following to suit your needs.

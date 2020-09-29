@@ -11,6 +11,7 @@ class PlayerSession{
 
 	/** @var ScoreHud */
 	private $plugin;
+	
 	/** @var Player */
 	private $player;
 	/** @var Scoreboard */
@@ -19,6 +20,10 @@ class PlayerSession{
 	public function __construct(Player $player){
 		$this->plugin = ScoreHud::getInstance();
 		$this->player = $player;
+	}
+
+	public function getPlayer(): Player{
+		return $this->player;
 	}
 
 	public function getScoreboard(): Scoreboard{

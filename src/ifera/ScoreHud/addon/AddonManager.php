@@ -31,9 +31,9 @@ declare(strict_types = 1);
  * ------------------------------------------------------------------------
  */
 
-namespace JackMD\ScoreHud\addon;
+namespace Ifera\ScoreHud\addon;
 
-use JackMD\ScoreHud\ScoreHud;
+use Ifera\ScoreHud\ScoreHud;
 use pocketmine\plugin\Plugin;
 use pocketmine\scheduler\ClosureTask;
 

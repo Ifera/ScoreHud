@@ -31,10 +31,10 @@ declare(strict_types = 1);
  * ------------------------------------------------------------------------
  */
 
-namespace JackMD\ScoreHud\commands;
+namespace Ifera\ScoreHud\commands;
 
 use JackMD\ScoreFactory\ScoreFactory;
-use JackMD\ScoreHud\ScoreHud;
+use Ifera\ScoreHud\ScoreHud;
 use pocketmine\command\CommandSender;
 use pocketmine\command\PluginCommand;
 use pocketmine\Player;

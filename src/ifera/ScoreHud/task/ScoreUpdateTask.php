@@ -31,42 +31,52 @@ declare(strict_types = 1);
  * ------------------------------------------------------------------------
  */
 
-namespace JackMD\ScoreHud\updater;
+namespace Ifera\ScoreHud\task;
 
-use JackMD\ScoreHud\addon\Addon;
-use JackMD\ScoreHud\ScoreHud;
-use JackMD\ScoreHud\updater\task\AddonUpdateNotifyTask;
+use Ifera\ScoreHud\ScoreHud;
+use pocketmine\scheduler\Task;
 
-class AddonUpdater{
+class ScoreUpdateTask extends Task{
 
 	/** @var ScoreHud */
 	private $plugin;
+	/** @var int */
+	private $titleIndex = 0;
 
 	/**
-	 * AddonUpdater constructor.
+	 * ScoreUpdateTask constructor.
 	 *
 	 * @param ScoreHud $plugin
 	 */
 	public function __construct(ScoreHud $plugin){
 		$this->plugin = $plugin;
+		$this->titleIndex = 0;
 	}
 
 	/**
-	 * @param Addon $addon
+	 * @param int $tick
 	 */
-	public function check(Addon $addon): void{
-		$plugin = $this->plugin;
-		$description = $addon->getDescription();
+	public function onRun(int $tick){
+		$players = $this->plugin->getServer()->getOnlinePlayers();
 
-		$addonName = $description->getName();
-		$addonVersion = $description->getVersion();
+		$dataConfig = $this->plugin->getScoreHudConfig();
+		$titles = $dataConfig->get("server-names");
 
-		if($addonVersion === "0.0.0"){
-			$plugin->getLogger()->warning("(Addon Update Notice) Addon $addonName is outdated. A new version has been released. Download the latest version from https://github.com/JackMD/ScoreHud-Addons");
+		if((is_null($titles)) || empty($titles) || !isset($titles)){
+			$this->plugin->getLogger()->error("Please set server-names in scorehud.yml properly.");
+			$this->plugin->getServer()->getPluginManager()->disablePlugin($this->plugin);
 
 			return;
 		}
 
-		$plugin->getServer()->getAsyncPool()->submitTask(new AddonUpdateNotifyTask($addonName, $addonVersion));
+		if(!isset($titles[$this->titleIndex])){
+			$this->titleIndex = 0;
+		}
+
+		foreach($players as $player){
+			$this->plugin->addScore($player, $titles[$this->titleIndex]);
+		}
+
+		$this->titleIndex++;
 	}
 }

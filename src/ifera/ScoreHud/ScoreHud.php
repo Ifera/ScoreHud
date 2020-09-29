@@ -31,15 +31,15 @@ declare(strict_types = 1);
  * ------------------------------------------------------------------------
  */
 
-namespace JackMD\ScoreHud;
+namespace Ifera\ScoreHud;
 
 use JackMD\ConfigUpdater\ConfigUpdater;
 use JackMD\ScoreFactory\ScoreFactory;
-use JackMD\ScoreHud\addon\AddonManager;
-use JackMD\ScoreHud\commands\ScoreHudCommand;
-use JackMD\ScoreHud\task\ScoreUpdateTask;
-use JackMD\ScoreHud\updater\AddonUpdater;
-use JackMD\ScoreHud\utils\Utils;
+use Ifera\ScoreHud\addon\AddonManager;
+use Ifera\ScoreHud\commands\ScoreHudCommand;
+use Ifera\ScoreHud\task\ScoreUpdateTask;
+use Ifera\ScoreHud\updater\AddonUpdater;
+use Ifera\ScoreHud\utils\Utils;
 use JackMD\UpdateNotifier\UpdateNotifier;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;

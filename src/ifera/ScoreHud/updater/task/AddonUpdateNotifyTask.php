@@ -31,10 +31,10 @@ declare(strict_types = 1);
  * ------------------------------------------------------------------------
  */
 
-namespace JackMD\ScoreHud\updater\task;
+namespace Ifera\ScoreHud\updater\task;
 
 use ErrorException;
-use JackMD\ScoreHud\ScoreHud;
+use Ifera\ScoreHud\ScoreHud;
 use pocketmine\scheduler\AsyncTask;
 use pocketmine\Server;
 

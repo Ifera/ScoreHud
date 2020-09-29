@@ -31,61 +31,42 @@ declare(strict_types = 1);
  * ------------------------------------------------------------------------
  */
 
-namespace JackMD\ScoreHud\addon;
+namespace Ifera\ScoreHud\updater;
 
-use JackMD\ScoreHud\ScoreHud;
-use pocketmine\Server;
+use Ifera\ScoreHud\addon\Addon;
+use Ifera\ScoreHud\ScoreHud;
+use Ifera\ScoreHud\updater\task\AddonUpdateNotifyTask;
 
-/**
- * Use of this class is encouraged instead of Addon.php.
- *
- * Please refer to Addon.php for details on what the methods below do.
- *
- * @see     Addon.php
- *
- * Class AddonBase
- *
- * @package JackMD\ScoreHud\addon
- */
-abstract class AddonBase implements Addon{
+class AddonUpdater{
 
 	/** @var ScoreHud */
-	private $scoreHud;
-	/** @var AddonDescription */
-	private $description;
+	private $plugin;
 
 	/**
-	 * AddonBase constructor.
+	 * AddonUpdater constructor.
 	 *
-	 * @param ScoreHud         $scoreHud
-	 * @param AddonDescription $description
+	 * @param ScoreHud $plugin
 	 */
-	public function __construct(ScoreHud $scoreHud, AddonDescription $description){
-		$this->scoreHud = $scoreHud;
-		$this->description = $description;
-	}
-
-	public function onEnable(): void{
+	public function __construct(ScoreHud $plugin){
+		$this->plugin = $plugin;
 	}
 
 	/**
-	 * @return ScoreHud
+	 * @param Addon $addon
 	 */
-	public function getScoreHud(): ScoreHud{
-		return $this->scoreHud;
-	}
+	public function check(Addon $addon): void{
+		$plugin = $this->plugin;
+		$description = $addon->getDescription();
 
-	/**
-	 * @return AddonDescription
-	 */
-	final public function getDescription(): AddonDescription{
-		return $this->description;
-	}
+		$addonName = $description->getName();
+		$addonVersion = $description->getVersion();
 
-	/**
-	 * @return Server
-	 */
-	public function getServer(): Server{
-		return $this->scoreHud->getServer();
+		if($addonVersion === "0.0.0"){
+			$plugin->getLogger()->warning("(Addon Update Notice) Addon $addonName is outdated. A new version has been released. Download the latest version from https://github.com/JackMD/ScoreHud-Addons");
+
+			return;
+		}
+
+		$plugin->getServer()->getAsyncPool()->submitTask(new AddonUpdateNotifyTask($addonName, $addonVersion));
 	}
 }

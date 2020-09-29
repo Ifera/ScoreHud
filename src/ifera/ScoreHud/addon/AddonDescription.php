@@ -32,7 +32,7 @@ declare(strict_types = 1);
  * ------------------------------------------------------------------------
  */
 
-namespace JackMD\ScoreHud\addon;
+namespace Ifera\ScoreHud\addon;
 
 class AddonDescription{
 

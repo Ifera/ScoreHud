@@ -31,46 +31,57 @@ declare(strict_types = 1);
  * ------------------------------------------------------------------------
  */
 
-namespace JackMD\ScoreHud\utils;
+namespace Ifera\ScoreHud\addon;
 
+use Ifera\ScoreHud\ScoreHud;
+use pocketmine\Player;
 
-use JackMD\ConfigUpdater\ConfigUpdater;
-use JackMD\ScoreFactory\ScoreFactory;
-use JackMD\ScoreHud\ScoreHud;
-use JackMD\UpdateNotifier\UpdateNotifier;
-use pocketmine\Server;
-use RuntimeException;
-
-class Utils{
-
-	/**
-	 * Checks if the required virions/libraries are present before enabling the plugin.
-	 */
-	public static function checkVirions(): void{
-		$requiredVirions = [
-			ScoreFactory::class,
-			UpdateNotifier::class,
-			ConfigUpdater::class
-		];
-
-		foreach($requiredVirions as $class){
-			if(!class_exists($class)){
-				throw new RuntimeException("ScoreHud plugin will only work if you use the plugin phar from Poggit.");
-			}
-		}
-	}
+/**
+ * Instead of implementing this class, AddonBase class should be extended for Addon making.
+ * @see AddonBase
+ *
+ * Interface Addon
+ *
+ * @package Ifera\ScoreHud\addon
+ */
+interface Addon{
 
 	/**
-	 * @param $timezone
-	 * @return bool
+	 * Addon constructor.
+	 *
+	 * @param ScoreHud         $scoreHud
+	 * @param AddonDescription $description
 	 */
-	public static function setTimezone($timezone): bool{
-		if($timezone !== false){
-			Server::getInstance()->getLogger()->notice(ScoreHud::PREFIX . "Server timezone successfully set to " . $timezone);
+	public function __construct(ScoreHud $scoreHud, AddonDescription $description);
 
-			return date_default_timezone_set($timezone);
-		}
+	/**
+	 * This is called whenever an Addon is successfully enabled. Depends on your use case.
+	 * Almost same as Plugin::onEnable().
+	 */
+	public function onEnable(): void;
 
-		return false;
-	}
+	/**
+	 * Returns the ScoreHud plugin for whatever reason an addon would like to use it.
+	 *
+	 * @return ScoreHud
+	 */
+	public function getScoreHud(): ScoreHud;
+
+	/**
+	 * Returns the description containing name, main etc of the addon.
+	 *
+	 * @return AddonDescription
+	 */
+	public function getDescription(): AddonDescription;
+
+	/**
+	 * After doing the edits in your script.
+	 * Return the final result to be used by ScoreHud using this.
+	 *
+	 * For example addons refer here: https://github.com/JackMD/ScoreHud-Addons
+	 *
+	 * @param Player $player
+	 * @return array
+	 */
+	public function getProcessedTags(Player $player): array;
 }

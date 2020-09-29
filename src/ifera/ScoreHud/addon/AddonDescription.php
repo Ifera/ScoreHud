@@ -11,9 +11,9 @@ declare(strict_types = 1);
  *    \____/ \___\___/|_|  \___\_| |_/\__,_|\__,_|
  *
  * ScoreHud, a Scoreboard plugin for PocketMine-MP
- * Copyright (c) 2018 JackMD  < https://github.com/JackMD >
+ * Copyright (c) 2020 Ifera  < https://github.com/Ifera >
  *
- * Discord: JackMD#3717
+ * Discord: Ifera#3717
  * Twitter: JackMTaylor_
  *
  * This software is distributed under "GNU General Public License v3.0".

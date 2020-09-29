@@ -35,10 +35,8 @@ namespace Ifera\ScoreHud;
 
 use JackMD\ConfigUpdater\ConfigUpdater;
 use JackMD\ScoreFactory\ScoreFactory;
-use Ifera\ScoreHud\addon\AddonManager;
 use Ifera\ScoreHud\commands\ScoreHudCommand;
 use Ifera\ScoreHud\task\ScoreUpdateTask;
-use Ifera\ScoreHud\updater\AddonUpdater;
 use Ifera\ScoreHud\utils\Utils;
 use JackMD\UpdateNotifier\UpdateNotifier;
 use pocketmine\Player;
@@ -63,10 +61,6 @@ class ScoreHud extends PluginBase{
 	/** @var array */
 	public $disabledScoreHudPlayers = [];
 
-	/** @var AddonUpdater */
-	private $addonUpdater;
-	/** @var AddonManager */
-	private $addonManager;
 	/** @var Config */
 	private $scoreHudConfig;
 	/** @var null|array */
@@ -92,9 +86,6 @@ class ScoreHud extends PluginBase{
 
 		$this->checkConfigs();
 		$this->initScoreboards();
-
-		$this->addonUpdater = new AddonUpdater($this);
-		$this->addonManager = new AddonManager($this);
 
 		$this->getServer()->getCommandMap()->register("scorehud", new ScoreHudCommand($this));
 		$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
@@ -225,12 +216,6 @@ class ScoreHud extends PluginBase{
 	public function process(Player $player, string $string): string{
 		$tags = [];
 
-		foreach($this->addonManager->getAddons() as $addon){
-			foreach($addon->getProcessedTags($player) as $identifier => $processedTag){
-				$tags[$identifier] = $processedTag;
-			}
-		}
-
 		$formattedString = str_replace(
 			array_keys($tags),
 			array_values($tags),
@@ -264,19 +249,5 @@ class ScoreHud extends PluginBase{
 				ScoreFactory::setScoreLine($player, $i, $this->process($player, $line));
 			}
 		}
-	}
-
-	/**
-	 * @return AddonUpdater
-	 */
-	public function getAddonUpdater(): AddonUpdater{
-		return $this->addonUpdater;
-	}
-
-	/**
-	 * @return AddonManager
-	 */
-	public function getAddonManager(): AddonManager{
-		return $this->addonManager;
 	}
 }

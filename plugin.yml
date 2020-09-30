@@ -1,5 +1,5 @@
 name: ScoreHud
-main: JackMD\ScoreHud\ScoreHud
+main: Ifera\ScoreHud\ScoreHud
 api: [3.0.0]
 version: 5.2.0
 author: JackMD

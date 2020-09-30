@@ -33,10 +33,9 @@ declare(strict_types = 1);
 
 namespace Ifera\ScoreHud;
 
+use Ifera\ScoreHud\session\PlayerSessionHandler;
 use JackMD\ConfigUpdater\ConfigUpdater;
 use JackMD\ScoreFactory\ScoreFactory;
-use Ifera\ScoreHud\commands\ScoreHudCommand;
-use Ifera\ScoreHud\task\ScoreUpdateTask;
 use Ifera\ScoreHud\utils\Utils;
 use JackMD\UpdateNotifier\UpdateNotifier;
 use pocketmine\Player;
@@ -85,12 +84,21 @@ class ScoreHud extends PluginBase{
 		UpdateNotifier::checkUpdate($this->getDescription()->getName(), $this->getDescription()->getVersion());
 
 		$this->checkConfigs();
-		$this->initScoreboards();
+		//$this->initScoreboards();
 
-		$this->getServer()->getCommandMap()->register("scorehud", new ScoreHudCommand($this));
-		$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
+		//todo cancel this if multi world is supported
+		if(empty($this->scoreHudConfig->get("score-lines"))){
+			$this->getLogger()->error("Please set score-lines in scorehud.yml properly.");
+			$this->getServer()->getPluginManager()->disablePlugin($this);
 
-		$this->getScheduler()->scheduleRepeatingTask(new ScoreUpdateTask($this), (int) $this->getConfig()->get("update-interval") * 20);
+			return;
+		}
+
+		$this->getServer()->getPluginManager()->registerEvents(new PlayerSessionHandler(), $this);
+
+		//$this->getServer()->getCommandMap()->register("scorehud", new ScoreHudCommand($this));
+		//$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
+		//$this->getScheduler()->scheduleRepeatingTask(new ScoreUpdateTask($this), (int) $this->getConfig()->get("update-interval") * 20);
 	}
 
 	/**

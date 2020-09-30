@@ -4,8 +4,13 @@ declare(strict_types = 1);
 namespace Ifera\ScoreHud\session;
 
 use Ifera\ScoreHud\scoreboard\Scoreboard;
+use Ifera\ScoreHud\scoreboard\ScoreboardHelper;
 use Ifera\ScoreHud\ScoreHud;
+use jackmd\scorefactory\ScoreFactory;
 use pocketmine\Player;
+use function array_keys;
+use function array_values;
+use function str_replace;
 
 class PlayerSession{
 
@@ -34,7 +39,31 @@ class PlayerSession{
 		$this->scoreboard = $scoreboard;
 	}
 
-	public function close(): void{
+	public function initialize(): void{
+		ScoreFactory::setScore($this->player, "TEST");//todo move this?
+		$sb = ScoreboardHelper::createDefault($this);
+		$tags = $sb->getProcessedTags();
 
+		$lines = $this->plugin->getScoreHudConfig()->get("score-lines");
+
+		$i = 0;
+
+		foreach($lines as $line){
+			$i++;
+
+			if($i <= 15){
+				$formattedString = str_replace(
+					array_keys($tags),
+					array_values($tags),
+					$line
+				);
+
+				ScoreFactory::setScoreLine($this->player, $i, $formattedString);
+			}
+		}
+	}
+
+	public function close(): void{
+		ScoreFactory::removeScore($this->player);
 	}
 }

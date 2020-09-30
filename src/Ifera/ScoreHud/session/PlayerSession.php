@@ -16,7 +16,6 @@ class PlayerSession{
 
 	/** @var ScoreHud */
 	private $plugin;
-	
 	/** @var Player */
 	private $player;
 	/** @var Scoreboard */

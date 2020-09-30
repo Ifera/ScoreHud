@@ -101,9 +101,6 @@ class ScoreHud extends PluginBase{
 		//$this->getScheduler()->scheduleRepeatingTask(new ScoreUpdateTask($this), (int) $this->getConfig()->get("update-interval") * 20);
 	}
 
-	/**
-	 * Check if the configs is up-to-date.
-	 */
 	private function checkConfigs(): void{
 		$this->saveDefaultConfig();
 
@@ -124,39 +121,22 @@ class ScoreHud extends PluginBase{
 		}
 	}
 
-	/**
-	 * @return Config
-	 */
 	public function getScoreHudConfig(): Config{
 		return $this->scoreHudConfig;
 	}
 
-	/**
-	 * @return array|null
-	 */
 	public function getScoreboards(): ?array{
 		return $this->scoreboards;
 	}
 
-	/**
-	 * @param string $world
-	 * @return array|null
-	 */
 	public function getScoreboardData(string $world): ?array{
 		return !isset($this->scoreboards[$world]) ? null : $this->scoreboards[$world];
 	}
 
-	/**
-	 * @return array|null
-	 */
 	public function getScoreWorlds(): ?array{
 		return is_null($this->scoreboards) ? null : array_keys($this->scoreboards);
 	}
 
-	/**
-	 * @param Player $player
-	 * @param string $title
-	 */
 	public function addScore(Player $player, string $title): void{
 		if(!$player->isOnline()){
 			return;
@@ -170,9 +150,6 @@ class ScoreHud extends PluginBase{
 		$this->updateScore($player);
 	}
 
-	/**
-	 * @param Player $player
-	 */
 	public function updateScore(Player $player): void{
 		if($this->getConfig()->get("per-world-scoreboards")){
 			if(!$player->isOnline()){
@@ -208,19 +185,10 @@ class ScoreHud extends PluginBase{
 		}
 	}
 
-	/**
-	 * @param string $world
-	 * @return array|null
-	 */
 	public function getScorelines(string $world): ?array{
 		return !isset($this->scorelines[$world]) ? null : $this->scorelines[$world];
 	}
 
-	/**
-	 * @param Player $player
-	 * @param string $string
-	 * @return string
-	 */
 	public function process(Player $player, string $string): string{
 		$tags = [];
 
@@ -233,9 +201,6 @@ class ScoreHud extends PluginBase{
 		return $formattedString;
 	}
 
-	/**
-	 * @param Player $player
-	 */
 	public function displayDefaultScoreboard(Player $player): void{
 		$dataConfig = $this->scoreHudConfig;
 

@@ -89,10 +89,6 @@ class Utils{
 		}
 	}
 
-	/**
-	 * @param $timezone
-	 * @return bool
-	 */
 	public static function setTimezone($timezone): bool{
 		if($timezone !== false){
 			Server::getInstance()->getLogger()->notice(ScoreHud::PREFIX . "Server timezone successfully set to " . $timezone);

@@ -8,11 +8,15 @@ class ScoreTag{
 	/** @var string */
 	private $name;
 	/** @var string */
-	private $value;
+	private $value = "";
 
 	public function __construct(string $name, string $value){
 		$this->name = $name;
 		$this->value = $value;
+	}
+
+	public function getId(): string{
+		return "{" . $this->name . "}";
 	}
 
 	public function getName(): string{

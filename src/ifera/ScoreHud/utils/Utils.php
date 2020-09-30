@@ -33,15 +33,44 @@ declare(strict_types = 1);
 
 namespace Ifera\ScoreHud\utils;
 
-
 use JackMD\ConfigUpdater\ConfigUpdater;
 use JackMD\ScoreFactory\ScoreFactory;
 use Ifera\ScoreHud\ScoreHud;
 use JackMD\UpdateNotifier\UpdateNotifier;
 use pocketmine\Server;
 use RuntimeException;
+use function preg_match_all;
+use function preg_quote;
 
 class Utils{
+
+	private static $REGEX = "";
+
+	/**
+	 * Massive shout-out to Cortex/Marshall for this bit of code
+	 * used from HRKChat
+	 */
+	private static function REGEX(): string{
+		if(self::$REGEX === ""){
+			self::$REGEX = "/(?:" . preg_quote("{") . ")((?:[A-Za-z0-9_\-]{2,})(?:\.[A-Za-z0-9_\-]+)+)(?:" . preg_quote("}") . ")/";
+		}
+
+		return self::$REGEX;
+	}
+
+	/**
+	 * Massive shout-out to Cortex/Marshall for this bit of code
+	 * used from HRKChat
+	 */
+	public static function resolveTags(string $line): array{
+		$tags = [];
+
+		if(preg_match_all(self::REGEX(), $line, $matches)) {
+			$tags = $matches[1];
+		}
+
+		return $tags;
+	}
 
 	/**
 	 * Checks if the required virions/libraries are present before enabling the plugin.

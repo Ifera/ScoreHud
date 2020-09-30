@@ -48,12 +48,10 @@ class ScoreHud extends PluginBase{
 	public const PREFIX = "§8[§6S§eH§8]§r ";
 
 	/** @var int */
-	private const CONFIG_VERSION = 8;
+	private const CONFIG_VERSION = 9;
 	/** @var int */
-	private const SCOREHUD_VERSION = 1;
+	private const SCOREHUD_VERSION = 2;
 
-	/** @var string */
-	public static $addonPath = "";
 	/** @var ScoreHud|null */
 	private static $instance = null;
 
@@ -76,7 +74,6 @@ class ScoreHud extends PluginBase{
 
 	public function onLoad(){
 		self::$instance = $this;
-		self::$addonPath = realpath($this->getDataFolder() . "addons") . DIRECTORY_SEPARATOR;
 	}
 
 	public function onEnable(){
@@ -104,12 +101,16 @@ class ScoreHud extends PluginBase{
 	private function checkConfigs(): void{
 		$this->saveDefaultConfig();
 
-		$this->saveResource("addons" . DIRECTORY_SEPARATOR . "README.txt");
 		$this->saveResource("scorehud.yml");
 		$this->scoreHudConfig = new Config($this->getDataFolder() . "scorehud.yml", Config::YAML);
 
-		ConfigUpdater::checkUpdate($this, $this->getConfig(), "config-version", self::CONFIG_VERSION);
-		ConfigUpdater::checkUpdate($this, $this->scoreHudConfig, "scorehud-version", self::SCOREHUD_VERSION);
+		if(ConfigUpdater::checkUpdate($this, $this->getConfig(), "config-version", self::CONFIG_VERSION)){
+			$this->reloadConfig();
+		}
+
+		if(ConfigUpdater::checkUpdate($this, $this->scoreHudConfig, "scorehud-version", self::SCOREHUD_VERSION)){
+			$this->scoreHudConfig = new Config($this->getDataFolder() . "scorehud.yml", Config::YAML);
+		}
 	}
 
 	private function initScoreboards(): void{

@@ -1,39 +1,73 @@
 ---
 # DO NOT EDIT THIS VALUE.
 # ONLY FOR INTERNAL USE.
-scorehud-version: 1
+scorehud-version: 2
 
-# Changing titles of the scoreboard.
-# Can be of any number.
-server-names:
-- "§l§aServer §dName"
-- "§l§bServer §cName"
-- "§l§cServer §bName"
-- "§l§dServer §aName"
+# =============================
+# SCOREHUD VERSION 6.0+ NOTE:
+# =============================
+#
+# Plugin developers are responsible for adding support for ScoreHud
+# in their plugins. Starting from ScoreHud version 6.0 onwards addon
+# support has been removed.
+#
+# ScoreHud is now event driven and all previous addons will no longer
+# work unless the author of that plugin adds support for ScoreHud in
+# their own plugin.
+#
+# If you want support for a plugin please ask the plugin author of
+# that plugin to add support for ScoreHud in their plugin.
+# =============================
 
-# Note: You can find links to the required/supported plugins via the README.md.
-# IMPORTANT NOTE: You can only set a maximum of 15 lines and no more.
+# Set the title for the scoreboard shown.
+titles:
+  # If *true* then 'titles.lines' will be used for showing changing
+  # or flickering titles. Although fancy but they might cause lag
+  # so be your judge. (not preferred)
+  #
+  # If *false* then 'titles.title' will be used for showing a simple
+  # title on the scoreboard. (preferred)
+  flicker: false
+
+  # A simple title that will be displayed for scoreboard.
+  title: "§l§aServer §dName"
+
+  # Changing titles. Add as many as you desire.
+  lines:
+  - "§l§aServer §dName"
+  - "§l§bServer §cName"
+  - "§l§cServer §bName"
+  - "§l§dServer §aName"
+
+# ==================
+# IMPORTANT NOTE:
+# ==================
+# You can only set a maximum of 15 lines and no more. #blameMOJANG
 #
-# You can edit the lines already set below and adjust them according to your needs.
+# Also note that you need 'ScoreHudX' plugin for some tags to work.
+# https://github.com/Ifera/ScoreHudX
+# ==================
+
+# You can edit the lines already set below and adjust them
+# according to your needs.
 #
-# If you want same scoreboard to be displayed in every world then set per-world-scoreboard to false in config.yml.
+# If you want same scoreboard to be displayed in every
+# world then set 'per-world.active' to false in config.yml.
 #
-# If you have per-world-scoreboard enabled and want to display a default scoreboard for a world you didn't mention
-# in scoreboards key below then set use-default-score-lines to true in config.yml.
-#
-# After that edit the following score-lines to edit the scoreboard.
-#
-# You need to add addons for adding support for tags.
-# If you want support for a plugin please ask the plugin author of that plugin to add support for ScoreHud by making an addon.
-#
-# For a list of addons go here https://github.com/JackMD/ScoreHud/blob/master/README.md#addons.
+# If you have 'per-world.active' set to true and want to
+# display a default scoreboard for a world you didn't mention
+# in 'scoreboards' key below then set 'per-world.active' along
+# with 'per-world.use-default' keys to true in config.yml.
 score-lines:
-- " §aLine #1"
-- " §bLine #2"
-- " §cLine #3"
-- " §dLine #4"
+- " §dName: §5{scorehud.name}"
+- ""
+- " §bOnline: §a{scorehud.online} §c/ §d{scorehud.max_online}"
+- ""
+- " §6Please Vote for us!"
 
-# If you want to display different scoreboards for every world then set per-world-scoreboard to true in config.yml.
+# If you want to display different scoreboards for every world
+# then set 'per-world.active' to true in config.yml.
+#
 # After that edit the following to suit your needs.
 scoreboards:
 # EXAMPLE CONFIGURATION:
@@ -45,10 +79,10 @@ scoreboards:
 #--------------------
   "world":
     lines:
-    - " §dName: §5{name}"
-    - " §bOnline: §a{online} §c/ §d{max_online}"
+    - " §dName: §5{scorehud.name}"
+    - " §bOnline: §a{scorehud.online} §c/ §d{scorehud.max_online}"
   "world 2":
     lines:
-    - " §dTPS: §5{tps}"
-    - " §bLoad: §a{load}"
+    - " §dTPS: §5{scorehud.tps}"
+    - " §bLoad: §a{scorehud.load}"
 ...

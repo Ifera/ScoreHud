@@ -61,4 +61,11 @@ class PlayerManager{
 	public static function getNonNull(Player $player) : PlayerSession{
 		return self::$sessions[$player->getRawUniqueId()];
 	}
+
+	/**
+	 * @return PlayerSession[]
+	 */
+	public static function getAll(): array{
+		return self::$sessions;
+	}
 }

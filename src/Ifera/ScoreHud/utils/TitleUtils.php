@@ -34,7 +34,6 @@ declare(strict_types = 1);
 namespace Ifera\ScoreHud\utils;
 
 use Ifera\ScoreHud\ScoreHudSettings;
-use function time;
 
 class TitleUtils{
 

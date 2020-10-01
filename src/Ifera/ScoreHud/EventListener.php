@@ -57,13 +57,12 @@ class EventListener implements Listener{
 		}
 
 		$player = $event->getEntity();
-		$world = $event->getTarget()->getFolderName();
 
 		if(!$player instanceof Player){
 			return;
 		}
 
-		PlayerManager::getNonNull($player)->handle($world);
+		PlayerManager::getNonNull($player)->handle($event->getTarget()->getFolderName());
 	}
 
 	public function onServerTagUpdate(ServerTagUpdateEvent $event){

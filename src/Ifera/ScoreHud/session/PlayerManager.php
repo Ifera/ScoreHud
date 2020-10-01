@@ -10,10 +10,10 @@ declare(strict_types = 1);
  *    \____/ \___\___/|_|  \___\_| |_/\__,_|\__,_|
  *
  * ScoreHud, a Scoreboard plugin for PocketMine-MP
- * Copyright (c) 2018 JackMD  < https://github.com/JackMD >
+ * Copyright (c) 2020 Ifera  < https://github.com/Ifera >
  *
- * Discord: JackMD#3717
- * Twitter: JackMTaylor_
+ * Discord: Ifera#3717
+ * Twitter: ifera_tr
  *
  * This software is distributed under "GNU General Public License v3.0".
  * This license allows you to use it and/or modify it but you are not at
@@ -31,46 +31,41 @@ declare(strict_types = 1);
  * ------------------------------------------------------------------------
  */
 
-namespace JackMD\ScoreHud\utils;
+namespace Ifera\ScoreHud\session;
 
+use pocketmine\Player;
 
-use JackMD\ConfigUpdater\ConfigUpdater;
-use JackMD\ScoreFactory\ScoreFactory;
-use JackMD\ScoreHud\ScoreHud;
-use JackMD\UpdateNotifier\UpdateNotifier;
-use pocketmine\Server;
-use RuntimeException;
+class PlayerManager{
 
-class Utils{
+	/** @var PlayerSession[] */
+	private static $sessions = [];
 
-	/**
-	 * Checks if the required virions/libraries are present before enabling the plugin.
-	 */
-	public static function checkVirions(): void{
-		$requiredVirions = [
-			ScoreFactory::class,
-			UpdateNotifier::class,
-			ConfigUpdater::class
-		];
+	public static function create(Player $player) : void{
+		self::$sessions[$player->getRawUniqueId()] = $session = new PlayerSession($player);
+		$session->handle();
+	}
 
-		foreach($requiredVirions as $class){
-			if(!class_exists($class)){
-				throw new RuntimeException("ScoreHud plugin will only work if you use the plugin phar from Poggit.");
-			}
+	public static function destroy(Player $player) : void{
+		if(!isset(self::$sessions[$uuid = $player->getRawUniqueId()])){
+			return;
 		}
+
+		self::$sessions[$uuid]->close();
+		unset(self::$sessions[$uuid]);
+	}
+
+	public static function get(Player $player) : ?PlayerSession{
+		return self::$sessions[$player->getRawUniqueId()] ?? null;
+	}
+
+	public static function getNonNull(Player $player) : PlayerSession{
+		return self::$sessions[$player->getRawUniqueId()];
 	}
 
 	/**
-	 * @param $timezone
-	 * @return bool
+	 * @return PlayerSession[]
 	 */
-	public static function setTimezone($timezone): bool{
-		if($timezone !== false){
-			Server::getInstance()->getLogger()->notice(ScoreHud::PREFIX . "Server timezone successfully set to " . $timezone);
-
-			return date_default_timezone_set($timezone);
-		}
-
-		return false;
+	public static function getAll(): array{
+		return self::$sessions;
 	}
 }

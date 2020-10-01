@@ -10,10 +10,10 @@ declare(strict_types = 1);
  *    \____/ \___\___/|_|  \___\_| |_/\__,_|\__,_|
  *
  * ScoreHud, a Scoreboard plugin for PocketMine-MP
- * Copyright (c) 2018 JackMD  < https://github.com/JackMD >
+ * Copyright (c) 2020 Ifera  < https://github.com/Ifera >
  *
- * Discord: JackMD#3717
- * Twitter: JackMTaylor_
+ * Discord: Ifera#3717
+ * Twitter: ifera_tr
  *
  * This software is distributed under "GNU General Public License v3.0".
  * This license allows you to use it and/or modify it but you are not at
@@ -31,61 +31,27 @@ declare(strict_types = 1);
  * ------------------------------------------------------------------------
  */
 
-namespace JackMD\ScoreHud\addon;
+namespace Ifera\ScoreHud\session;
 
-use JackMD\ScoreHud\ScoreHud;
-use pocketmine\Server;
+use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerJoinEvent;
+use pocketmine\event\player\PlayerQuitEvent;
 
-/**
- * Use of this class is encouraged instead of Addon.php.
- *
- * Please refer to Addon.php for details on what the methods below do.
- *
- * @see     Addon.php
- *
- * Class AddonBase
- *
- * @package JackMD\ScoreHud\addon
- */
-abstract class AddonBase implements Addon{
-
-	/** @var ScoreHud */
-	private $scoreHud;
-	/** @var AddonDescription */
-	private $description;
+class PlayerSessionHandler implements Listener{
 
 	/**
-	 * AddonBase constructor.
-	 *
-	 * @param ScoreHud         $scoreHud
-	 * @param AddonDescription $description
+	 * @param PlayerJoinEvent $event
+	 * @priority LOW
 	 */
-	public function __construct(ScoreHud $scoreHud, AddonDescription $description){
-		$this->scoreHud = $scoreHud;
-		$this->description = $description;
-	}
-
-	public function onEnable(): void{
+	public function onPlayerJoin(PlayerJoinEvent $event) : void{
+		PlayerManager::create($event->getPlayer());
 	}
 
 	/**
-	 * @return ScoreHud
+	 * @param PlayerQuitEvent $event
+	 * @priority MONITOR
 	 */
-	public function getScoreHud(): ScoreHud{
-		return $this->scoreHud;
-	}
-
-	/**
-	 * @return AddonDescription
-	 */
-	final public function getDescription(): AddonDescription{
-		return $this->description;
-	}
-
-	/**
-	 * @return Server
-	 */
-	public function getServer(): Server{
-		return $this->scoreHud->getServer();
+	public function onPlayerQuit(PlayerQuitEvent $event) : void{
+		PlayerManager::destroy($event->getPlayer());
 	}
 }

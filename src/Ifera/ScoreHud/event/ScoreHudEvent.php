@@ -10,10 +10,10 @@ declare(strict_types = 1);
  *    \____/ \___\___/|_|  \___\_| |_/\__,_|\__,_|
  *
  * ScoreHud, a Scoreboard plugin for PocketMine-MP
- * Copyright (c) 2018 JackMD  < https://github.com/JackMD >
+ * Copyright (c) 2020 Ifera  < https://github.com/Ifera >
  *
- * Discord: JackMD#3717
- * Twitter: JackMTaylor_
+ * Discord: Ifera#3717
+ * Twitter: ifera_tr
  *
  * This software is distributed under "GNU General Public License v3.0".
  * This license allows you to use it and/or modify it but you are not at
@@ -31,42 +31,37 @@ declare(strict_types = 1);
  * ------------------------------------------------------------------------
  */
 
-namespace JackMD\ScoreHud\updater;
+namespace Ifera\ScoreHud\event;
 
-use JackMD\ScoreHud\addon\Addon;
-use JackMD\ScoreHud\ScoreHud;
-use JackMD\ScoreHud\updater\task\AddonUpdateNotifyTask;
+use Ifera\ScoreHud\scoreboard\ScoreTag;
+use Ifera\ScoreHud\ScoreHud;
+use pocketmine\event\Event;
+use pocketmine\Player;
 
-class AddonUpdater{
+abstract class ScoreHudEvent extends Event{
 
-	/** @var ScoreHud */
-	private $plugin;
+	/** @var ScoreHud|null */
+	protected $plugin = null;
+	/** @var Player */
+	protected $player;
+	/** @var ScoreTag */
+	protected $tag;
 
-	/**
-	 * AddonUpdater constructor.
-	 *
-	 * @param ScoreHud $plugin
-	 */
-	public function __construct(ScoreHud $plugin){
-		$this->plugin = $plugin;
+	public function __construct(Player $player, ScoreTag $tag){
+		$this->plugin = ScoreHud::getInstance();
+		$this->player = $player;
+		$this->tag = $tag;
 	}
 
-	/**
-	 * @param Addon $addon
-	 */
-	public function check(Addon $addon): void{
-		$plugin = $this->plugin;
-		$description = $addon->getDescription();
+	public function getPlugin(): ?ScoreHud{
+		return $this->plugin;
+	}
 
-		$addonName = $description->getName();
-		$addonVersion = $description->getVersion();
+	public function getPlayer(): Player{
+		return $this->player;
+	}
 
-		if($addonVersion === "0.0.0"){
-			$plugin->getLogger()->warning("(Addon Update Notice) Addon $addonName is outdated. A new version has been released. Download the latest version from https://github.com/JackMD/ScoreHud-Addons");
-
-			return;
-		}
-
-		$plugin->getServer()->getAsyncPool()->submitTask(new AddonUpdateNotifyTask($addonName, $addonVersion));
+	public function getTag(): ScoreTag{
+		return $this->tag;
 	}
 }

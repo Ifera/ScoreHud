@@ -10,10 +10,10 @@ declare(strict_types = 1);
  *    \____/ \___\___/|_|  \___\_| |_/\__,_|\__,_|
  *
  * ScoreHud, a Scoreboard plugin for PocketMine-MP
- * Copyright (c) 2018 JackMD  < https://github.com/JackMD >
+ * Copyright (c) 2020 Ifera  < https://github.com/Ifera >
  *
- * Discord: JackMD#3717
- * Twitter: JackMTaylor_
+ * Discord: Ifera#3717
+ * Twitter: ifera_tr
  *
  * This software is distributed under "GNU General Public License v3.0".
  * This license allows you to use it and/or modify it but you are not at
@@ -31,10 +31,13 @@ declare(strict_types = 1);
  * ------------------------------------------------------------------------
  */
 
-namespace JackMD\ScoreHud\commands;
+namespace Ifera\ScoreHud\commands;
 
+use Ifera\ScoreHud\ScoreHud;
+use Ifera\ScoreHud\ScoreHudSettings;
+use Ifera\ScoreHud\session\PlayerManager;
+use Ifera\ScoreHud\utils\HelperUtils;
 use JackMD\ScoreFactory\ScoreFactory;
-use JackMD\ScoreHud\ScoreHud;
 use pocketmine\command\CommandSender;
 use pocketmine\command\PluginCommand;
 use pocketmine\Player;
@@ -69,45 +72,50 @@ class ScoreHudCommand extends PluginCommand{
 		if(!$this->testPermission($sender)){
 			return true;
 		}
+
 		if(!$sender instanceof Player){
-			$sender->sendMessage(ScoreHud::PREFIX . "§cYou can only use this command in-game.");
+			$sender->sendMessage(ScoreHudSettings::PREFIX . "§cYou can only use this command in-game.");
 
 			return false;
 		}
+
 		if(!isset($args[0])){
-			$sender->sendMessage(ScoreHud::PREFIX . "§cUsage: /scorehud <on|off|about|help>");
+			$sender->sendMessage(ScoreHudSettings::PREFIX . "§cUsage: /scorehud <on|off|about|help>");
 
 			return false;
 		}
+
 		switch($args[0]){
 			case "about":
-				$sender->sendMessage(ScoreHud::PREFIX . "§6Score§eHud §av" . $this->plugin->getDescription()->getVersion() . "§a.Plugin by §dJackMD§a. Contact on §bTwitter: JackMTaylor_ §aor §bDiscord: JackMD#3717§a.");
-				break;
+				$sender->sendMessage(ScoreHudSettings::PREFIX . "§6Score§eHud §av" . $this->plugin->getDescription()->getVersion() . "§a. Plugin by §dIfera§a. Contact on §bTwitter: @ifera_tr §aor §bDiscord: Ifera#3717§a.");
+			break;
 
 			case "on":
-				if(isset($this->plugin->disabledScoreHudPlayers[strtolower($sender->getName())])){
-					unset($this->plugin->disabledScoreHudPlayers[strtolower($sender->getName())]);
-					$sender->sendMessage(ScoreHud::PREFIX . "§aSuccessfully enabled ScoreHud.");
+				if(HelperUtils::isDisabled($sender)){
+					HelperUtils::destroy($sender);
+					PlayerManager::getNonNull($sender)->handle();
+
+					$sender->sendMessage(ScoreHudSettings::PREFIX . "§aSuccessfully enabled ScoreHud.");
 				}else{
-					$sender->sendMessage(ScoreHud::PREFIX . "§cScoreHud is already enabled for you.");
+					$sender->sendMessage(ScoreHudSettings::PREFIX . "§cScoreHud is already enabled for you.");
 				}
-				break;
+			break;
 
 			case "off":
-				if(!isset($this->plugin->disabledScoreHudPlayers[strtolower($sender->getName())])){
+				if(!HelperUtils::isDisabled($sender)){
 					ScoreFactory::removeScore($sender);
+					HelperUtils::disable($sender);
 
-					$this->plugin->disabledScoreHudPlayers[strtolower($sender->getName())] = 1;
-					$sender->sendMessage(ScoreHud::PREFIX . "§cSuccessfully disabled ScoreHud.");
+					$sender->sendMessage(ScoreHudSettings::PREFIX . "§aSuccessfully disabled ScoreHud.");
 				}else{
-					$sender->sendMessage(ScoreHud::PREFIX . "§aScoreHud is already disabled for you.");
+					$sender->sendMessage(ScoreHudSettings::PREFIX . "§cScoreHud is already disabled for you.");
 				}
-				break;
+			break;
 
 			case "help":
 			default:
-				$sender->sendMessage(ScoreHud::PREFIX . "§cUsage: /scorehud <on|off|about|help>");
-				break;
+				$sender->sendMessage(ScoreHudSettings::PREFIX . "§cUsage: /scorehud <on|off|about|help>");
+			break;
 		}
 
 		return false;

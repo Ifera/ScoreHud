@@ -7,10 +7,10 @@
 #  \____/ \___\___/|_|  \___\_| |_/\__,_|\__,_|
 #
 # ScoreHud, a Scoreboard plugin for PocketMine-MP
-# Copyright (c) 2018 JackMD  < https://github.com/JackMD >
+# Copyright (c) 2020 Ifera  < https://github.com/Ifera >
 #
-# Discord: JackMD#3717
-# Twitter: JackMTaylor_
+# Discord: Ifera#3717
+# Twitter: ifera_tr
 #
 # This software is distributed under "GNU General Public License v3.0".
 # This license allows you to use it and/or modify it but you are not at
@@ -29,38 +29,53 @@
 
 # DO NOT EDIT THIS VALUE.
 # ONLY FOR INTERNAL USE.
-config-version: 8
+config-version: 9
 
-# Set this to true if you want to enable per world scoreboards.
-# Then edit scoreboards key in scorehud.yml to suit your needs.
-per-world-scoreboards: false
+# If you want to have different scoreboards for different worlds
+# then edit the nested values to suit your needs.
+multi-world:
+  # Set this to true if you want to enable per world scoreboards.
+  # Then edit 'scoreboards' key in scorehud.yml to suit your needs.
+  active: false
 
-# If you have per-world-scoreboards enabled and you want to display a default scoreboard for a world
-# whose scoreboard you didn't set in scorehud.yml under scoreboards key then set this to true.
-use-default-score-lines: false
+  # If you have 'multi-world.active' set to true and you want to display
+  # a default scoreboard for a world whose scoreboard you didn't set
+  # under 'scoreboards' key in scorehud.yml, then set this to true.
+  use-default: false
 
-# The amount in seconds after which the Scoreboard would update.
-# Increase this value if your server seems to lag.
-# Default: 3 seconds.
-update-interval: 3
+# Change how time is displayed on your server.
+time:
+  # Set the timezone to your own preference.
+  # false - Follow the server/machine time without changes.
+  # For a list of timezones you can visit:
+  # https://secure.php.net/manual/timezones.php
+  # Example: "America/New_York" - This will set NewYork's time.
+  zone: false
 
-# Set the timezone for {time} to your own preference.
-# false - Follow the server/machine time without changes.
-# For a list of timezones you can visit: https://secure.php.net/manual/timezones.php
-# Example: "America/New_York" - This will set NewYork's time.
-timezone: false
+  format:
+    # Set the time format that you want to display.
+    # Use {scorehud.time} tag for displaying time.
+    # You need ScoreHudX plugin for the tag to work.
+    # https://github.com/Ifera/ScoreHudX
+    #
+    # H - hours
+    # i - minutes
+    # s - seconds
+    #
+    # You can find more information regarding it here:
+    # http://php.net/manual/function.date.php
+    time: "H:i:s"
 
-# Set the time format that you want to display. Will only work if you add {time} in score-lines in data.yml.
-# H - hours
-# i - minutes
-# s - seconds
-# You can fine more information regarding it here: http://php.net/manual/function.date.php
-time-format: "H:i:s"
-
-# Set the date format that you want to display. Will only work if you add {date} in score-lines in data.yml.
-# d - date (01-31)
-# m - month (01-12)
-# Y - year (yyyy)
-# You can fine more information regarding it here: http://php.net/manual/function.date.php
-date-format: "d-m-Y"
+    # Set the date format that you want to display. Will only work
+    # Use {scorehud.date} tag for displaying date.
+    # You need ScoreHudX plugin for the tag to work.
+    # https://github.com/Ifera/ScoreHudX
+    #
+    # d - date (01-31)
+    # m - month (01-12)
+    # Y - year (yyyy)
+    #
+    # You can find more information regarding it here:
+    # http://php.net/manual/function.date.php
+    date: "d-m-Y"
 ...

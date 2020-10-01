@@ -33,11 +33,10 @@ declare(strict_types = 1);
 
 namespace Ifera\ScoreHud\utils;
 
+use Ifera\ScoreHud\ScoreHudSettings;
 use JackMD\ConfigUpdater\ConfigUpdater;
 use JackMD\ScoreFactory\ScoreFactory;
-use Ifera\ScoreHud\ScoreHud;
 use JackMD\UpdateNotifier\UpdateNotifier;
-use pocketmine\Server;
 use RuntimeException;
 use function preg_match_all;
 use function preg_quote;
@@ -89,13 +88,7 @@ class Utils{
 		}
 	}
 
-	public static function setTimezone($timezone): bool{
-		if($timezone !== false){
-			Server::getInstance()->getLogger()->notice(ScoreHud::PREFIX . "Server timezone successfully set to " . $timezone);
-
-			return date_default_timezone_set($timezone);
-		}
-
-		return false;
+	public static function setTimezone(): bool{
+		return date_default_timezone_set(ScoreHudSettings::getTimezone());
 	}
 }

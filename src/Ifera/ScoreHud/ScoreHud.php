@@ -35,10 +35,8 @@ namespace Ifera\ScoreHud;
 
 use Ifera\ScoreHud\session\PlayerSessionHandler;
 use JackMD\ConfigUpdater\ConfigUpdater;
-use JackMD\ScoreFactory\ScoreFactory;
 use Ifera\ScoreHud\utils\Utils;
 use JackMD\UpdateNotifier\UpdateNotifier;
-use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 
@@ -52,15 +50,8 @@ class ScoreHud extends PluginBase{
 	/** @var ScoreHud|null */
 	private static $instance = null;
 
-	/** @var array */
-	public $disabledScoreHudPlayers = [];
-
 	/** @var Config */
-	private $scoreHudConfig;
-	/** @var null|array */
-	private $scoreboards = [];
-	/** @var null|array */
-	private $scorelines = [];
+	private $scoreConfig;
 
 	/**
 	 * @return ScoreHud|null
@@ -74,26 +65,25 @@ class ScoreHud extends PluginBase{
 	}
 
 	public function onEnable(){
+		$this->checkConfigs();
+
 		Utils::checkVirions();
 		UpdateNotifier::checkUpdate($this->getDescription()->getName(), $this->getDescription()->getVersion());
+		ScoreHudSettings::init($this);
 
-		$this->checkConfigs();
-		//$this->initScoreboards();
-
-		//todo cancel this if multi world is supported
-		if(empty($this->scoreHudConfig->get("score-lines"))){
-			$this->getLogger()->error("Please set score-lines in scorehud.yml properly.");
-			$this->getServer()->getPluginManager()->disablePlugin($this);
-
+		if(!$this->canLoad()){
 			return;
 		}
 
-		ScoreHudSettings::init($this);
+		if(ScoreHudSettings::isTimezoneChanged() && Utils::setTimezone()){
+			$this->getLogger()->notice("Server timezone successfully set to " . ScoreHudSettings::getTimezone());
+		}else{
+			$this->getLogger()->error("Unable to set timezone. Invalid timezone: " . ScoreHudSettings::getTimezone() . ", provided under 'time.zone' in config.yml.");
+		}
 
 		$this->getServer()->getPluginManager()->registerEvents(new PlayerSessionHandler(), $this);
 
 		//$this->getServer()->getCommandMap()->register("scorehud", new ScoreHudCommand($this));
-		//$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
 		//$this->getScheduler()->scheduleRepeatingTask(new ScoreUpdateTask($this), (int) $this->getConfig()->get("update-interval") * 20);
 	}
 
@@ -101,28 +91,38 @@ class ScoreHud extends PluginBase{
 		$this->saveDefaultConfig();
 
 		$this->saveResource("scorehud.yml");
-		$this->scoreHudConfig = new Config($this->getDataFolder() . "scorehud.yml", Config::YAML);
+		$this->scoreConfig = new Config($this->getDataFolder() . "scorehud.yml", Config::YAML);
 
 		if(ConfigUpdater::checkUpdate($this, $this->getConfig(), "config-version", self::CONFIG_VERSION)){
 			$this->reloadConfig();
 		}
 
-		if(ConfigUpdater::checkUpdate($this, $this->scoreHudConfig, "scorehud-version", self::SCOREHUD_VERSION)){
-			$this->scoreHudConfig = new Config($this->getDataFolder() . "scorehud.yml", Config::YAML);
+		if(ConfigUpdater::checkUpdate($this, $this->scoreConfig, "scorehud-version", self::SCOREHUD_VERSION)){
+			$this->scoreConfig = new Config($this->getDataFolder() . "scorehud.yml", Config::YAML);
 		}
 	}
 
-	private function initScoreboards(): void{
-		foreach($this->scoreHudConfig->getNested("scoreboards") as $world => $data){
-			$world = strtolower($world);
+	private function canLoad(): bool{
+		$load = true;
 
-			$this->scoreboards[$world] = $data;
-			$this->scorelines[$world] = $data["lines"];
+		if(!ScoreHudSettings::isMultiWorld() && empty(ScoreHudSettings::getDefaultBoard())){
+			$load = false;
 		}
+
+		if(ScoreHudSettings::useDefaultBoard() && empty(ScoreHudSettings::getDefaultBoard())){
+			$load = false;
+		}
+
+		if(!$load){
+			$this->getLogger()->error("Please set the lines under 'default-board' properly, in scorehud.yml.");
+			$this->getServer()->getPluginManager()->disablePlugin($this);
+		}
+
+		return $load;
 	}
 
-	public function getScoreHudConfig(): Config{
-		return $this->scoreHudConfig;
+	public function getScoreConfig(): Config{
+		return $this->scoreConfig;
 	}
 
 	public function getScoreboards(): ?array{
@@ -204,7 +204,7 @@ class ScoreHud extends PluginBase{
 	public function displayDefaultScoreboard(Player $player): void{
 		$dataConfig = $this->scoreHudConfig;
 
-		$lines = $dataConfig->get("score-lines");
+		$lines = $dataConfig->get("default-board");
 
 		if(empty($lines)){
 			$this->getLogger()->error("Please set score-lines in scorehud.yml properly.");

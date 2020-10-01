@@ -21,7 +21,7 @@ class ScoreHudSettings{
 	public static function init(ScoreHud $plugin): void{
 		self::$plugin = $plugin;
 		self::$config = $plugin->getConfig();
-		self::$scorehud = $plugin->getScoreHudConfig();
+		self::$scorehud = $plugin->getScoreConfig();
 	}
 
 	/*
@@ -36,7 +36,7 @@ class ScoreHudSettings{
 	 * If multi world support is enabled and scoreboard for a world is not found then
 	 * check whether the user allows for using the default scoreboard instead.
 	 */
-	public static function useDefault(): bool{
+	public static function useDefaultBoard(): bool{
 		return self::isMultiWorld() && (bool) self::$config->getNested("multi-world.default", false);
 	}
 

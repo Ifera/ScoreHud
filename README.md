@@ -1,4 +1,4 @@
-<img align="right" width="100" height="100" src="https://github.com/JackMD/ScoreHud/blob/master/meta/ScoreHud.PNG" alt="ScoreHud Banner">
+<img align="right" widht="auto" height="260" src="https://github.com/JackMD/ScoreHud/blob/master/meta/ScoreHud.PNG" alt="ScoreHud Banner">
 
 >## Notice: <br />
 >**Backwards Incompatible Update**

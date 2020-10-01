@@ -33,6 +33,10 @@ declare(strict_types = 1);
 
 namespace Ifera\ScoreHud\event;
 
+use Ifera\ScoreHud\scoreboard\ScoreTag;
+use Ifera\ScoreHud\ScoreHud;
+use pocketmine\event\Event;
+
 /**
  * Call this event when you need to change a tag
  * that is independent of the player. For example, for
@@ -44,5 +48,23 @@ namespace Ifera\ScoreHud\event;
  * Call this event, pass the tag that needs updating into the
  * constructor and let ScoreHud handle the rest.
  */
-class ServerTagUpdateEvent extends ScoreHudEvent{
+class ServerTagUpdateEvent extends Event{
+
+	/** @var ScoreHud|null */
+	protected $plugin = null;
+	/** @var ScoreTag */
+	protected $tag;
+
+	public function __construct(ScoreTag $tag){
+		$this->plugin = ScoreHud::getInstance();
+		$this->tag = $tag;
+	}
+
+	public function getPlugin(): ?ScoreHud{
+		return $this->plugin;
+	}
+
+	public function getTag(): ScoreTag{
+		return $this->tag;
+	}
 }

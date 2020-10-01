@@ -81,7 +81,7 @@ class ScoreHudCommand extends PluginCommand{
 		}
 		switch($args[0]){
 			case "about":
-				$sender->sendMessage(ScoreHud::PREFIX . "§6Score§eHud §av" . $this->plugin->getDescription()->getVersion() . "§a.Plugin by §dJackMD§a. Contact on §bTwitter: JackMTaylor_ §aor §bDiscord: Ifera#3717§a.");
+				$sender->sendMessage(ScoreHud::PREFIX . "§6Score§eHud §av" . $this->plugin->getDescription()->getVersion() . "§a.Plugin by §dJackMD§a. Contact on §bTwitter: ifera_tr §aor §bDiscord: Ifera#3717§a.");
 				break;
 
 			case "on":

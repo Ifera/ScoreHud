@@ -34,47 +34,45 @@ declare(strict_types = 1);
 namespace Ifera\ScoreHud\task;
 
 use Ifera\ScoreHud\ScoreHud;
+use Ifera\ScoreHud\ScoreHudSettings;
+use Ifera\ScoreHud\session\PlayerManager;
 use pocketmine\scheduler\Task;
+use function is_null;
 
-class ScoreUpdateTask extends Task{
+class ScoreUpdateTitleTask extends Task{
 
 	/** @var ScoreHud */
 	private $plugin;
 	/** @var int */
 	private $titleIndex = 0;
 
-	/**
-	 * ScoreUpdateTask constructor.
-	 *
-	 * @param ScoreHud $plugin
-	 */
 	public function __construct(ScoreHud $plugin){
 		$this->plugin = $plugin;
 		$this->titleIndex = 0;
 	}
 
-	/**
-	 * @param int $tick
-	 */
 	public function onRun(int $tick){
-		$players = $this->plugin->getServer()->getOnlinePlayers();
-
-		$dataConfig = $this->plugin->getScoreHudConfig();
-		$titles = $dataConfig->get("server-names");
-
-		if((is_null($titles)) || empty($titles) || !isset($titles)){
-			$this->plugin->getLogger()->error("Please set server-names in scorehud.yml properly.");
-			$this->plugin->getServer()->getPluginManager()->disablePlugin($this->plugin);
-
-			return;
-		}
+		$titles = ScoreHudSettings::getTitles();
 
 		if(!isset($titles[$this->titleIndex])){
 			$this->titleIndex = 0;
 		}
 
-		foreach($players as $player){
-			$this->plugin->addScore($player, $titles[$this->titleIndex]);
+		foreach($this->plugin->getServer()->getOnlinePlayers() as $player){
+			if(ScoreHudSettings::isMultiWorld()){
+				$world = $player->getLevelNonNull()->getFolderName();
+
+				if(!ScoreHudSettings::worldExists($world) && !ScoreHudSettings::useDefaultBoard()){
+					continue;
+				}
+			}
+
+			if(is_null($session = PlayerManager::get($player))){
+				continue;
+			}
+
+			$this->plugin->setScore($player, $titles[$this->titleIndex]);
+			$session->getScoreboard()->display();
 		}
 
 		$this->titleIndex++;

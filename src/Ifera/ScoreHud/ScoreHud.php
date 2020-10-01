@@ -34,9 +34,12 @@ declare(strict_types = 1);
 namespace Ifera\ScoreHud;
 
 use Ifera\ScoreHud\session\PlayerSessionHandler;
+use Ifera\ScoreHud\task\ScoreUpdateTitleTask;
 use JackMD\ConfigUpdater\ConfigUpdater;
 use Ifera\ScoreHud\utils\Utils;
+use jackmd\scorefactory\ScoreFactory;
 use JackMD\UpdateNotifier\UpdateNotifier;
+use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 
@@ -75,16 +78,21 @@ class ScoreHud extends PluginBase{
 			return;
 		}
 
-		if(ScoreHudSettings::isTimezoneChanged() && Utils::setTimezone()){
-			$this->getLogger()->notice("Server timezone successfully set to " . ScoreHudSettings::getTimezone());
-		}else{
-			$this->getLogger()->error("Unable to set timezone. Invalid timezone: " . ScoreHudSettings::getTimezone() . ", provided under 'time.zone' in config.yml.");
+		if(ScoreHudSettings::isTimezoneChanged()){
+			if(Utils::setTimezone()){
+				$this->getLogger()->notice("Server timezone successfully set to " . ScoreHudSettings::getTimezone());
+			}else{
+				$this->getLogger()->error("Unable to set timezone. Invalid timezone: " . ScoreHudSettings::getTimezone() . ", provided under 'time.zone' in config.yml.");
+			}
 		}
 
 		$this->getServer()->getPluginManager()->registerEvents(new PlayerSessionHandler(), $this);
 
+		if(ScoreHudSettings::areFlickeringTitlesEnabled()){
+			$this->getScheduler()->scheduleRepeatingTask(new ScoreUpdateTitleTask($this), ScoreHudSettings::getFlickerRate());
+		}
+
 		//$this->getServer()->getCommandMap()->register("scorehud", new ScoreHudCommand($this));
-		//$this->getScheduler()->scheduleRepeatingTask(new ScoreUpdateTask($this), (int) $this->getConfig()->get("update-interval") * 20);
 	}
 
 	private function checkConfigs(): void{
@@ -104,17 +112,28 @@ class ScoreHud extends PluginBase{
 
 	private function canLoad(): bool{
 		$load = true;
+		$errors = [];
 
 		if(!ScoreHudSettings::isMultiWorld() && empty(ScoreHudSettings::getDefaultBoard())){
 			$load = false;
+			$errors[] = "Please set the lines under 'default-board' properly, in scorehud.yml.";
 		}
 
 		if(ScoreHudSettings::useDefaultBoard() && empty(ScoreHudSettings::getDefaultBoard())){
 			$load = false;
+			$errors[] = "Please set the lines under 'default-board' properly, in scorehud.yml.";
+		}
+
+		if(ScoreHudSettings::areFlickeringTitlesEnabled() && empty(ScoreHudSettings::getTitles())){
+			$load = false;
+			$errors[] = "Please set the lines under 'titles.lines' properly, in scorehud.yml.";
 		}
 
 		if(!$load){
-			$this->getLogger()->error("Please set the lines under 'default-board' properly, in scorehud.yml.");
+			foreach($errors as $error){
+				$this->getLogger()->error($error);
+			}
+
 			$this->getServer()->getPluginManager()->disablePlugin($this);
 		}
 
@@ -125,102 +144,17 @@ class ScoreHud extends PluginBase{
 		return $this->scoreConfig;
 	}
 
-	public function getScoreboards(): ?array{
-		return $this->scoreboards;
-	}
-
-	public function getScoreboardData(string $world): ?array{
-		return !isset($this->scoreboards[$world]) ? null : $this->scoreboards[$world];
-	}
-
-	public function getScoreWorlds(): ?array{
-		return is_null($this->scoreboards) ? null : array_keys($this->scoreboards);
-	}
-
-	public function addScore(Player $player, string $title): void{
+	public function setScore(Player $player, string $title = ""): void{
 		if(!$player->isOnline()){
 			return;
 		}
 
-		if(isset($this->disabledScoreHudPlayers[strtolower($player->getName())])){
-			return;
+		//todo disabled players
+
+		if($title === ""){
+			$title = ScoreHudSettings::getTitle();
 		}
 
 		ScoreFactory::setScore($player, $title);
-		$this->updateScore($player);
-	}
-
-	public function updateScore(Player $player): void{
-		if($this->getConfig()->get("per-world-scoreboards")){
-			if(!$player->isOnline()){
-				return;
-			}
-
-			$levelName = strtolower($player->getLevel()->getFolderName());
-
-			if(!is_null($lines = $this->getScorelines($levelName))){
-				if(empty($lines)){
-					$this->getLogger()->error("Please set lines key for $levelName correctly for scoreboards in scorehud.yml.");
-					$this->getServer()->getPluginManager()->disablePlugin($this);
-
-					return;
-				}
-
-				$i = 0;
-
-				foreach($lines as $line){
-					$i++;
-
-					if($i <= 15){
-						ScoreFactory::setScoreLine($player, $i, $this->process($player, $line));
-					}
-				}
-			}elseif($this->getConfig()->get("use-default-score-lines")){
-				$this->displayDefaultScoreboard($player);
-			}else{
-				ScoreFactory::removeScore($player);
-			}
-		}else{
-			$this->displayDefaultScoreboard($player);
-		}
-	}
-
-	public function getScorelines(string $world): ?array{
-		return !isset($this->scorelines[$world]) ? null : $this->scorelines[$world];
-	}
-
-	public function process(Player $player, string $string): string{
-		$tags = [];
-
-		$formattedString = str_replace(
-			array_keys($tags),
-			array_values($tags),
-			$string
-		);
-
-		return $formattedString;
-	}
-
-	public function displayDefaultScoreboard(Player $player): void{
-		$dataConfig = $this->scoreHudConfig;
-
-		$lines = $dataConfig->get("default-board");
-
-		if(empty($lines)){
-			$this->getLogger()->error("Please set score-lines in scorehud.yml properly.");
-			$this->getServer()->getPluginManager()->disablePlugin($this);
-
-			return;
-		}
-
-		$i = 0;
-
-		foreach($lines as $line){
-			$i++;
-
-			if($i <= 15){
-				ScoreFactory::setScoreLine($player, $i, $this->process($player, $line));
-			}
-		}
 	}
 }

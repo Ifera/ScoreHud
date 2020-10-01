@@ -7,6 +7,8 @@ use pocketmine\utils\Config;
 
 class ScoreHudSettings{
 
+	public const PREFIX = "§8[§6Score§eHud§8]§r ";
+
 	/** @var ScoreHud */
 	private static $plugin;
 	/** @var Config */

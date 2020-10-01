@@ -44,9 +44,6 @@ use pocketmine\utils\Config;
 
 class ScoreHud extends PluginBase{
 
-	/** @var string */
-	public const PREFIX = "§8[§6S§eH§8]§r ";
-
 	/** @var int */
 	private const CONFIG_VERSION = 9;
 	/** @var int */

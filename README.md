@@ -53,7 +53,7 @@ A: You can make a new issue with details what you want to be added. <br /><br />
 **Q: How many `server-names` can I set?**<br />
 A: You can set infinite many number of `server-names`. <br /><br />
 **Q: I am having problems and cannot set the plugin correctly. What do I do?**<br />
-A: Well you can always open a new issue on this repository or contact me via Discord: `JackMD#3717` or Twitter: `JackMTaylor_`. <br /><br />
+A: Well you can always open a new issue on this repository or contact me via Discord: `Ifera#3717` or Twitter: `ifera_tr`. <br /><br />
 **Q: I like the plugin. What do I do?**<br />
 A: Well, that is extremely fortunate. Why not to star this repository and might as well a good review on [poggit](https://poggit.pmmp.io/p/ScoreHud).<br /><br />
 **Q: I could'nt find an addon for a plugin. What do i do?**<br />

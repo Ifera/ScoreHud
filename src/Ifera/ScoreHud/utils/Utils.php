@@ -13,7 +13,7 @@ declare(strict_types = 1);
  * Copyright (c) 2020 Ifera  < https://github.com/Ifera >
  *
  * Discord: Ifera#3717
- * Twitter: JackMTaylor_
+ * Twitter: ifera_tr
  *
  * This software is distributed under "GNU General Public License v3.0".
  * This license allows you to use it and/or modify it but you are not at

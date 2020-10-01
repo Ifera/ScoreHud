@@ -35,9 +35,14 @@ namespace Ifera\ScoreHud\scoreboard;
 
 use Ifera\ScoreHud\session\PlayerSession;
 use jackmd\scorefactory\ScoreFactory;
+use function array_count_values;
 use function array_keys;
+use function array_map;
 use function array_values;
+use function max;
+use function str_repeat;
 use function str_replace;
+use function strlen;
 
 class Scoreboard{
 
@@ -121,6 +126,7 @@ class Scoreboard{
 	public function update(): self{
 		$i = 0;
 		$tags = $this->getProcessedTags();
+		$duplicateLines = [];
 
 		foreach($this->lines as $index => $line){
 			$i++;
@@ -128,6 +134,18 @@ class Scoreboard{
 			if($i > 15){
 				break;
 			}
+
+			if($line === ""){
+				$this->lines[$index] = " ";
+				$line = " ";
+			}
+
+			if(array_count_values($this->lines)[$line] > 1){
+				$duplicateLines[] = $line;
+				$line = $line . str_repeat(" ", array_count_values($duplicateLines)[$line]);
+			}
+
+			$line = " " . $line . (max(array_map("strlen", $this->lines)) === strlen($line) ? " " : "") . " ";
 
 			$this->formattedLines[$index] = str_replace(
 				array_keys($tags),

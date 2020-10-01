@@ -1,6 +1,6 @@
 ![ScoreHud Banner](https://github.com/JackMD/ScoreHud/blob/master/meta/ScoreHud.PNG)
 
->>## Notice: <br />
+>## Notice: <br />
 >**Backwards Incompatible Update**
 >- Starting from **ScoreHud version 6.0**, addons are no longer supported. <br />
 >- All old addons will stop working on versions 6.0 and above. <br />

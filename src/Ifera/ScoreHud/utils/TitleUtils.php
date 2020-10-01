@@ -34,12 +34,13 @@ declare(strict_types = 1);
 namespace Ifera\ScoreHud\utils;
 
 use Ifera\ScoreHud\ScoreHudSettings;
+use function time;
 
 class TitleUtils{
 
 	private static $titleIndex = 0;
 
-	public static function getTitle(): string{
+	public static function getTitle(bool $calledFromTask = false): string{
 		$title = ScoreHudSettings::getTitle();
 
 		if(ScoreHudSettings::areFlickeringTitlesEnabled()){
@@ -51,7 +52,9 @@ class TitleUtils{
 
 			$title = $titles[self::$titleIndex];
 
-			self::$titleIndex++;
+			if($calledFromTask){
+				self::$titleIndex++;
+			}
 		}
 
 		return $title;

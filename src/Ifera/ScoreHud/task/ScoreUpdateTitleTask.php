@@ -72,7 +72,7 @@ class ScoreUpdateTitleTask extends Task{
 				continue;
 			}
 
-			$this->plugin->setScore($player);
+			$this->plugin->setScore($player, true);
 			$session->getScoreboard()->display();
 		}
 	}

@@ -148,7 +148,7 @@ class ScoreHud extends PluginBase{
 		return $this->scoreConfig;
 	}
 
-	public function setScore(Player $player): void{
+	public function setScore(Player $player, bool $calledFromTask = false): void{
 		if(!$player->isOnline()){
 			return;
 		}
@@ -159,6 +159,6 @@ class ScoreHud extends PluginBase{
 			return;
 		}
 
-		ScoreFactory::setScore($player, TitleUtils::getTitle());
+		ScoreFactory::setScore($player, TitleUtils::getTitle($calledFromTask));
 	}
 }

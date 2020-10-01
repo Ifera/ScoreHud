@@ -91,6 +91,8 @@ class ScoreHud extends PluginBase{
 			return;
 		}
 
+		ScoreHudSettings::init($this);
+
 		$this->getServer()->getPluginManager()->registerEvents(new PlayerSessionHandler(), $this);
 
 		//$this->getServer()->getCommandMap()->register("scorehud", new ScoreHudCommand($this));

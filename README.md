@@ -44,8 +44,8 @@
 
 ### FAQs:
 
-**Q: How many `score-lines` can I set?**<br />
-A: You can set 1 to 15 `score-lines`. <br /><br />
+**Q: How many `default-board` can I set?**<br />
+A: You can set 1 to 15 `default-board`. <br /><br />
 **Q: What tags are available to be set?**<br />
 A: Mostly all the tags that you could imagine are available. More details can be found in over [here](https://github.com/JackMD/ScoreHud/tree/addons). <br /><br />
 **Q: There is a tag missing or I want a new tag to be added?**<br />

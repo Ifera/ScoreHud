@@ -44,21 +44,12 @@ class ScoreUpdateTitleTask extends Task{
 
 	/** @var ScoreHud */
 	private $plugin;
-	/** @var int */
-	private $titleIndex = 0;
 
 	public function __construct(ScoreHud $plugin){
 		$this->plugin = $plugin;
-		$this->titleIndex = 0;
 	}
 
 	public function onRun(int $tick){
-		$titles = ScoreHudSettings::getTitles();
-
-		if(!isset($titles[$this->titleIndex])){
-			$this->titleIndex = 0;
-		}
-
 		foreach($this->plugin->getServer()->getOnlinePlayers() as $player){
 			if(ScoreHudSettings::isMultiWorld()){
 				$world = $player->getLevelNonNull()->getFolderName();
@@ -74,10 +65,8 @@ class ScoreUpdateTitleTask extends Task{
 				continue;
 			}
 
-			$this->plugin->setScore($player, $titles[$this->titleIndex]);
+			$this->plugin->setScore($player);
 			$session->getScoreboard()->display();
 		}
-
-		$this->titleIndex++;
 	}
 }

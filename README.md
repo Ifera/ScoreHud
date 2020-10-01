@@ -1,12 +1,12 @@
-# ScoreHud
-
->## Notice: <br />
+## Notice: <br />
 > **Backwards Incompatible Update**
 > Starting from **ScoreHud version 6.0**, addons are no longer supported. <br />
 > All old addons will stop working on versions 6.0 and above. <br />
 > All old tags will stop functioning as well. <br />
 > More details can be found below <br />
 > **Please read FAQs below.**
+
+# ScoreHud
 
 | HitCount | License | Poggit | Release |
 |:--:|:--:|:--:|:--:|
@@ -31,8 +31,8 @@
  
 ### Version 6.0 Update:
 
-The main goal of version 6.0 update was to remove ScoreHud dependency pocketmine tasks. So that was achieved by making
-ScoreHud **event driven**! <br />
+> The main goal of version 6.0 update was to remove ScoreHud dependency pocketmine tasks. So that was achieved by making
+> ScoreHud **event driven**! <br />
 
 **Q: But what exactly does event driven mean? And what are its benefits?** <br />
 A: Well, its simple, instead of using **tasks** to update values on scoreboard every 20 or so ticks even when there was **no 

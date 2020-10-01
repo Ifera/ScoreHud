@@ -23,11 +23,17 @@ scorehud-version: 2
 titles:
   # If *true* then 'titles.lines' will be used for showing changing
   # or flickering titles. Although fancy but they might cause lag
-  # so be your judge. (not preferred)
+  # so be your own judge. This may also cause the scoreboard to
+  # flicker at times. (not preferred)
   #
   # If *false* then 'titles.title' will be used for showing a simple
   # title on the scoreboard. (preferred)
   flicker: false
+
+  # If 'titles.flicker' is set to true then adjust the rate at which
+  # the titles should change. In seconds.
+  # Default: 5 (seconds)
+  period: 5
 
   # A simple title that will be displayed for scoreboard.
   title: "§l§aServer §dName"
@@ -52,13 +58,13 @@ titles:
 # according to your needs.
 #
 # If you want same scoreboard to be displayed in every
-# world then set 'per-world.active' to false in config.yml.
+# world then set 'multi-world.active' to false in config.yml.
 #
-# If you have 'per-world.active' set to true and want to
+# If you have 'multi-world.active' set to true and want to
 # display a default scoreboard for a world you didn't mention
-# in 'scoreboards' key below then set 'per-world.active' along
-# with 'per-world.use-default' keys to true in config.yml.
-score-lines:
+# in 'scoreboards' key below then set 'multi-world.active' along
+# with 'multi-world.use-default' keys to true in config.yml.
+default-board:
 - " §dName: §5{scorehud.name}"
 - ""
 - " §bOnline: §a{scorehud.online} §c/ §d{scorehud.max_online}"
@@ -66,7 +72,7 @@ score-lines:
 - " §6Please Vote for us!"
 
 # If you want to display different scoreboards for every world
-# then set 'per-world.active' to true in config.yml.
+# then set 'multi-world.active' to true in config.yml.
 #
 # After that edit the following to suit your needs.
 scoreboards:

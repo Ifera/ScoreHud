@@ -35,6 +35,7 @@ namespace Ifera\ScoreHud;
 
 use Ifera\ScoreHud\session\PlayerSessionHandler;
 use Ifera\ScoreHud\task\ScoreUpdateTitleTask;
+use Ifera\ScoreHud\utils\TitleHelper;
 use JackMD\ConfigUpdater\ConfigUpdater;
 use Ifera\ScoreHud\utils\Utils;
 use jackmd\scorefactory\ScoreFactory;
@@ -145,17 +146,13 @@ class ScoreHud extends PluginBase{
 		return $this->scoreConfig;
 	}
 
-	public function setScore(Player $player, string $title = ""): void{
+	public function setScore(Player $player): void{
 		if(!$player->isOnline()){
 			return;
 		}
 
 		//todo disabled players
 
-		if($title === ""){
-			$title = ScoreHudSettings::getTitle();
-		}
-
-		ScoreFactory::setScore($player, $title);
+		ScoreFactory::setScore($player, TitleHelper::getTitle());
 	}
 }

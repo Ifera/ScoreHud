@@ -5,7 +5,7 @@ projects:
   ScoreHud:
     icon: meta/ScoreHud.PNG
     libs:
-      - src: JackMD/ScoreFactory/ScoreFactory
+      - src: jackmd/scorefactory/ScoreFactory
         version: ^1.0.0
       - src: JackMD/UpdateNotifier/UpdateNotifier
         version: ^2.0.0

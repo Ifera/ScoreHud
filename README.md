@@ -1,5 +1,5 @@
 ### Notice: <br />
->- **Backwards Incompatible Update**
+>**Backwards Incompatible Update**
 >- Starting from **ScoreHud version 6.0**, addons are no longer supported. <br />
 >- All old addons will stop working on versions 6.0 and above. <br />
 >- All old tags will stop functioning as well. <br />

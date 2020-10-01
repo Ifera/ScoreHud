@@ -37,6 +37,7 @@ use Ifera\ScoreHud\scoreboard\Scoreboard;
 use Ifera\ScoreHud\scoreboard\ScoreboardHelper;
 use Ifera\ScoreHud\ScoreHud;
 use Ifera\ScoreHud\ScoreHudSettings;
+use Ifera\ScoreHud\utils\HelperUtils;
 use jackmd\scorefactory\ScoreFactory;
 use pocketmine\Player;
 
@@ -68,6 +69,10 @@ class PlayerSession{
 
 	public function handle(?string $world = null): void{
 		$player = $this->player;
+
+		if(HelperUtils::isDisabled($player)){
+			return;
+		}
 
 		// check for multi world board first
 		if(ScoreHudSettings::isMultiWorld()){

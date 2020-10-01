@@ -36,6 +36,7 @@ namespace Ifera\ScoreHud\task;
 use Ifera\ScoreHud\ScoreHud;
 use Ifera\ScoreHud\ScoreHudSettings;
 use Ifera\ScoreHud\session\PlayerManager;
+use Ifera\ScoreHud\utils\HelperUtils;
 use jackmd\scorefactory\ScoreFactory;
 use pocketmine\scheduler\Task;
 use function is_null;
@@ -51,6 +52,12 @@ class ScoreUpdateTitleTask extends Task{
 
 	public function onRun(int $tick){
 		foreach($this->plugin->getServer()->getOnlinePlayers() as $player){
+			if(HelperUtils::isDisabled($player)){
+				ScoreFactory::removeScore($player);
+
+				return;
+			}
+
 			if(ScoreHudSettings::isMultiWorld()){
 				$world = $player->getLevelNonNull()->getFolderName();
 

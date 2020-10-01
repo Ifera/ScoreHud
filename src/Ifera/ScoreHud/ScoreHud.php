@@ -33,9 +33,11 @@ declare(strict_types = 1);
 
 namespace Ifera\ScoreHud;
 
+use Ifera\ScoreHud\commands\ScoreHudCommand;
 use Ifera\ScoreHud\session\PlayerSessionHandler;
 use Ifera\ScoreHud\task\ScoreUpdateTitleTask;
-use Ifera\ScoreHud\utils\TitleHelper;
+use Ifera\ScoreHud\utils\HelperUtils;
+use Ifera\ScoreHud\utils\TitleUtils;
 use JackMD\ConfigUpdater\ConfigUpdater;
 use Ifera\ScoreHud\utils\Utils;
 use jackmd\scorefactory\ScoreFactory;
@@ -94,7 +96,7 @@ class ScoreHud extends PluginBase{
 		$this->getServer()->getPluginManager()->registerEvents(new PlayerSessionHandler(), $this);
 		$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
 
-		//$this->getServer()->getCommandMap()->register("scorehud", new ScoreHudCommand($this));
+		$this->getServer()->getCommandMap()->register("scorehud", new ScoreHudCommand($this));
 	}
 
 	private function checkConfigs(): void{
@@ -151,8 +153,12 @@ class ScoreHud extends PluginBase{
 			return;
 		}
 
-		//todo disabled players
+		if(HelperUtils::isDisabled($player)){
+			ScoreFactory::removeScore($player);
 
-		ScoreFactory::setScore($player, TitleHelper::getTitle());
+			return;
+		}
+
+		ScoreFactory::setScore($player, TitleUtils::getTitle());
 	}
 }

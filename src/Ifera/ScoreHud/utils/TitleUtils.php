@@ -5,7 +5,7 @@ namespace Ifera\ScoreHud\utils;
 
 use Ifera\ScoreHud\ScoreHudSettings;
 
-class TitleHelper{
+class TitleUtils{
 
 	private static $titleIndex = 0;
 

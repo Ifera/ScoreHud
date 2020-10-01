@@ -66,12 +66,12 @@ class PlayerSession{
 		$this->scoreboard = $scoreboard;
 	}
 
-	public function handle(): void{
+	public function handle(?string $world = null): void{
 		$player = $this->player;
 
 		// check for multi world board first
 		if(ScoreHudSettings::isMultiWorld()){
-			$world = $player->getLevelNonNull()->getFolderName();
+			$world = $world ?? $player->getLevelNonNull()->getFolderName();
 
 			// construct the board for this level and send
 			if(ScoreHudSettings::worldExists($world)){
@@ -85,14 +85,16 @@ class PlayerSession{
 				return;
 			}
 
-			// use the default board since the level board is unknown
-			if(!ScoreHudSettings::worldExists($world) && ScoreHudSettings::useDefaultBoard()){
+			// use the default board since the scoreboard for the world is unknown
+			if(ScoreHudSettings::useDefaultBoard()){
 				$this->constructDefaultBoard();
 
 				return;
 			}
 
 			// no scoreboard is to be displayed
+			ScoreFactory::removeScore($player);
+
 			return;
 		}
 

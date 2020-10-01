@@ -36,6 +36,7 @@ namespace Ifera\ScoreHud\task;
 use Ifera\ScoreHud\ScoreHud;
 use Ifera\ScoreHud\ScoreHudSettings;
 use Ifera\ScoreHud\session\PlayerManager;
+use jackmd\scorefactory\ScoreFactory;
 use pocketmine\scheduler\Task;
 use function is_null;
 
@@ -63,6 +64,8 @@ class ScoreUpdateTitleTask extends Task{
 				$world = $player->getLevelNonNull()->getFolderName();
 
 				if(!ScoreHudSettings::worldExists($world) && !ScoreHudSettings::useDefaultBoard()){
+					ScoreFactory::removeScore($player);
+
 					continue;
 				}
 			}

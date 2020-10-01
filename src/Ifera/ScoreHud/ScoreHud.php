@@ -86,11 +86,12 @@ class ScoreHud extends PluginBase{
 			}
 		}
 
-		$this->getServer()->getPluginManager()->registerEvents(new PlayerSessionHandler(), $this);
-
 		if(ScoreHudSettings::areFlickeringTitlesEnabled()){
 			$this->getScheduler()->scheduleRepeatingTask(new ScoreUpdateTitleTask($this), ScoreHudSettings::getFlickerRate());
 		}
+
+		$this->getServer()->getPluginManager()->registerEvents(new PlayerSessionHandler(), $this);
+		$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
 
 		//$this->getServer()->getCommandMap()->register("scorehud", new ScoreHudCommand($this));
 	}

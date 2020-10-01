@@ -67,7 +67,7 @@ class ScoreHudSettings{
 	 * check whether the user allows for using the default scoreboard instead.
 	 */
 	public static function useDefaultBoard(): bool{
-		return self::isMultiWorld() && (bool) self::$config->getNested("multi-world.default", false);
+		return self::isMultiWorld() && (bool) self::$config->getNested("multi-world.use-default", false);
 	}
 
 	public static function isTimezoneChanged(): bool{

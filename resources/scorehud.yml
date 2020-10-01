@@ -89,6 +89,7 @@ scoreboards:
     - " §bOnline: §a{scorehud.online} §c/ §d{scorehud.max_online}"
   "world 2":
     lines:
+    - " §dName: §5{scorehud.name}"
     - " §dTPS: §5{scorehud.tps}"
     - " §bLoad: §a{scorehud.load}"
 ...

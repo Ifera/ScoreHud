@@ -66,9 +66,9 @@ titles:
 # with 'multi-world.use-default' keys to true in config.yml.
 default-board:
 - ""
-- "§dName: §5{scorehud.name}"
+- "§dName: §5{scorehudx.name}"
 - ""
-- "§bOnline: §a{scorehud.online} §c/ §d{scorehud.max_online}"
+- "§bOnline: §a{scorehudx.online} §c/ §d{scorehudx.max_online}"
 - ""
 - "§6Please Vote for us!"
 
@@ -86,11 +86,11 @@ scoreboards:
 #-------------------
   "world":
     lines:
-    - "§dName: §5{scorehud.name}"
-    - "§bOnline: §a{scorehud.online} §c/ §d{scorehud.max_online}"
+    - "§dName: §5{scorehudx.name}"
+    - "§bOnline: §a{scorehudx.online} §c/ §d{scorehudx.max_online}"
   "world 2":
     lines:
-    - "§dName: §5{scorehud.name}"
-    - "§dTPS: §5{scorehud.tps}"
-    - "§bLoad: §a{scorehud.load}"
+    - "§dName: §5{scorehudx.name}"
+    - "§dTPS: §5{scorehudx.tps}"
+    - "§bLoad: §a{scorehudx.load}"
 ...

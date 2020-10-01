@@ -54,7 +54,7 @@ time:
 
   format:
     # Set the time format that you want to display.
-    # Use {scorehud.time} tag for displaying time.
+    # Use {scorehudx.time} tag for displaying time.
     # You need ScoreHudX plugin for the tag to work.
     # https://github.com/Ifera/ScoreHudX
     #
@@ -67,7 +67,7 @@ time:
     time: "H:i:s"
 
     # Set the date format that you want to display. Will only work
-    # Use {scorehud.date} tag for displaying date.
+    # Use {scorehudx.date} tag for displaying date.
     # You need ScoreHudX plugin for the tag to work.
     # https://github.com/Ifera/ScoreHudX
     #

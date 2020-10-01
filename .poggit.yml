@@ -9,8 +9,8 @@ projects:
         version: ^1.0.0
       - src: JackMD/UpdateNotifier/UpdateNotifier
         version: ^2.0.0
-      - src: Ifera/ConfigUpdater
-        version: ^1.0.0
+      - src: Ifera/ConfigUpdater/ConfigUpdater
+        version: ^1.1.0
     lint:
       phpstan: false
 ...

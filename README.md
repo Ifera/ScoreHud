@@ -23,6 +23,7 @@
  - Everything is customizable.
  - Easy and simple API for developers to use and integrate ScoreHud.
  - You can find some basic tags via [ScoreHudX](https://github.com/Ifera/ScoreHudX) plugin.
+ - Repository created by provsalt for [addons](https://github.com/provsalt/ScoreHud-AddonX)
  
 ### How to setup?
 

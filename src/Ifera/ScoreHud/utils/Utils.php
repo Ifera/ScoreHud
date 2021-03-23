@@ -35,7 +35,7 @@ namespace Ifera\ScoreHud\utils;
 
 use Ifera\ScoreHud\ScoreHudSettings;
 use JackMD\ConfigUpdater\ConfigUpdater;
-use JackMD\ScoreFactory\ScoreFactory;
+use jackmd\scorefactory\ScoreFactory;
 use JackMD\UpdateNotifier\UpdateNotifier;
 use RuntimeException;
 use function preg_match_all;

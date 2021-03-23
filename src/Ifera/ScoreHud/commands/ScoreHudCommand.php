@@ -37,7 +37,7 @@ use Ifera\ScoreHud\ScoreHud;
 use Ifera\ScoreHud\ScoreHudSettings;
 use Ifera\ScoreHud\session\PlayerManager;
 use Ifera\ScoreHud\utils\HelperUtils;
-use JackMD\ScoreFactory\ScoreFactory;
+use jackmd\scorefactory\ScoreFactory;
 use pocketmine\command\CommandSender;
 use pocketmine\command\PluginCommand;
 use pocketmine\Player;

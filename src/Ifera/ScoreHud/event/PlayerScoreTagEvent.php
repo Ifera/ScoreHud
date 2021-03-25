@@ -6,7 +6,7 @@ namespace Ifera\ScoreHud\event;
 use Ifera\ScoreHud\scoreboard\ScoreTag;
 use pocketmine\Player;
 
-abstract class ScoreTagEvent extends ScoreHudEvent{
+abstract class PlayerScoreTagEvent extends PlayerEvent{
 
 	/** @var ScoreTag */
 	protected $tag;

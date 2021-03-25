@@ -33,6 +33,7 @@ declare(strict_types = 1);
 
 namespace Ifera\ScoreHud;
 
+use Ifera\ScoreHud\event\PlayerTagsUpdateEvent;
 use Ifera\ScoreHud\event\PlayerTagUpdateEvent;
 use Ifera\ScoreHud\event\ServerTagUpdateEvent;
 use Ifera\ScoreHud\scoreboard\ScoreTag;
@@ -73,6 +74,12 @@ class EventListener implements Listener{
 
 	public function onPlayerTagUpdate(PlayerTagUpdateEvent $event){
 		$this->updateTag($event->getPlayer(), $event->getTag());
+	}
+
+	public function onPlayerTagsUpdate(PlayerTagsUpdateEvent $event){
+		foreach($event->getTags() as $tag){
+			$this->updateTag($event->getPlayer(), $tag);
+		}
 	}
 
 	private function updateTag(Player $player, ScoreTag $newTag): void{

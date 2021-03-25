@@ -39,8 +39,10 @@ use pocketmine\Player;
 /**
  * Same as PlayerTagUpdateEvent but provides an easier way
  * to send updates for multiple tags at the same time.
+ *
+ * @see PlayerTagUpdateEvent
  */
-class PlayerTagsUpdateEvent extends ScoreHudEvent{
+class PlayerTagsUpdateEvent extends PlayerEvent{
 
 	/** @var ScoreTag[] */
 	private $tags = [];

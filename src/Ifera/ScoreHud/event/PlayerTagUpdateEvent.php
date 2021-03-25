@@ -45,5 +45,5 @@ namespace Ifera\ScoreHud\event;
  * Call this event, pass the tag that needs updating into the
  * constructor and let ScoreHud handle the rest.
  */
-class PlayerTagUpdateEvent extends ScoreTagEvent{
+class PlayerTagUpdateEvent extends PlayerScoreTagEvent{
 }

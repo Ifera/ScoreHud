@@ -49,5 +49,5 @@ namespace Ifera\ScoreHud\event;
  * the update for the tags being called. This works very much the same
  * way as HRKChat.
  */
-class TagsResolveEvent extends ScoreTagEvent{
+class TagsResolveEvent extends PlayerScoreTagEvent{
 }

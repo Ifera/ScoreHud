@@ -35,6 +35,7 @@ namespace Ifera\ScoreHud;
 
 use Ifera\ScoreHud\event\PlayerTagsUpdateEvent;
 use Ifera\ScoreHud\event\PlayerTagUpdateEvent;
+use Ifera\ScoreHud\event\ServerTagsUpdateEvent;
 use Ifera\ScoreHud\event\ServerTagUpdateEvent;
 use Ifera\ScoreHud\scoreboard\ScoreTag;
 use Ifera\ScoreHud\session\PlayerManager;
@@ -67,8 +68,12 @@ class EventListener implements Listener{
 	}
 
 	public function onServerTagUpdate(ServerTagUpdateEvent $event){
-		foreach(PlayerManager::getAll() as $session){
-			$this->updateTag($session->getPlayer(), $event->getTag());
+		$this->updateServerTag($event->getTag());
+	}
+
+	public function onServerTagsUpdate(ServerTagsUpdateEvent $event){
+		foreach($event->getTags() as $tag){
+			$this->updateServerTag($tag);
 		}
 	}
 
@@ -79,6 +84,12 @@ class EventListener implements Listener{
 	public function onPlayerTagsUpdate(PlayerTagsUpdateEvent $event){
 		foreach($event->getTags() as $tag){
 			$this->updateTag($event->getPlayer(), $tag);
+		}
+	}
+
+	private function updateServerTag(ScoreTag $tag){
+		foreach(PlayerManager::getAll() as $session){
+			$this->updateTag($session->getPlayer(), $tag);
 		}
 	}
 

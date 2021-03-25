@@ -36,28 +36,40 @@ namespace Ifera\ScoreHud\event;
 use Ifera\ScoreHud\scoreboard\ScoreTag;
 
 /**
- * Call this event when you need to change a tag
- * that is independent of the player. For example, for
- * displaying server TPS or Load or any other data.
+ * Same as ServerTagUpdateEvent but provides an easier way
+ * to send updates for multiple tags at the same time.
  *
- * Use PlayerTagUpdateEvent in case the tag depends on
- * the player.
- *
- * Call this event, pass the tag that needs updating into the
- * constructor and let ScoreHud handle the rest.
+ * @see ServerTagUpdateEvent
  */
-class ServerTagUpdateEvent extends ScoreHudEvent{
+class ServerTagsUpdateEvent extends ScoreHudEvent{
 
-	/** @var ScoreTag */
-	protected $tag;
+	/** @var ScoreTag[] */
+	private $tags = [];
 
-	public function __construct(ScoreTag $tag){
-		$this->tag = $tag;
+	/**
+	 * @param ScoreTag[] $tags
+	 */
+	public function __construct(array $tags){
+		$this->tags = $tags;
 
 		parent::__construct();
 	}
 
-	public function getTag(): ScoreTag{
-		return $this->tag;
+	/**
+	 * @param ScoreTag[] $tags
+	 */
+	public function setTags(array $tags): void{
+		$this->tags = $tags;
+	}
+
+	/**
+	 * @return ScoreTag[]
+	 */
+	public function getTags(): array{
+		return $this->tags;
+	}
+
+	public function addTag(ScoreTag $tag): void{
+		$this->tags[] = $tag;
 	}
 }

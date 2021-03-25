@@ -5,7 +5,7 @@ namespace Ifera\ScoreHud\event;
 
 use pocketmine\Player;
 
-class PlayerEvent extends ScoreHudEvent{
+abstract class PlayerEvent extends ScoreHudEvent{
 	
 	/** @var Player */
 	protected $player;

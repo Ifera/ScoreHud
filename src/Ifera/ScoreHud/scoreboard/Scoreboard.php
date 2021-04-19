@@ -34,6 +34,7 @@ declare(strict_types = 1);
 namespace Ifera\ScoreHud\scoreboard;
 
 use Ifera\ScoreHud\session\PlayerSession;
+use Ifera\ScoreHud\utils\HelperUtils;
 use jackmd\scorefactory\ScoreFactory;
 use function array_count_values;
 use function array_keys;
@@ -116,7 +117,7 @@ class Scoreboard{
 	public function getProcessedTags(): array{
 		$processedTags = [];
 
-		foreach($this->tags as $key => $tag){
+		foreach($this->tags as $tag){
 			$processedTags[$tag->getId()] = $tag->getValue();
 		}
 
@@ -124,6 +125,10 @@ class Scoreboard{
 	}
 
 	public function update(): self{
+		if(HelperUtils::isDisabled($this->session->getPlayer())){
+			return $this;
+		}
+
 		$i = 0;
 		$tags = $this->getProcessedTags();
 		$duplicateLines = [];
@@ -158,6 +163,10 @@ class Scoreboard{
 	}
 
 	public function display(): self{
+		if(HelperUtils::isDisabled($this->session->getPlayer())){
+			return $this;
+		}
+
 		$i = 0;
 
 		foreach($this->formattedLines as $formattedLine){

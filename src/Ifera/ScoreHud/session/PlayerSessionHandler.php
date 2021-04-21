@@ -33,7 +33,6 @@ declare(strict_types = 1);
 
 namespace Ifera\ScoreHud\session;
 
-use Ifera\ScoreHud\utils\HelperUtils;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerQuitEvent;
@@ -53,7 +52,6 @@ class PlayerSessionHandler implements Listener{
 	 * @priority MONITOR
 	 */
 	public function onPlayerQuit(PlayerQuitEvent $event) : void{
-		HelperUtils::destroy($event->getPlayer());
 		PlayerManager::destroy($event->getPlayer());
 	}
 }

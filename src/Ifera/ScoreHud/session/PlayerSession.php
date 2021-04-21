@@ -120,6 +120,7 @@ class PlayerSession{
 	}
 
 	public function close(): void{
+		HelperUtils::destroy($this->player);
 		ScoreFactory::removeScore($this->player);
 	}
 }

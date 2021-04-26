@@ -167,6 +167,7 @@ class Scoreboard{
 			return $this;
 		}
 
+		$player = $this->session->getPlayer();
 		$i = 0;
 
 		foreach($this->formattedLines as $formattedLine){
@@ -176,8 +177,10 @@ class Scoreboard{
 				break;
 			}
 
-			ScoreFactory::setScoreLine($this->session->getPlayer(), $i, $formattedLine);
+			ScoreFactory::setScoreLine($player, $i, $formattedLine);
 		}
+
+		ScoreFactory::send($player);
 
 		return $this;
 	}

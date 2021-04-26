@@ -1,7 +1,7 @@
 name: ScoreHud
 main: Ifera\ScoreHud\ScoreHud
 api: [3.0.0]
-version: 6.1.0
+version: 6.2.0
 author: Ifera
 description: Add fully customizable scoreboards to your server.
 

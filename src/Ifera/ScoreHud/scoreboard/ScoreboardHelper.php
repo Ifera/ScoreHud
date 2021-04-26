@@ -53,7 +53,7 @@ class ScoreboardHelper{
 	public static function createDefault(PlayerSession $session): Scoreboard{
 		$tags = [];
 
-		foreach(self::resolveLines($lines = ScoreHudSettings::getDefaultBoard()) as $index => $tagName){
+		foreach(self::resolveLines($lines = ScoreHudSettings::getDefaultBoard()) as $tagName){
 			$tags[] = self::constructTag($session, $tagName);
 		}
 
@@ -63,7 +63,7 @@ class ScoreboardHelper{
 	public static function create(PlayerSession $session, string $world): Scoreboard{
 		$tags = [];
 
-		foreach(self::resolveLines($lines = ScoreHudSettings::getScoreboard($world)) as $index => $tagName){
+		foreach(self::resolveLines($lines = ScoreHudSettings::getScoreboard($world)) as $tagName){
 			$tags[] = self::constructTag($session, $tagName);
 		}
 
@@ -76,7 +76,7 @@ class ScoreboardHelper{
 	public static function resolveLines(array $lines): array{
 		$tags = [];
 
-		foreach($lines as $i => $line){
+		foreach($lines as $line){
 			$tags = array_merge($tags, Utils::resolveTags($line));
 		}
 

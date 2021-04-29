@@ -33,11 +33,11 @@ declare(strict_types = 1);
 
 namespace Ifera\ScoreHud\utils;
 
+use Ifera\ScoreHud\ScoreHud;
 use Ifera\ScoreHud\ScoreHudSettings;
 use JackMD\ConfigUpdater\ConfigUpdater;
 use jackmd\scorefactory\ScoreFactory;
 use JackMD\UpdateNotifier\UpdateNotifier;
-use RuntimeException;
 use function preg_match_all;
 use function preg_quote;
 
@@ -64,7 +64,7 @@ class Utils{
 	public static function resolveTags(string $line): array{
 		$tags = [];
 
-		if(preg_match_all(self::REGEX(), $line, $matches)) {
+		if(preg_match_all(self::REGEX(), $line, $matches)){
 			$tags = $matches[1];
 		}
 
@@ -74,18 +74,26 @@ class Utils{
 	/**
 	 * Checks if the required virions/libraries are present before enabling the plugin.
 	 */
-	public static function checkVirions(): void{
+	public static function validateVirions(ScoreHud $plugin): bool{
 		$requiredVirions = [
-			ScoreFactory::class,
-			UpdateNotifier::class,
-			ConfigUpdater::class
+			"ScoreFactory"   => ScoreFactory::class,
+			"UpdateNotifier" => UpdateNotifier::class,
+			"ConfigUpdater"  => ConfigUpdater::class
 		];
 
-		foreach($requiredVirions as $class){
+		$return = true;
+
+		foreach($requiredVirions as $name => $class){
 			if(!class_exists($class)){
-				throw new RuntimeException("ScoreHud plugin will only work if you use the plugin phar from Poggit.");
+				$plugin->getLogger()->error("ScoreHud plugin will only work if you use the plugin phar from Poggit. [Missing: $name virion]");
+				$plugin->getServer()->getPluginManager()->disablePlugin($plugin);
+				$return = false;
+
+				break;
 			}
 		}
+
+		return $return;
 	}
 
 	public static function setTimezone(): bool{

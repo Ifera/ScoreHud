@@ -34,6 +34,7 @@ declare(strict_types = 1);
 namespace Ifera\ScoreHud;
 
 use Ifera\ScoreHud\commands\ScoreHudCommand;
+use Ifera\ScoreHud\session\PlayerManager;
 use Ifera\ScoreHud\session\PlayerSessionHandler;
 use Ifera\ScoreHud\task\ScoreUpdateTitleTask;
 use Ifera\ScoreHud\utils\HelperUtils;
@@ -48,16 +49,13 @@ use pocketmine\utils\Config;
 
 class ScoreHud extends PluginBase{
 
-	/** @var int */
 	private const CONFIG_VERSION = 9;
-	/** @var int */
 	private const SCOREHUD_VERSION = 2;
 
 	/** @var ScoreHud|null */
 	private static $instance = null;
 
-	/** @var Config */
-	private $scoreConfig;
+	private ?Config $scoreConfig;
 
 	/**
 	 * @return ScoreHud|null
@@ -66,20 +64,25 @@ class ScoreHud extends PluginBase{
 		return self::$instance;
 	}
 
-	public function onLoad(){
+	public function onLoad(): void{
 		self::$instance = $this;
 	}
 
-	public function onEnable(){
-		$this->checkConfigs();
+	public function onEnable(): void{
+		$this->loadConfigs();
 
-		Utils::checkVirions();
+		if(!Utils::validateVirions($this)){
+			return;
+		}
+
 		UpdateNotifier::checkUpdate($this->getDescription()->getName(), $this->getDescription()->getVersion());
 		ScoreHudSettings::init($this);
 
 		if(!$this->canLoad()){
 			return;
 		}
+
+		$this->validateConfigs();
 
 		if(ScoreHudSettings::isTimezoneChanged()){
 			if(Utils::setTimezone()){
@@ -99,12 +102,23 @@ class ScoreHud extends PluginBase{
 		$this->getServer()->getCommandMap()->register("scorehud", new ScoreHudCommand($this));
 	}
 
-	private function checkConfigs(): void{
+	public function onDisable(): void{
+		$this->scoreConfig = null;
+
+		ScoreHudSettings::destroy();
+		PlayerManager::destroyAll();
+
+		self::$instance = null;
+	}
+
+	private function loadConfigs(): void{
 		$this->saveDefaultConfig();
 
 		$this->saveResource("scorehud.yml");
 		$this->scoreConfig = new Config($this->getDataFolder() . "scorehud.yml", Config::YAML);
+	}
 
+	private function validateConfigs(): void{
 		if(ConfigUpdater::checkUpdate($this, $this->getConfig(), "config-version", self::CONFIG_VERSION)){
 			$this->reloadConfig();
 		}

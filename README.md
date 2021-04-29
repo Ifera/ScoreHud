@@ -2,17 +2,18 @@
 
 >## Notice: <br />
 >**Backwards Incompatible Update**
+>- PLEASE MAKE SURE YOU ARE USING **PHP v7.4** OR GREATER. <br />
 >- Starting from **ScoreHud version 6.0**, addons are no longer supported. <br />
 >- All old addons will stop working on versions 6.0 and above. <br />
 >- All old tags will stop functioning as well. <br />
->- More details can be found below <br />
+>- More details can be found below. <br />
 >- **Please read FAQs below.**
 
 # ScoreHud
 
-| HitCount | License | Poggit | Release |
-|:--:|:--:|:--:|:--:|
-|[![HitCount](http://hits.dwyl.io/JackMD/ScoreHud.svg)](http://hits.dwyl.io/JackMD/ScoreHud)|[![GitHub license](https://img.shields.io/github/license/Ifera/ScoreHud.svg)](https://github.com/Ifera/ScoreHud/blob/master/LICENSE)|[![Poggit-CI](https://poggit.pmmp.io/ci.shield/Ifera/ScoreHud/ScoreHud)](https://poggit.pmmp.io/ci/Ifera/ScoreHud/ScoreHud)|[![](https://poggit.pmmp.io/shield.state/ScoreHud)](https://poggit.pmmp.io/p/ScoreHud)|
+| License | Poggit | Release |
+|:--:|:--:|:--:|
+|[![GitHub license](https://img.shields.io/github/license/Ifera/ScoreHud.svg)](https://github.com/Ifera/ScoreHud/blob/master/LICENSE)|[![Poggit-CI](https://poggit.pmmp.io/ci.shield/Ifera/ScoreHud/ScoreHud)](https://poggit.pmmp.io/ci/Ifera/ScoreHud/ScoreHud)|[![](https://poggit.pmmp.io/shield.state/ScoreHud)](https://poggit.pmmp.io/p/ScoreHud)|
 
 ### A highly customizable plugin to add Scoreboards on your Minecraft Bedrock Server.
 
@@ -52,6 +53,8 @@ can just integrate ScoreHud directly into their plugin and fire events to update
 
 ### FAQs:
 
+**Q: Help I am getting this error. `Required extension Core has an incompatible version (7.x.y not >=7.4)`**<br />
+A: This means that the PHP binary that your server is using is outdated. Please update it to v7.4 or greater to continue using ScoreHud. <br /><br />
 **Q: How many lines can I set in `default-board`?**<br />
 A: You can set 1 to 15 lines in `default-board`. <br /><br />
 **Q: How many `server-names` can I set?**<br />

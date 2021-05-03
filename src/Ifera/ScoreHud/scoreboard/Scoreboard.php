@@ -125,7 +125,9 @@ class Scoreboard{
 	}
 
 	public function update(): self{
-		if(HelperUtils::isDisabled($this->session->getPlayer())){
+		$player = $this->session->getPlayer();
+
+		if(!$player->isOnline() || HelperUtils::isDisabled($player)){
 			return $this;
 		}
 
@@ -163,11 +165,12 @@ class Scoreboard{
 	}
 
 	public function display(): self{
-		if(HelperUtils::isDisabled($this->session->getPlayer())){
+		$player = $this->session->getPlayer();
+
+		if(!$player->isOnline() || HelperUtils::isDisabled($player)){
 			return $this;
 		}
 
-		$player = $this->session->getPlayer();
 		$i = 0;
 
 		foreach($this->formattedLines as $formattedLine){

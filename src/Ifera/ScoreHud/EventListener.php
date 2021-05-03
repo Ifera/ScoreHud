@@ -94,7 +94,7 @@ class EventListener implements Listener{
 	}
 
 	private function updateTag(Player $player, ScoreTag $newTag): void{
-		if(is_null($session = PlayerManager::get($player))){
+		if(!$player->isOnline() || is_null($session = PlayerManager::get($player))){
 			return;
 		}
 

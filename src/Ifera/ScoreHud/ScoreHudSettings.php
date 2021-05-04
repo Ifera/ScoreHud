@@ -34,6 +34,7 @@ declare(strict_types = 1);
 namespace Ifera\ScoreHud;
 
 use pocketmine\utils\Config;
+use function in_array;
 
 class ScoreHudSettings{
 
@@ -71,6 +72,14 @@ class ScoreHudSettings{
 	 */
 	public static function useDefaultBoard(): bool{
 		return self::isMultiWorld() && (bool) self::$config->getNested("multi-world.use-default", false);
+	}
+
+	public static function getDisabledWorlds(): array{
+		return (array) self::$config->get("disabled-worlds", []);
+	}
+
+	public static function isInDisabledWorld(string $world): bool{
+		return in_array($world, self::getDisabledWorlds());
 	}
 
 	public static function isTimezoneChanged(): bool{

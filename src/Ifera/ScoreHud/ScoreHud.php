@@ -46,10 +46,11 @@ use JackMD\UpdateNotifier\UpdateNotifier;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
+use function is_array;
 
 class ScoreHud extends PluginBase{
 
-	private const CONFIG_VERSION = 9;
+	private const CONFIG_VERSION = 10;
 	private const SCOREHUD_VERSION = 2;
 
 	/** @var ScoreHud|null */
@@ -156,6 +157,11 @@ class ScoreHud extends PluginBase{
 			$errors[] = "Please set the lines under 'titles.lines' properly, in scorehud.yml.";
 		}
 
+		if(!is_array($this->getConfig()->get("disabled-worlds", []))){
+			$load = false;
+			$errors[] = "The 'disabled-worlds' key in config.yml must be of the type array. Please set it properly.";
+		}
+
 		if(!$load){
 			foreach($errors as $error){
 				$this->getLogger()->error($error);
@@ -176,7 +182,7 @@ class ScoreHud extends PluginBase{
 			return;
 		}
 
-		if(HelperUtils::isDisabled($player)){
+		if(HelperUtils::isDisabled($player) || ScoreHudSettings::isInDisabledWorld($player->getLevelNonNull()->getFolderName())){
 			ScoreFactory::removeScore($player);
 
 			return;

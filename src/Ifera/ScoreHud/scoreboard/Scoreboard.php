@@ -33,6 +33,7 @@ declare(strict_types = 1);
 
 namespace Ifera\ScoreHud\scoreboard;
 
+use Ifera\ScoreHud\ScoreHudSettings;
 use Ifera\ScoreHud\session\PlayerSession;
 use Ifera\ScoreHud\utils\HelperUtils;
 use jackmd\scorefactory\ScoreFactory;
@@ -127,7 +128,7 @@ class Scoreboard{
 	public function update(): self{
 		$player = $this->session->getPlayer();
 
-		if(!$player->isOnline() || HelperUtils::isDisabled($player)){
+		if(!$player->isOnline() || HelperUtils::isDisabled($player) || ScoreHudSettings::isInDisabledWorld($player->getLevelNonNull()->getFolderName())){
 			return $this;
 		}
 
@@ -167,7 +168,7 @@ class Scoreboard{
 	public function display(): self{
 		$player = $this->session->getPlayer();
 
-		if(!$player->isOnline() || HelperUtils::isDisabled($player)){
+		if(!$player->isOnline() || HelperUtils::isDisabled($player) || ScoreHudSettings::isInDisabledWorld($player->getLevelNonNull()->getFolderName())){
 			return $this;
 		}
 

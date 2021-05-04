@@ -70,14 +70,21 @@ class PlayerSession{
 	public function handle(?string $world = null): void{
 		$player = $this->player;
 
-		if(HelperUtils::isDisabled($player)){
+		if(!$player->isOnline() || HelperUtils::isDisabled($player)){
+			return;
+		}
+
+		$world = $world ?? $player->getLevelNonNull()->getFolderName();
+
+		// remove scoreboard if player is in a world where scoreboard is disabled
+		if(ScoreHudSettings::isInDisabledWorld($world)){
+			ScoreFactory::removeScore($player);
+
 			return;
 		}
 
 		// check for multi world board first
 		if(ScoreHudSettings::isMultiWorld()){
-			$world = $world ?? $player->getLevelNonNull()->getFolderName();
-
 			// construct the board for this level and send
 			if(ScoreHudSettings::worldExists($world)){
 				$this->plugin->setScore($player);

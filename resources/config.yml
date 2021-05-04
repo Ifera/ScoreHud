@@ -29,7 +29,7 @@
 
 # DO NOT EDIT THIS VALUE.
 # ONLY FOR INTERNAL USE.
-config-version: 9
+config-version: 10
 
 # If you want to have different scoreboards for different worlds
 # then edit the nested values to suit your needs.
@@ -42,6 +42,15 @@ multi-world:
   # a default scoreboard for a world whose scoreboard you didn't set
   # under 'scoreboards' key in scorehud.yml, then set this to true.
   use-default: false
+
+# If you don't want a scoreboard to be displayed in a particular world then
+# mention the folder name of that particular world below.
+# Follow the given pattern to add more worlds.
+# If you wish to not have any disabled worlds then set the key as shown below.
+# disabled-worlds: []
+disabled-worlds:
+- "world 1"
+- "world 2"
 
 # Change how time is displayed on your server.
 time:

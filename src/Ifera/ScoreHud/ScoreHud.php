@@ -78,11 +78,11 @@ class ScoreHud extends PluginBase{
 		UpdateNotifier::checkUpdate($this->getDescription()->getName(), $this->getDescription()->getVersion());
 		ScoreHudSettings::init($this);
 
+		$this->validateConfigs();
+
 		if(!$this->canLoad()){
 			return;
 		}
-
-		$this->validateConfigs();
 
 		if(ScoreHudSettings::isTimezoneChanged()){
 			if(Utils::setTimezone()){
@@ -119,12 +119,21 @@ class ScoreHud extends PluginBase{
 	}
 
 	private function validateConfigs(): void{
+		$updated = false;
+
 		if(ConfigUpdater::checkUpdate($this, $this->getConfig(), "config-version", self::CONFIG_VERSION)){
+			$updated = true;
 			$this->reloadConfig();
 		}
 
 		if(ConfigUpdater::checkUpdate($this, $this->scoreConfig, "scorehud-version", self::SCOREHUD_VERSION)){
+			$updated = true;
 			$this->scoreConfig = new Config($this->getDataFolder() . "scorehud.yml", Config::YAML);
+		}
+
+		if($updated){
+			ScoreHudSettings::destroy();
+			ScoreHudSettings::init($this);
 		}
 	}
 

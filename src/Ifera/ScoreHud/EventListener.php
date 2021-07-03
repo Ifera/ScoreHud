@@ -60,7 +60,7 @@ class EventListener implements Listener{
 
 		$player = $event->getEntity();
 
-		if(!$player instanceof Player){
+		if(!$player instanceof Player or !$player->spawned){
 			return;
 		}
 

@@ -23,8 +23,13 @@
  - Completely **Event Driven**!! Good bye tasks!
  - Everything is customizable.
  - Easy and simple API for developers to use and integrate ScoreHud.
- - You can find some basic tags via [ScoreHudX](https://github.com/Ifera/ScoreHudX) plugin.
+ - You can find some basic tags in the [ScoreHudX](https://github.com/Ifera/ScoreHudX) repo.
  
+### Available Tags:
+
+ - Please checkout the [ScoreHudX](https://github.com/Ifera/ScoreHudX) repo.
+ - Also read the [discussions](https://github.com/Ifera/ScoreHudX/discussions)
+
 ### How to setup?
 
  - Put the plugin in your plugins folder.

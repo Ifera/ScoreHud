@@ -40,6 +40,7 @@ use Ifera\ScoreHud\ScoreHudSettings;
 use Ifera\ScoreHud\utils\HelperUtils;
 use jackmd\scorefactory\ScoreFactory;
 use pocketmine\Player;
+use function is_null;
 
 class PlayerSession{
 
@@ -47,19 +48,20 @@ class PlayerSession{
 	private $plugin;
 	/** @var Player */
 	private $player;
-	/** @var Scoreboard */
+	/** @var Scoreboard|null */
 	private $scoreboard;
 
 	public function __construct(Player $player){
 		$this->plugin = ScoreHud::getInstance();
 		$this->player = $player;
+		$this->scoreboard = null;
 	}
 
 	public function getPlayer(): Player{
 		return $this->player;
 	}
 
-	public function getScoreboard(): Scoreboard{
+	public function getScoreboard(): ?Scoreboard{
 		return $this->scoreboard;
 	}
 
@@ -67,7 +69,7 @@ class PlayerSession{
 		$this->scoreboard = $scoreboard;
 	}
 
-	public function handle(?string $world = null): void{
+	public function handle(string $world = null, bool $calledFromTask = false): void{
 		$player = $this->player;
 
 		if(!$player->isOnline() || HelperUtils::isDisabled($player)){
@@ -87,7 +89,7 @@ class PlayerSession{
 		if(ScoreHudSettings::isMultiWorld()){
 			// construct the board for this level and send
 			if(ScoreHudSettings::worldExists($world)){
-				$this->plugin->setScore($player);
+				$this->plugin->setScore($player, $calledFromTask);
 
 				$scoreboard = ScoreboardHelper::create($this, $world);
 				$scoreboard->update()->display();
@@ -99,7 +101,7 @@ class PlayerSession{
 
 			// use the default board since the scoreboard for the world is unknown
 			if(ScoreHudSettings::useDefaultBoard()){
-				$this->constructDefaultBoard();
+				$this->constructDefaultBoard($calledFromTask);
 
 				return;
 			}
@@ -111,14 +113,20 @@ class PlayerSession{
 		}
 
 		// construct the default board since multi world support is not enabled
-		$this->constructDefaultBoard();
+		$this->constructDefaultBoard($calledFromTask);
 	}
 
 	/**
 	 * Used for handling default scoreboard
 	 */
-	private function constructDefaultBoard(): void{
-		$this->plugin->setScore($this->player);
+	private function constructDefaultBoard(bool $calledFromTask): void{
+		$this->plugin->setScore($this->player, $calledFromTask);
+
+		if($calledFromTask && !is_null($this->scoreboard)){
+			$this->scoreboard->display();
+
+			return;
+		}
 
 		$scoreboard = ScoreboardHelper::createDefault($this);
 		$scoreboard->update()->display();

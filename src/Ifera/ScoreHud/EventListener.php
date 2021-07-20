@@ -94,18 +94,17 @@ class EventListener implements Listener{
 	}
 
 	private function updateTag(Player $player, ScoreTag $newTag): void{
-		if(!$player->isOnline() || is_null($session = PlayerManager::get($player)) || ScoreHudSettings::isInDisabledWorld($player->getLevelNonNull()->getFolderName())){
+		if(
+			!$player->isOnline() ||
+			ScoreHudSettings::isInDisabledWorld($player->getLevelNonNull()->getFolderName()) ||
+			is_null($session = PlayerManager::get($player)) ||
+			is_null($scoreboard = $session->getScoreboard()) ||
+			is_null($scoreTag = $scoreboard->getTag($newTag->getName()))
+		){
 			return;
 		}
 
-		$scoreboard = $session->getScoreboard();
-
-		if(is_null($scoreTag = $scoreboard->getTag($newTag->getName()))){
-			return;
-		}
-
-		$this->plugin->setScore($session->getPlayer());
-
+		$this->plugin->setScore($player, false);
 		$scoreTag->setValue($newTag->getValue());
 		$scoreboard->update()->display();
 	}

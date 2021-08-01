@@ -11,9 +11,9 @@
 
 # ScoreHud
 
-| License | Poggit | Release |
-|:--:|:--:|:--:|
-|[![GitHub license](https://img.shields.io/github/license/Ifera/ScoreHud.svg)](https://github.com/Ifera/ScoreHud/blob/master/LICENSE)|[![Poggit-CI](https://poggit.pmmp.io/ci.shield/Ifera/ScoreHud/ScoreHud)](https://poggit.pmmp.io/ci/Ifera/ScoreHud/ScoreHud)|[![](https://poggit.pmmp.io/shield.state/ScoreHud)](https://poggit.pmmp.io/p/ScoreHud)|
+| Discord | License | Poggit | Release |
+|:--:|:--:|:--:|:--:|
+|[![Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/urQt6ETgYu)|[![GitHub license](https://img.shields.io/github/license/Ifera/ScoreHud.svg)](https://github.com/Ifera/ScoreHud/blob/master/LICENSE)|[![Poggit-CI](https://poggit.pmmp.io/ci.shield/Ifera/ScoreHud/ScoreHud)](https://poggit.pmmp.io/ci/Ifera/ScoreHud/ScoreHud)|[![](https://poggit.pmmp.io/shield.state/ScoreHud)](https://poggit.pmmp.io/p/ScoreHud)|
 
 ### A highly customizable plugin to add Scoreboards on your Minecraft Bedrock Server.
 

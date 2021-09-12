@@ -39,21 +39,18 @@ use Ifera\ScoreHud\ScoreHud;
 use Ifera\ScoreHud\ScoreHudSettings;
 use Ifera\ScoreHud\utils\HelperUtils;
 use jackmd\scorefactory\ScoreFactory;
-use pocketmine\Player;
+use pocketmine\player\Player;
 use function is_null;
 
 class PlayerSession{
 
 	/** @var ScoreHud */
-	private $plugin;
-	/** @var Player */
-	private $player;
+	private ScoreHud $plugin;
 	/** @var Scoreboard|null */
-	private $scoreboard;
+	private ?Scoreboard $scoreboard;
 
-	public function __construct(Player $player){
+	public function __construct(private Player $player){
 		$this->plugin = ScoreHud::getInstance();
-		$this->player = $player;
 		$this->scoreboard = null;
 	}
 
@@ -76,7 +73,7 @@ class PlayerSession{
 			return;
 		}
 
-		$world = $world ?? $player->getLevelNonNull()->getFolderName();
+		$world = $world ?? $player->getWorld()->getFolderName();
 
 		// remove scoreboard if player is in a world where scoreboard is disabled
 		if(ScoreHudSettings::isInDisabledWorld($world)){

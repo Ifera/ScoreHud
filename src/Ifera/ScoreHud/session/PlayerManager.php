@@ -33,7 +33,7 @@ declare(strict_types = 1);
 
 namespace Ifera\ScoreHud\session;
 
-use pocketmine\Player;
+use pocketmine\player\Player;
 
 class PlayerManager{
 
@@ -41,7 +41,7 @@ class PlayerManager{
 	private static $sessions = [];
 
 	public static function create(Player $player): void{
-		self::$sessions[$player->getRawUniqueId()] = $session = new PlayerSession($player);
+		self::$sessions[$player->getUniqueId()->toString()] = $session = new PlayerSession($player);
 		$session->handle();
 	}
 
@@ -50,7 +50,7 @@ class PlayerManager{
 			return;
 		}
 
-		if(!isset(self::$sessions[$uuid = $player->getRawUniqueId()])){
+		if(!isset(self::$sessions[$uuid = $player->getUniqueId()->toString()])){
 			return;
 		}
 
@@ -59,11 +59,11 @@ class PlayerManager{
 	}
 
 	public static function get(Player $player): ?PlayerSession{
-		return self::$sessions[$player->getRawUniqueId()] ?? null;
+		return self::$sessions[$player->getUniqueId()->toString()] ?? null;
 	}
 
 	public static function getNonNull(Player $player): PlayerSession{
-		return self::$sessions[$player->getRawUniqueId()];
+		return self::$sessions[$player->getUniqueId()->toString()];
 	}
 
 	/**

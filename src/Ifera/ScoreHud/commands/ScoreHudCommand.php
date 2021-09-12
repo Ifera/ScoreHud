@@ -38,14 +38,14 @@ use Ifera\ScoreHud\ScoreHudSettings;
 use Ifera\ScoreHud\session\PlayerManager;
 use Ifera\ScoreHud\utils\HelperUtils;
 use jackmd\scorefactory\ScoreFactory;
+use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
-use pocketmine\command\PluginCommand;
-use pocketmine\Player;
+use pocketmine\player\Player;
+use pocketmine\plugin\PluginOwned;
+use pocketmine\plugin\PluginOwnedTrait;
 
-class ScoreHudCommand extends PluginCommand{
-
-	/** @var ScoreHud */
-	private $plugin;
+class ScoreHudCommand extends Command implements PluginOwned{
+	use PluginOwnedTrait;
 
 	/**
 	 * ScoreHudCommand constructor.
@@ -53,13 +53,13 @@ class ScoreHudCommand extends PluginCommand{
 	 * @param ScoreHud $plugin
 	 */
 	public function __construct(ScoreHud $plugin){
-		parent::__construct("scorehud", $plugin);
+		parent::__construct("scorehud");
 		$this->setDescription("Shows ScoreHud Commands");
 		$this->setUsage("/scorehud <on|off|about|help>");
 		$this->setAliases(["sh"]);
 		$this->setPermission("sh.command.sh");
 
-		$this->plugin = $plugin;
+		$this->owningPlugin = $plugin;
 	}
 
 	/**
@@ -87,7 +87,7 @@ class ScoreHudCommand extends PluginCommand{
 
 		switch($args[0]){
 			case "about":
-				$sender->sendMessage(ScoreHudSettings::PREFIX . "§6Score§eHud §av" . $this->plugin->getDescription()->getVersion() . "§a. Plugin by §dIfera§a. Contact on §bTwitter: @ifera_tr §aor §bDiscord: Ifera#3717§a.");
+				$sender->sendMessage(ScoreHudSettings::PREFIX . "§6Score§eHud §av" . $this->owningPlugin->getDescription()->getVersion() . "§a. Plugin by §dIfera§a. Contact on §bTwitter: @ifera_tr §aor §bDiscord: Ifera#3717§a.");
 			break;
 
 			case "on":

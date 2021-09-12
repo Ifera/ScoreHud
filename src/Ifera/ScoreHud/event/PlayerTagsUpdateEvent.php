@@ -34,7 +34,7 @@ declare(strict_types = 1);
 namespace Ifera\ScoreHud\event;
 
 use Ifera\ScoreHud\scoreboard\ScoreTag;
-use pocketmine\Player;
+use pocketmine\player\Player;
 
 /**
  * Same as PlayerTagUpdateEvent but provides an easier way
@@ -45,7 +45,7 @@ use pocketmine\Player;
 class PlayerTagsUpdateEvent extends PlayerEvent{
 
 	/** @var ScoreTag[] */
-	private $tags = [];
+	private array $tags = [];
 
 	/**
 	 * @param ScoreTag[] $tags

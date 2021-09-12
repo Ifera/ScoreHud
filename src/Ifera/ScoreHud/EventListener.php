@@ -39,9 +39,10 @@ use Ifera\ScoreHud\event\ServerTagsUpdateEvent;
 use Ifera\ScoreHud\event\ServerTagUpdateEvent;
 use Ifera\ScoreHud\scoreboard\ScoreTag;
 use Ifera\ScoreHud\session\PlayerManager;
-use pocketmine\event\entity\EntityLevelChangeEvent;
+use pocketmine\event\entity\EntityTeleportEvent;
 use pocketmine\event\Listener;
-use pocketmine\Player;
+use pocketmine\player\Player;
+use pocketmine\world\Position;
 use function is_null;
 
 class EventListener implements Listener{
@@ -53,8 +54,19 @@ class EventListener implements Listener{
 		$this->plugin = $plugin;
 	}
 
-	public function onWorldChange(EntityLevelChangeEvent $event){
+	public function onWorldChange(EntityTeleportEvent $event){
 		if(!ScoreHudSettings::isMultiWorld()){
+			return;
+		}
+
+		$from = $event->getFrom();
+		$to = $event->getTo();
+
+		if(!($from instanceof Position and $to instanceof Position)){
+			return;
+		}
+
+		if($from->getWorld()->getFolderName() === $to->getWorld()->getFolderName()){
 			return;
 		}
 
@@ -64,7 +76,7 @@ class EventListener implements Listener{
 			return;
 		}
 
-		PlayerManager::getNonNull($player)->handle($event->getTarget()->getFolderName());
+		PlayerManager::getNonNull($player)->handle($to->getWorld()->getFolderName());
 	}
 
 	public function onServerTagUpdate(ServerTagUpdateEvent $event){
@@ -96,7 +108,7 @@ class EventListener implements Listener{
 	private function updateTag(Player $player, ScoreTag $newTag): void{
 		if(
 			!$player->isOnline() ||
-			ScoreHudSettings::isInDisabledWorld($player->getLevelNonNull()->getFolderName()) ||
+			ScoreHudSettings::isInDisabledWorld($player->getWorld()->getFolderName()) ||
 			is_null($session = PlayerManager::get($player)) ||
 			is_null($scoreboard = $session->getScoreboard()) ||
 			is_null($scoreTag = $scoreboard->getTag($newTag->getName()))

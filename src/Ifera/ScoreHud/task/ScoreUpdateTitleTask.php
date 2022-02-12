@@ -40,14 +40,9 @@ use function is_null;
 
 class ScoreUpdateTitleTask extends Task{
 
-	/** @var ScoreHud */
-	private $plugin;
+	public function __construct(private ScoreHud $plugin){}
 
-	public function __construct(ScoreHud $plugin){
-		$this->plugin = $plugin;
-	}
-
-	public function onRun(int $tick){
+	public function onRun() : void{
 		foreach($this->plugin->getServer()->getOnlinePlayers() as $player){
 			if(is_null($session = PlayerManager::get($player))){
 				continue;

@@ -3,16 +3,11 @@ declare(strict_types = 1);
 
 namespace Ifera\ScoreHud\event;
 
-use pocketmine\Player;
+use pocketmine\player\Player;
 
 abstract class PlayerEvent extends ScoreHudEvent{
-	
-	/** @var Player */
-	protected $player;
 
-	public function __construct(Player $player){
-		$this->player = $player;
-
+	public function __construct(private Player $player){
 		parent::__construct();
 	}
 

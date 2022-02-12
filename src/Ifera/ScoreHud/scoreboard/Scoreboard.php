@@ -47,14 +47,6 @@ use function str_replace;
 use function strlen;
 
 class Scoreboard{
-
-	/** @var PlayerSession */
-	private $session;
-	/** @var string[] */
-	private $lines = [];
-	/** @var ScoreTag[] */
-	private $tags = [];
-
 	/** @var string[] */
 	private $formattedLines = [];
 
@@ -65,10 +57,7 @@ class Scoreboard{
 	 * @param string[]      $lines
 	 * @param ScoreTag[]    $tags
 	 */
-	public function __construct(PlayerSession $session, array $lines = [], array $tags = []){
-		$this->session = $session;
-		$this->lines = $lines;
-		$this->tags = $tags;
+	public function __construct(private PlayerSession $session, private array $lines = [], private array $tags = []){
 	}
 
 	public function getSession(): PlayerSession{
@@ -128,7 +117,7 @@ class Scoreboard{
 	public function update(): self{
 		$player = $this->session->getPlayer();
 
-		if(!$player->isOnline() || HelperUtils::isDisabled($player) || ScoreHudSettings::isInDisabledWorld($player->getLevelNonNull()->getFolderName())){
+		if(!$player->isOnline() || HelperUtils::isDisabled($player) || ScoreHudSettings::isInDisabledWorld($player->getWorld()->getFolderName())){
 			return $this;
 		}
 
@@ -168,7 +157,7 @@ class Scoreboard{
 	public function display(): self{
 		$player = $this->session->getPlayer();
 
-		if(!$player->isOnline() || HelperUtils::isDisabled($player) || ScoreHudSettings::isInDisabledWorld($player->getLevelNonNull()->getFolderName())){
+		if(!$player->isOnline() || HelperUtils::isDisabled($player) || ScoreHudSettings::isInDisabledWorld($player->getWorld()->getFolderName())){
 			return $this;
 		}
 
@@ -183,8 +172,6 @@ class Scoreboard{
 
 			ScoreFactory::setScoreLine($player, $i, $formattedLine);
 		}
-
-		ScoreFactory::send($player);
 
 		return $this;
 	}

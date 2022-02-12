@@ -39,7 +39,7 @@ use pocketmine\event\Event;
 abstract class ScoreHudEvent extends Event{
 
 	/** @var ScoreHud|null */
-	protected $plugin = null;
+	protected ?ScoreHud $plugin = null;
 
 	public function __construct(){
 		$this->plugin = ScoreHud::getInstance();

@@ -44,7 +44,7 @@ use Ifera\ScoreHud\scoreboard\ScoreTag;
 class ServerTagsUpdateEvent extends ScoreHudEvent{
 
 	/** @var ScoreTag[] */
-	private $tags = [];
+	private array $tags = [];
 
 	/**
 	 * @param ScoreTag[] $tags

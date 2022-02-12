@@ -48,12 +48,7 @@ use Ifera\ScoreHud\scoreboard\ScoreTag;
  */
 class ServerTagUpdateEvent extends ScoreHudEvent{
 
-	/** @var ScoreTag */
-	protected $tag;
-
-	public function __construct(ScoreTag $tag){
-		$this->tag = $tag;
-
+	public function __construct(private ScoreTag $tag){
 		parent::__construct();
 	}
 

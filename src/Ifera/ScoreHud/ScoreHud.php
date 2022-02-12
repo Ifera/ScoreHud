@@ -43,18 +43,17 @@ use JackMD\ConfigUpdater\ConfigUpdater;
 use Ifera\ScoreHud\utils\Utils;
 use jackmd\scorefactory\ScoreFactory;
 use JackMD\UpdateNotifier\UpdateNotifier;
-use pocketmine\Player;
+use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
+use pocketmine\utils\SingletonTrait;
 use function is_array;
 
 class ScoreHud extends PluginBase{
+	use SingletonTrait;
 
 	private const CONFIG_VERSION = 10;
 	private const SCOREHUD_VERSION = 2;
-
-	/** @var ScoreHud|null */
-	private static $instance = null;
 
 	private ?Config $scoreConfig;
 
@@ -66,7 +65,7 @@ class ScoreHud extends PluginBase{
 	}
 
 	public function onLoad(): void{
-		self::$instance = $this;
+		self::setInstance($this);
 	}
 
 	public function onEnable(): void{
@@ -182,7 +181,7 @@ class ScoreHud extends PluginBase{
 			return;
 		}
 
-		if(HelperUtils::isDisabled($player) || ScoreHudSettings::isInDisabledWorld($player->getLevelNonNull()->getFolderName())){
+		if(HelperUtils::isDisabled($player) || ScoreHudSettings::isInDisabledWorld($player->getWorld()->getFolderName())){
 			ScoreFactory::removeScore($player);
 
 			return;

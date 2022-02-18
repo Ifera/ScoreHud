@@ -1,4 +1,4 @@
-<img align="right" widht="auto" height="260" src="https://github.com/JackMD/ScoreHud/blob/master/meta/ScoreHud.PNG" alt="ScoreHud Banner">
+<img align="right" width="auto" height="260" src="https://github.com/JackMD/ScoreHud/blob/master/meta/ScoreHud.PNG" alt="ScoreHud Banner">
 
 # ScoreHud
 
@@ -6,7 +6,9 @@
 |:--:|:--:|:--:|:--:|
 |[![Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/urQt6ETgYu)|[![GitHub license](https://img.shields.io/github/license/Ifera/ScoreHud.svg)](https://github.com/Ifera/ScoreHud/blob/master/LICENSE)|[![Poggit-CI](https://poggit.pmmp.io/ci.shield/Ifera/ScoreHud/ScoreHud)](https://poggit.pmmp.io/ci/Ifera/ScoreHud/ScoreHud)|[![](https://poggit.pmmp.io/shield.state/ScoreHud)](https://poggit.pmmp.io/p/ScoreHud)|
 
-### A highly customizable plugin to add Scoreboards on your Minecraft: Bedrock Server.
+#### A highly customizable plugin to add Scoreboards on your Minecraft: Bedrock Server.
+
+Click [here](https://github.com/Ifera/ScoreHud/blob/master/changelogs/7.0.0.md) to view the latest **changelog**.
 
 ### Features:
 

@@ -52,8 +52,8 @@ use function is_array;
 class ScoreHud extends PluginBase{
 	use SingletonTrait;
 
-	private const CONFIG_VERSION = 10;
-	private const SCOREHUD_VERSION = 2;
+	private const CONFIG_VERSION = 11;
+	private const SCOREHUD_VERSION = 3;
 
 	private ?Config $scoreConfig;
 
@@ -182,11 +182,12 @@ class ScoreHud extends PluginBase{
 		}
 
 		if(HelperUtils::isDisabled($player) || ScoreHudSettings::isInDisabledWorld($player->getWorld()->getFolderName())){
-			ScoreFactory::removeScore($player);
+			ScoreFactory::removeObjective($player);
 
 			return;
 		}
 
-		ScoreFactory::setScore($player, TitleUtils::getTitle($calledFromTask));
+		ScoreFactory::setObjective($player, TitleUtils::getTitle($calledFromTask));
+		ScoreFactory::sendObjective($player);
 	}
 }

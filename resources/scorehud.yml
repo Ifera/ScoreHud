@@ -1,23 +1,7 @@
 ---
 # DO NOT EDIT THIS VALUE.
 # ONLY FOR INTERNAL USE.
-scorehud-version: 2
-
-# =============================
-# SCOREHUD VERSION 6.0+ NOTE:
-# =============================
-#
-# Plugin developers are responsible for adding support for ScoreHud
-# in their plugins. Starting from ScoreHud version 6.0 onwards addon
-# support has been removed.
-#
-# ScoreHud is now event driven and all previous addons will no longer
-# work unless the author of that plugin adds support for ScoreHud in
-# their own plugin.
-#
-# If you want support for a plugin please ask the plugin author of
-# that plugin to add support for ScoreHud in their plugin.
-# =============================
+scorehud-version: 3
 
 # Set the title for the scoreboard shown.
 titles:
@@ -50,7 +34,7 @@ titles:
 # ==================
 # You can only set a maximum of 15 lines and no more. #blameMOJANG
 #
-# Also note that you need 'ScoreHudX' plugin for some tags to work.
+# You can find some pre-made tags from the ScoreHudX repo:
 # https://github.com/Ifera/ScoreHudX
 # ==================
 

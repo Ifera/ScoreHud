@@ -103,7 +103,7 @@ class ScoreHudCommand extends Command implements PluginOwned{
 
 			case "off":
 				if(!HelperUtils::isDisabled($sender)){
-					ScoreFactory::removeScore($sender);
+					ScoreFactory::removeObjective($sender);
 					HelperUtils::disable($sender);
 
 					$sender->sendMessage(ScoreHudSettings::PREFIX . "§aSuccessfully disabled ScoreHud.");

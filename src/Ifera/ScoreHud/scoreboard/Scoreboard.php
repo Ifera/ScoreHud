@@ -47,18 +47,15 @@ use function str_replace;
 use function strlen;
 
 class Scoreboard{
+
 	/** @var string[] */
 	private $formattedLines = [];
 
-	/**
-	 * Scoreboard constructor.
-	 *
-	 * @param PlayerSession $session
-	 * @param string[]      $lines
-	 * @param ScoreTag[]    $tags
-	 */
-	public function __construct(private PlayerSession $session, private array $lines = [], private array $tags = []){
-	}
+	public function __construct(
+		private PlayerSession $session,
+		private array $lines = [],
+		private array $tags = []
+	) {}
 
 	public function getSession(): PlayerSession{
 		return $this->session;
@@ -69,6 +66,22 @@ class Scoreboard{
 	 */
 	public function getLines(): array{
 		return $this->lines;
+	}
+
+	/**
+	 * Returns the line containing the particular tag on the scoreboard.
+	 */
+	public function getLineOfTag(ScoreTag $tag): int {
+		foreach ($this->lines as $index => $line){
+			if (trim($line) === "") continue;
+			if (str_contains($line, $tag->getId())) return $index;
+		}
+
+		return -1;
+	}
+
+	public function getLine(int $index): string {
+		return (string) $this->lines[$index];
 	}
 
 	/**
@@ -112,6 +125,28 @@ class Scoreboard{
 		}
 
 		return $processedTags;
+	}
+
+	public function handleSingleTagUpdate(ScoreTag $tag): self{
+		$player = $this->session->getPlayer();
+
+		if(!$player->isOnline() || HelperUtils::isDisabled($player) || ScoreHudSettings::isInDisabledWorld($player->getWorld()->getFolderName())){
+			return $this;
+		}
+
+		$tags = $this->getProcessedTags();
+		$index = $this->getLineOfTag($tag);
+		$line = $this->getLine($index);
+
+		$line = str_replace(
+			array_keys($tags),
+			array_values($tags),
+			$line
+		);
+
+		ScoreFactory::sendLine($player, $index + 1, ScoreFactory::setScoreLine($player, $index + 1, " " . $line . " "));
+
+		return $this;
 	}
 
 	public function update(): self{
@@ -172,6 +207,8 @@ class Scoreboard{
 
 			ScoreFactory::setScoreLine($player, $i, $formattedLine);
 		}
+
+		ScoreFactory::sendLines($player);
 
 		return $this;
 	}

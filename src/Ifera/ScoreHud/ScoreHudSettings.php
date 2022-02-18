@@ -62,6 +62,14 @@ class ScoreHudSettings{
 	 * Settings from config.yml
 	 */
 
+	public static function getLineUpdateMode(): string{
+		return (string) strtolower(self::$config->getNested("line-update-mode", "single"));
+	}
+
+	public static function isSingleLineUpdateMode(): bool{
+		return self::getLineUpdateMode() === "single";
+	}
+
 	public static function isMultiWorld(): bool{
 		return (bool) self::$config->getNested("multi-world.active", false);
 	}

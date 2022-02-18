@@ -77,7 +77,7 @@ class PlayerSession{
 
 		// remove scoreboard if player is in a world where scoreboard is disabled
 		if(ScoreHudSettings::isInDisabledWorld($world)){
-			ScoreFactory::removeScore($player);
+			ScoreFactory::removeObjective($player);
 
 			return;
 		}
@@ -104,7 +104,7 @@ class PlayerSession{
 			}
 
 			// no scoreboard is to be displayed
-			ScoreFactory::removeScore($player);
+			ScoreFactory::removeObjective($player);
 
 			return;
 		}
@@ -133,6 +133,6 @@ class PlayerSession{
 
 	public function close(): void{
 		HelperUtils::destroy($this->player);
-		ScoreFactory::removeScore($this->player);
+		ScoreFactory::removeObjective($this->player, true);
 	}
 }

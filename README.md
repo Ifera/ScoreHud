@@ -1,34 +1,27 @@
 <img align="right" widht="auto" height="260" src="https://github.com/JackMD/ScoreHud/blob/master/meta/ScoreHud.PNG" alt="ScoreHud Banner">
 
->## Notice: <br />
->**Backwards Incompatible Update**
->- PLEASE MAKE SURE YOU ARE USING **PHP v7.4** OR GREATER. <br />
->- Starting from **ScoreHud version 6.0**, addons are no longer supported. <br />
->- All old addons will stop working on versions 6.0 and above. <br />
->- All old tags will stop functioning as well. <br />
->- More details can be found below. <br />
->- **Please read FAQs below.**
-
 # ScoreHud
 
 | Discord | License | Poggit | Release |
 |:--:|:--:|:--:|:--:|
 |[![Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/urQt6ETgYu)|[![GitHub license](https://img.shields.io/github/license/Ifera/ScoreHud.svg)](https://github.com/Ifera/ScoreHud/blob/master/LICENSE)|[![Poggit-CI](https://poggit.pmmp.io/ci.shield/Ifera/ScoreHud/ScoreHud)](https://poggit.pmmp.io/ci/Ifera/ScoreHud/ScoreHud)|[![](https://poggit.pmmp.io/shield.state/ScoreHud)](https://poggit.pmmp.io/p/ScoreHud)|
 
-### A highly customizable plugin to add Scoreboards on your Minecraft Bedrock Server.
+### A highly customizable plugin to add Scoreboards on your Minecraft: Bedrock Server.
 
 ### Features:
 
  - This plugin adds **scoreboard** to your server.
- - Completely **Event Driven**!! Good bye tasks!
+ - Completely **Event Driven**!! Goodbye tasks!
  - Everything is customizable.
  - Easy and simple API for developers to use and integrate ScoreHud.
- - You can find some basic tags in the [ScoreHudX](https://github.com/Ifera/ScoreHudX) repo.
+ - Some basic tags are integrated within ScoreHud.
+ - You can find more tags support in the [ScoreHudX](https://github.com/Ifera/ScoreHudX) repo.
  
 ### Available Tags:
 
- - Please checkout the [ScoreHudX](https://github.com/Ifera/ScoreHudX) repo.
- - Also read the [discussions](https://github.com/Ifera/ScoreHudX/discussions)
+- Please visit the wiki [here](https://github.com/Ifera/ScoreHud/wiki/Available-Tags) for a list of in-built tags provided by ScoreHud.
+- Please check out the [ScoreHudX](https://github.com/Ifera/ScoreHudX) repo for more tags.
+- Also read the [discussions](https://github.com/Ifera/ScoreHudX/discussions).
 
 ### How to setup?
 
@@ -37,25 +30,6 @@
  - Edit the `config.yml` and `scorehud.yml` to suit your needs.
  - Restart and enjoy.
  
-### Version 6.0 Update:
-
-> The main goal of version 6.0 update was to remove ScoreHud dependency pocketmine tasks. So that was achieved by making
-> ScoreHud **event driven**! <br />
-
-**Q: But what exactly does event driven mean? And what are its benefits?** <br />
-A: Well, its simple, instead of using **tasks** to update values on scoreboard every 20 or so ticks even when there was **no 
-update**, ScoreHud now **listens for events** that are fired by the plugin which implements ScoreHud. In doing so, the scoreboard 
-is **only updated when there is an actual update** and not the other way round. Although not tested but this should **improve 
-ScoreHud's performance**.<br />
-
-**Addon support was removed** with version 6.0 update. Reason being that it was no longer feasible and users had reported addons 
-not working on different systems either due to hosting problem or some other reasons. Removing addons and listening to events 
-instead should now **work on almost all systems**.<br />
-
-ScoreHud using events is in the **benefit of plugin developers and the end-user** as well. Users no longer will need to download 
-and place addons in separate folder. And plugin developers will no longer need to make a separate addon for ScoreHud. They 
-can just integrate ScoreHud directly into their plugin and fire events to update their tags on ScoreHud. 
-
 ### FAQs:
 
 **Q: Help I am getting this error. `Required extension Core has an incompatible version (7.x.y not >=7.4)`**<br />
@@ -70,6 +44,10 @@ A: Well you can always open a new issue on this repository or contact me via Dis
 A: Well, that is extremely fortunate. Why not to star this repository and might as well a good review on [poggit](https://poggit.pmmp.io/p/ScoreHud).<br /><br />
 **Q: What happened to addons?**<br />
 A: Addons system being simple and similar to pocketmine had some flaws especially when combined with tasks caused a great deal of lag. ScoreHud is now event driven and no longer depends on tasks, so it was only fitting to remove addon support as a whole. <br />
+
+### Changelogs:
+
+ - Visit [here](https://github.com/Ifera/ScoreHud/tree/master/changelogs).
 
 ### For Developers:
 

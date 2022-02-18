@@ -70,6 +70,18 @@ class ScoreHudSettings{
 		return self::getLineUpdateMode() === "single";
 	}
 
+	public static function isTagFactoryEnabled(): bool {
+		return (bool) self::$config->getNested("tag-factory.enable", true);
+	}
+
+	public static function getTagFactoryUpdatePeriod(): int {
+		return (int) self::$config->getNested("tag-factory.update-period", 5);
+	}
+
+	public static function areMemoryTagsEnabled(): bool {
+		return (bool) self::$config->getNested("tag-factory.enable-memory-tags", false);
+	}
+
 	public static function isMultiWorld(): bool{
 		return (bool) self::$config->getNested("multi-world.active", false);
 	}

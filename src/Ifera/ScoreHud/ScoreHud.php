@@ -34,6 +34,7 @@ declare(strict_types = 1);
 namespace Ifera\ScoreHud;
 
 use Ifera\ScoreHud\commands\ScoreHudCommand;
+use Ifera\ScoreHud\factory\TagsFactory;
 use Ifera\ScoreHud\session\PlayerManager;
 use Ifera\ScoreHud\session\PlayerSessionHandler;
 use Ifera\ScoreHud\task\ScoreUpdateTitleTask;
@@ -100,6 +101,8 @@ class ScoreHud extends PluginBase{
 		$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
 
 		$this->getServer()->getCommandMap()->register("scorehud", new ScoreHudCommand($this));
+
+		if (ScoreHudSettings::isTagFactoryEnabled()) TagsFactory::init($this);
 	}
 
 	public function onDisable(): void{

@@ -14,6 +14,24 @@ config-version: 11
 # Apart from that difference both modes work the same. You will not notice much difference.
 line-update-mode: single
 
+# In-built support for some basic tags provided by ScoreHud.
+# There used to be a separate plugin called BasicScore handling these tags however it
+# has since then been moved within ScoreHud (due to popular demand).
+tag-factory:
+  # Do you want to enable support for basic tags provided by ScoreHud.
+  # Default: true
+  enable: true
+
+  # Some tags require constant updating for them to work this is
+  # only achieved through a task.
+  # Mention the time in seconds for that value to update.
+  # Default: 5 (seconds)
+  update-period: 5
+
+  # If you want the to show memory tags on the scoreboard then set this to true.
+  # NOTE: This could lead to a drop in performance, use only if necessary.
+  enable-memory-tags: false
+
 # If you want to have different scoreboards for different worlds
 # then edit the nested values to suit your needs.
 multi-world:
@@ -46,9 +64,8 @@ time:
 
   format:
     # Set the time format that you want to display.
-    # Use {scorehudx.time} tag for displaying time.
-    # You need ScoreHudX plugin for the tag to work.
-    # https://github.com/Ifera/ScoreHudX
+    # Use {scorehud.time} tag for displaying time.
+    # You need to set `tag-factory.enable` to true for these tags to work
     #
     # H - hours
     # i - minutes
@@ -59,9 +76,8 @@ time:
     time: "H:i:s"
 
     # Set the date format that you want to display. Will only work
-    # Use {scorehudx.date} tag for displaying date.
-    # You need ScoreHudX plugin for the tag to work.
-    # https://github.com/Ifera/ScoreHudX
+    # Use {scorehud.date} tag for displaying date.
+    # You need to set `tag-factory.enable` to true for these tags to work
     #
     # d - date (01-31)
     # m - month (01-12)

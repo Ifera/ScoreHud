@@ -144,7 +144,9 @@ class Scoreboard{
 			$line
 		);
 
-		ScoreFactory::sendLine($player, $index + 1, ScoreFactory::setScoreLine($player, $index + 1, " " . $line . " "));
+		$this->formattedLines[$index] = " " . $line . " ";
+
+		ScoreFactory::sendLine($player, $index + 1, ScoreFactory::setScoreLine($player, $index + 1, $this->formattedLines[$index]));
 
 		return $this;
 	}

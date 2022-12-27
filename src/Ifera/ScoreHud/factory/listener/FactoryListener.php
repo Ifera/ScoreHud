@@ -28,11 +28,13 @@ class FactoryListener implements Listener {
 
 	public function onJoin(PlayerJoinEvent $event) {
 		(new ServerTagUpdateEvent(new ScoreTag("scorehud.online", (string) count($this->plugin->getServer()->getOnlinePlayers()))))->call();
+        (new ServerTagUpdateEvent(new ScoreTag("scorehud.world_player_count", (string) count($event->getPlayer()->getWorld()->getPlayers()))))->call();
 	}
 
 	public function onQuit(PlayerQuitEvent $event) {
-		$this->plugin->getScheduler()->scheduleDelayedTask(new ClosureTask(function(): void {
+		$this->plugin->getScheduler()->scheduleDelayedTask(new ClosureTask(function() use($event): void {
 			(new ServerTagUpdateEvent(new ScoreTag("scorehud.online", (string) count($this->plugin->getServer()->getOnlinePlayers()))))->call();
+            (new ServerTagUpdateEvent(new ScoreTag("scorehud.world_player_count", (string) count($event->getPlayer()->getWorld()->getPlayers()))))->call();
 		}), 20);
 	}
 

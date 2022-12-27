@@ -81,7 +81,11 @@ class FactoryListener implements Listener {
 
 		if (!$player instanceof Player) return;
 
-		(new ServerTagUpdateEvent(new ScoreTag("scorehud.world_player_count", (string) (count($target->getPlayers()) + 1))))->call();
+		if($target !== $event->getFrom()->getWorld()){
+            (new ServerTagUpdateEvent(new ScoreTag("scorehud.world_player_count", (string) (count($target->getPlayers()) + 1))))->call();
+        }else{
+            (new ServerTagUpdateEvent(new ScoreTag("scorehud.world_player_count", (string) count($target->getPlayers()))))->call();
+        }
 
 		(new PlayerTagUpdateEvent($player, new ScoreTag("scorehud.level_name", $target->getDisplayName())))->call();
 		(new PlayerTagUpdateEvent($player, new ScoreTag("scorehud.world_name", $target->getDisplayName())))->call();

@@ -88,13 +88,20 @@ class FactoryListener implements Listener {
 	public function onTeleport(EntityTeleportEvent $event) {
 		$player = $event->getEntity();
 		$target = $event->getTo()->getWorld();
+        $prevWorld = $event->getFrom()->getWorld();
 
 		if (!$player instanceof Player) return;
 
         $worldPlayers = $target->getPlayers();
+        $prevWorldPlayers = $prevWorld->getPlayers();
         if($target !== $event->getFrom()->getWorld()){
             $worldCount = count($worldPlayers) + 1;
-            $worldPlayers[] = $player;
+            $worldPlayers[$player->getId()] = $player;
+            $prevWorldCount = count($prevWorldPlayers) - 1;
+            unset($prevWorldPlayers[$player->getId()]);
+            foreach ($prevWorldPlayers as $prevWorldPlayer) {
+                (new PlayerTagUpdateEvent($prevWorldPlayer, new ScoreTag("scorehud.world_player_count", (string) $prevWorldCount)))->call();
+            }
         }else{
             $worldCount = count($worldPlayers);
         }

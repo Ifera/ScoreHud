@@ -94,6 +94,7 @@ class FactoryListener implements Listener {
         $worldPlayers = $target->getPlayers();
         if($target !== $event->getFrom()->getWorld()){
             $worldCount = count($worldPlayers) + 1;
+            $worldPlayers[] = $player;
         }else{
             $worldCount = count($worldPlayers);
         }

@@ -20,14 +20,14 @@ titles:
   period: 5
 
   # A simple title that will be displayed for scoreboard.
-  title: "§l§aServer §dName"
+  title: "§l§4Dead§cStar §7| §bFactions"
 
   # Changing titles. Add as many as you desire.
   lines:
-  - "§l§aServer §dName"
-  - "§l§bServer §cName"
-  - "§l§cServer §bName"
-  - "§l§dServer §aName"
+  - "§l§4Dead§cStar §7| §bFactions"
+  - "§l§4Dead§cStar §7| §bFactions"
+  - "§l§4Dead§cStar §7| §bFactions"
+  - "§l§4Dead§cStar §7| §bFactions"
 
 # ==================
 # IMPORTANT NOTE:
@@ -54,9 +54,10 @@ titles:
 default-board:
 - ""
 - "§dName: §5{scorehud.name}"
-- ""
 - "§bOnline: §a{scorehud.online} §c/ §d{scorehud.max_online}"
-- ""
+- "§eMoney: §a$§g{ecoapiscore.money}"
+-"§3Rank: §1{ppscore.rank}"
+
 - "§6Please Vote for us!"
 
 # If you want to display different scoreboards for every world
@@ -75,6 +76,7 @@ scoreboards:
     lines:
     - "§dName: §5{scorehud.name}"
     - "§bOnline: §a{scorehud.online} §c/ §d{scorehud.max_online}"
+    
   "world 2":
     lines:
     - "§dName: §5{scorehud.name}"

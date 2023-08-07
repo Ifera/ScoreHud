@@ -28,11 +28,21 @@ class FactoryListener implements Listener {
 
 	public function onJoin(PlayerJoinEvent $event) {
 		(new ServerTagUpdateEvent(new ScoreTag("scorehud.online", (string) count($this->plugin->getServer()->getOnlinePlayers()))))->call();
-	}
+        $worldPlayers = $event->getPlayer()->getWorld()->getPlayers();
+        $worldCount = count($worldPlayers);
+        foreach ($worldPlayers as $player) {
+            (new PlayerTagUpdateEvent($player, new ScoreTag("scorehud.world_player_count", (string) $worldCount)))->call();
+        }
+    }
 
 	public function onQuit(PlayerQuitEvent $event) {
-		$this->plugin->getScheduler()->scheduleDelayedTask(new ClosureTask(function(): void {
+		$this->plugin->getScheduler()->scheduleDelayedTask(new ClosureTask(function() use($event): void {
 			(new ServerTagUpdateEvent(new ScoreTag("scorehud.online", (string) count($this->plugin->getServer()->getOnlinePlayers()))))->call();
+            $worldPlayers = $event->getPlayer()->getWorld()->getPlayers();
+            $worldCount = count($worldPlayers);
+            foreach ($worldPlayers as $player) {
+                (new PlayerTagUpdateEvent($player, new ScoreTag("scorehud.world_player_count", (string) $worldCount)))->call();
+            }
 		}), 20);
 	}
 
@@ -78,12 +88,28 @@ class FactoryListener implements Listener {
 	public function onTeleport(EntityTeleportEvent $event) {
 		$player = $event->getEntity();
 		$target = $event->getTo()->getWorld();
+        $prevWorld = $event->getFrom()->getWorld();
 
 		if (!$player instanceof Player) return;
 
-		(new ServerTagUpdateEvent(new ScoreTag("scorehud.world_player_count", (string) count($target->getPlayers()))))->call();
+        $worldPlayers = $target->getPlayers();
+        $prevWorldPlayers = $prevWorld->getPlayers();
+        if($target !== $event->getFrom()->getWorld()){
+            $worldCount = count($worldPlayers) + 1;
+            $worldPlayers[$player->getId()] = $player;
+            $prevWorldCount = count($prevWorldPlayers) - 1;
+            unset($prevWorldPlayers[$player->getId()]);
+            foreach ($prevWorldPlayers as $prevWorldPlayer) {
+                (new PlayerTagUpdateEvent($prevWorldPlayer, new ScoreTag("scorehud.world_player_count", (string) $prevWorldCount)))->call();
+            }
+        }else{
+            $worldCount = count($worldPlayers);
+        }
+        foreach ($worldPlayers as $worldPlayer) {
+            (new PlayerTagUpdateEvent($worldPlayer, new ScoreTag("scorehud.world_player_count", (string) $worldCount)))->call();
+        }
 
-		(new PlayerTagUpdateEvent($player, new ScoreTag("scorehud.level_name", $target->getDisplayName())))->call();
+        (new PlayerTagUpdateEvent($player, new ScoreTag("scorehud.level_name", $target->getDisplayName())))->call();
 		(new PlayerTagUpdateEvent($player, new ScoreTag("scorehud.world_name", $target->getDisplayName())))->call();
 
 		(new PlayerTagUpdateEvent($player, new ScoreTag("scorehud.level_folder_name", $target->getFolderName())))->call();

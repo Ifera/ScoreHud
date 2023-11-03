@@ -50,14 +50,6 @@ class TagResolveListener implements Listener {
 				$value = $player->getInventory()->getItemInHand()->getName();
 			break;
 
-			case "item_id":
-				$value = $player->getInventory()->getItemInHand()->getId();
-			break;
-
-			case "item_meta":
-				$value = $player->getInventory()->getItemInHand()->getMeta();
-			break;
-
 			case "item_count":
 				$value = $player->getInventory()->getItemInHand()->getCount();
 			break;

@@ -8,7 +8,7 @@
 
 #### A highly customizable plugin to add Scoreboards on your Minecraft: Bedrock Server.
 
-Click [here](https://github.com/Ifera/ScoreHud/blob/master/changelogs/7.0.0.md) to view the latest **changelog**.
+Click [here](https://github.com/Ifera/ScoreHud/blob/master/changelogs/8.0.0.md) to view the latest **changelog**.
 
 ### Features:
 

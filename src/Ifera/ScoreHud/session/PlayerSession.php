@@ -40,6 +40,7 @@ use Ifera\ScoreHud\ScoreHudSettings;
 use Ifera\ScoreHud\utils\HelperUtils;
 use jackmd\scorefactory\ScoreFactory;
 use pocketmine\player\Player;
+use pocketmine\Server;
 use function is_null;
 
 class PlayerSession{
@@ -74,6 +75,9 @@ class PlayerSession{
 		}
 
 		$world = $world ?? $player->getWorld()->getFolderName();
+
+        // check if the world is loaded
+        if(!Server::getInstance()->getWorldManager()->getWorldByName($world)->isLoaded()) return;
 
 		// remove scoreboard if player is in a world where scoreboard is disabled
 		if(ScoreHudSettings::isInDisabledWorld($world)){

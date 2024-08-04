@@ -38,10 +38,14 @@ class FactoryListener implements Listener {
 	public function onQuit(PlayerQuitEvent $event) {
 		$this->plugin->getScheduler()->scheduleDelayedTask(new ClosureTask(function() use($event): void {
 			(new ServerTagUpdateEvent(new ScoreTag("scorehud.online", (string) count($this->plugin->getServer()->getOnlinePlayers()))))->call();
-            $worldPlayers = $event->getPlayer()->getWorld()->getPlayers();
-            $worldCount = count($worldPlayers);
-            foreach ($worldPlayers as $player) {
-                (new PlayerTagUpdateEvent($player, new ScoreTag("scorehud.world_player_count", (string) $worldCount)))->call();
+            try {
+                $worldPlayers = $event->getPlayer()->getWorld()->getPlayers();
+                $worldCount = count($worldPlayers);
+                foreach ($worldPlayers as $player) {
+                    (new PlayerTagUpdateEvent($player, new ScoreTag("scorehud.world_player_count", (string) $worldCount)))->call();
+                }
+            } catch (\Throwable $e) {
+                ScoreHud::getInstance()->getLogger()->debug("Error on PlayerQuitEvent: " . $e->getMessage());
             }
 		}), 20);
 	}
@@ -94,7 +98,7 @@ class FactoryListener implements Listener {
 
         $worldPlayers = $target->getPlayers();
         $prevWorldPlayers = $prevWorld->getPlayers();
-        if($target !== $event->getFrom()->getWorld()){
+        if($target !== $prevWorld){
             $worldCount = count($worldPlayers) + 1;
             $worldPlayers[$player->getId()] = $player;
             $prevWorldCount = count($prevWorldPlayers) - 1;
